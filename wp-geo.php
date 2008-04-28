@@ -14,10 +14,6 @@ Minimum WordPress Version Required: 2.5
 
 
 
-$geoMashupOpts = get_option('geo_mashup_options');
-
-
-
 /**
  * The WP Geo class
  */
