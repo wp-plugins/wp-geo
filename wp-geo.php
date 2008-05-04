@@ -4,9 +4,9 @@
 
 /*
 Plugin Name: WP Geo
-Plugin URI: http://www.benhuson.co.uk/
+Plugin URI: http://www.benhuson.co.uk/wordpress-plugins/wp-geo/
 Description: Adds geocoding to WordPress.
-Version: 1.0
+Version: 1.1
 Author: Ben Huson
 Author URI: http://www.benhuson.co.uk/
 Minimum WordPress Version Required: 2.5
@@ -19,6 +19,30 @@ Minimum WordPress Version Required: 2.5
  */
 class WPGeo
 {
+
+
+
+	/**
+	 * Register Activation
+	 */
+	function register_activation()
+	{
+		$options = array(
+			'google_api_key' => '', 
+			'google_map_type' => 'G_NORMAL_MAP', 
+			'show_post_map' => 'TOP'
+		);
+		add_option('wp_geo_options', $options);
+		$wp_geo_options = get_option('wp_geo_options');
+		foreach ($options as $key => $val)
+		{
+			if (!isset($wp_geo_options[$key]))
+			{
+				$wp_geo_options[$key] = $options[$key];
+			}
+		}
+		update_option('wp_geo_options', $wp_geo_options);
+	}
 
 
 
@@ -99,7 +123,7 @@ class WPGeo
 				$zoom = 3;
 			}
 			
-			$maptype = is_category() ? 'G_SATELLITE_MAP' : 'G_HYBRID_MAP';
+			$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];			
 			
 			// Points JS
 			$points_js = '';
@@ -434,6 +458,8 @@ class WPGeo
 	
 		global $posts;
 		
+		$wp_geo_options = get_option('wp_geo_options');
+		
 		// Only add wp_head when viewing a single post or a page.
 		if (!(is_single() || is_page())) return $content;
 		
@@ -448,9 +474,17 @@ class WPGeo
 		// Need a map?
 		if (is_numeric($latitude) && is_numeric($longitude))
 		{
-			return '<div id="wp_geo_map" style="height:300px;"></div>' . $content;
+			if ($wp_geo_options['show_post_map'] == 'TOP')
+			{
+				// Show at top of post
+				return '<div id="wp_geo_map" style="height:300px;"></div>' . $content;
+			}
+			elseif ($wp_geo_options['show_post_map'] == 'BOTTOM')
+			{
+				// Show at bottom of post
+				return $content . '<div id="wp_geo_map" style="height:300px;"></div>';
+			}
 		}
-		
 		return $content;
 		
 	}
@@ -482,6 +516,8 @@ class WPGeo
 		if (isset($_POST['action']) && $_POST['action'] == 'update')
 		{
 			$wp_geo_options['google_api_key'] = $_POST['google_api_key'];
+			$wp_geo_options['google_map_type'] = $_POST['google_map_type'];
+			$wp_geo_options['show_post_map'] = $_POST['show_post_map'];
 			update_option('wp_geo_options', $wp_geo_options);
 			echo '<div class="updated"><p>Options updated</p></div>';
 		}
@@ -496,16 +532,95 @@ class WPGeo
 				<table class="form-table">
 					<tr valign="top">
 						<th scope="row">Google API Key</th>
-						<td><input name="google_api_key" type="text" id="google_api_key" value="' . $wp_geo_options['google_api_key'] . '" size="90" /></td>
+						<td><input name="google_api_key" type="text" id="google_api_key" value="' . $wp_geo_options['google_api_key'] . '" size="50" /></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">Map Type</th>
+						<td>
+							' . WPGeo::google_map_types('menu', $wp_geo_options['google_map_type']) . '
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">Show Post Map</th>
+						<td>
+							' . WPGeo::post_map_menu('menu', $wp_geo_options['show_post_map']) . '
+						</td>
 					</tr>
 				</table>
 				<p class="submit">
 					<input type="submit" name="Submit" value="Save Changes" />
 					<input type="hidden" name="action" value="update" />
-					<input type="hidden" name="option_fields" value="google_api_key" />
+					<input type="hidden" name="option_fields" value="google_api_key,google_map_type,show_post_map" />
 				</p>
 			</form>
 		</div>';
+	}
+
+
+
+	/**
+	 * Google Map Types
+	 */
+	function google_map_types($return = 'array', $selected = '')
+	{
+		
+		// Array
+		$map_type_array = array(
+			'G_NORMAL_MAP' 		=> 'Normal', 
+			'G_SATELLITE_MAP' 	=> 'Satellite', 
+			'G_HYBRID_MAP' 		=> 'Hybrid (Satellite with road, cities etc.)', 
+			'G_PHYSICAL_MAP' 	=> 'Physical (Terrain information)'
+		);
+		
+		// Menu?
+		if ($return = 'menu')
+		{
+			$menu = '';
+			foreach ($map_type_array as $key => $val)
+			{
+				$is_selected = $selected == $key ? ' selected="selected"' : '';
+				$menu .= '<option value="' . $key . '"' . $is_selected . '>' . $val . '</option>';
+			}
+			$menu = '<select name="google_map_type" id="google_map_type">' . $menu. '</select>';
+			return $menu;
+		}
+		
+		// Default return
+		return $map_type_array;
+		
+	}
+
+
+
+	/**
+	 * Post Map Menu
+	 */
+	function post_map_menu($return = 'array', $selected = '')
+	{
+		
+		// Array
+		$map_type_array = array(
+			'TOP' 		=> 'At top of post', 
+			'BOTTOM' 	=> 'At bottom of post', 
+			'HIDE' 		=> "Don't show"
+		);
+		
+		// Menu?
+		if ($return = 'menu')
+		{
+			$menu = '';
+			foreach ($map_type_array as $key => $val)
+			{
+				$is_selected = $selected == $key ? ' selected="selected"' : '';
+				$menu .= '<option value="' . $key . '"' . $is_selected . '>' . $val . '</option>';
+			}
+			$menu = '<select name="show_post_map" id="show_post_map">' . $menu. '</select>';
+			return $menu;
+		}
+		
+		// Default return
+		return $map_type_array;
+		
 	}
 	
 	
@@ -513,6 +628,8 @@ class WPGeo
 }
 
 
+// Activation Hooks
+register_activation_hook(__FILE__, 'register_activation');
 
 // Frontend Hooks
 add_action('wp_head', array('WPGeo', 'wp_head'));
