@@ -3,8 +3,8 @@ Contributors: Ben Huson
 Donate link: http://www.benhuson.co.uk/wordpress-plugins/wp-geo/
 Tags: maps, map, geo, geocoding, google, location
 Requires at least: 2.5
-Tested up to: 2.5
-Stable tag: 1.1
+Tested up to: 2.5.1
+Stable tag: 1.2
 
 Add location maps to your posts and pages.
 
@@ -40,6 +40,7 @@ If upgrading from a previous version of the plugin:
 
 == Features ==
 
+*  NEW - Shortcode [wp_geo_map] to insert map within your post
 *  NEW - Select your preferred map type
 *  NEW - Select wether to show your map at the top or bottom of posts (or not at all)
 *  Set a location by clicking on a map or
