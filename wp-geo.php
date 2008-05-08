@@ -6,7 +6,7 @@
 Plugin Name: WP Geo
 Plugin URI: http://www.benhuson.co.uk/wordpress-plugins/wp-geo/
 Description: Adds geocoding to WordPress.
-Version: 1.1
+Version: 1.2
 Author: Ben Huson
 Author URI: http://www.benhuson.co.uk/
 Minimum WordPress Version Required: 2.5
@@ -42,6 +42,29 @@ class WPGeo
 			}
 		}
 		update_option('wp_geo_options', $wp_geo_options);
+	}
+	
+	
+	
+	/**
+	 * Shortcode: [wpgeo_map type="G_NORMAL_MAP"]
+	 */
+	function shortcode_wpgeo_map($atts, $content = null)
+	{
+		
+		$wp_geo_options = get_option('wp_geo_options');
+		
+		if ($wp_geo_options['show_post_map'] == 'HIDE')
+		{
+			$map_atts = array('type' => 'G_NORMAL_MAP');
+			extract(shortcode_atts($map_atts, $atts));
+			return '<div id="wp_geo_map" style="height:300px;">' . $content . '</div>';
+		}
+		else
+		{
+			return '';
+		}
+		
 	}
 
 
@@ -553,6 +576,8 @@ class WPGeo
 					<input type="hidden" name="option_fields" value="google_api_key,google_map_type,show_post_map" />
 				</p>
 			</form>
+			<h2>Documentation</h2>
+			<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a location has been set for the post). You can only include the Shortcode once within a post. If you select another Show Post Map option then the Shortcode will be ignored and the map will be positioned automatically.</p>
 		</div>';
 	}
 
@@ -602,7 +627,7 @@ class WPGeo
 		$map_type_array = array(
 			'TOP' 		=> 'At top of post', 
 			'BOTTOM' 	=> 'At bottom of post', 
-			'HIDE' 		=> "Don't show"
+			'HIDE' 		=> "Manually"
 		);
 		
 		// Menu?
@@ -628,8 +653,9 @@ class WPGeo
 }
 
 
-// Activation Hooks
+// Hooks
 register_activation_hook(__FILE__, 'register_activation');
+add_shortcode('wp_geo_map', array('WPGeo', 'shortcode_wpgeo_map'));
 
 // Frontend Hooks
 add_action('wp_head', array('WPGeo', 'wp_head'));
