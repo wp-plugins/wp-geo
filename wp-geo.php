@@ -6,7 +6,7 @@
 Plugin Name: WP Geo
 Plugin URI: http://www.benhuson.co.uk/wordpress-plugins/wp-geo/
 Description: Adds geocoding to WordPress.
-Version: 1.2
+Version: 1.3
 Author: Ben Huson
 Author URI: http://www.benhuson.co.uk/
 Minimum WordPress Version Required: 2.5
@@ -30,7 +30,9 @@ class WPGeo
 		$options = array(
 			'google_api_key' => '', 
 			'google_map_type' => 'G_NORMAL_MAP', 
-			'show_post_map' => 'TOP'
+			'show_post_map' => 'TOP', 
+			'default_map_width' => '100%', 
+			'default_map_height' => '300px'
 		);
 		add_option('wp_geo_options', $options);
 		$wp_geo_options = get_option('wp_geo_options');
@@ -58,7 +60,7 @@ class WPGeo
 		{
 			$map_atts = array('type' => 'G_NORMAL_MAP');
 			extract(shortcode_atts($map_atts, $atts));
-			return '<div id="wp_geo_map" style="height:300px;">' . $content . '</div>';
+			return '<div id="wp_geo_map" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';">' . $content . '</div>';
 		}
 		else
 		{
@@ -77,6 +79,8 @@ class WPGeo
 		
 		global $posts;
 		
+		$wp_geo_options = get_option('wp_geo_options');
+		
 		$showmap = false;
 		
 		for ($i = 0; $i < count($posts); $i++)
@@ -94,7 +98,7 @@ class WPGeo
 		
 		if ($showmap)
 		{
-			echo '<div id="wp_geo_map" style="height:300px;"></div>';
+			echo '<div id="wp_geo_map" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>';
 		}
 		
 	}
@@ -500,12 +504,12 @@ class WPGeo
 			if ($wp_geo_options['show_post_map'] == 'TOP')
 			{
 				// Show at top of post
-				return '<div id="wp_geo_map" style="height:300px;"></div>' . $content;
+				return '<div id="wp_geo_map" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>' . $content;
 			}
 			elseif ($wp_geo_options['show_post_map'] == 'BOTTOM')
 			{
 				// Show at bottom of post
-				return $content . '<div id="wp_geo_map" style="height:300px;"></div>';
+				return $content . '<div id="wp_geo_map" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>';
 			}
 		}
 		return $content;
@@ -541,6 +545,8 @@ class WPGeo
 			$wp_geo_options['google_api_key'] = $_POST['google_api_key'];
 			$wp_geo_options['google_map_type'] = $_POST['google_map_type'];
 			$wp_geo_options['show_post_map'] = $_POST['show_post_map'];
+			$wp_geo_options['default_map_width'] = WPGeo::numberPercentOrPx($_POST['default_map_width']);
+			$wp_geo_options['default_map_height'] = WPGeo::numberPercentOrPx($_POST['default_map_height']);
 			update_option('wp_geo_options', $wp_geo_options);
 			echo '<div class="updated"><p>Options updated</p></div>';
 		}
@@ -559,15 +565,19 @@ class WPGeo
 					</tr>
 					<tr valign="top">
 						<th scope="row">Map Type</th>
-						<td>
-							' . WPGeo::google_map_types('menu', $wp_geo_options['google_map_type']) . '
-						</td>
+						<td>' . WPGeo::google_map_types('menu', $wp_geo_options['google_map_type']) . '</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">Show Post Map</th>
-						<td>
-							' . WPGeo::post_map_menu('menu', $wp_geo_options['show_post_map']) . '
-						</td>
+						<td>' . WPGeo::post_map_menu('menu', $wp_geo_options['show_post_map']) . '</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">Default Map Width</th>
+						<td><input name="default_map_width" type="text" id="default_map_width" value="' . $wp_geo_options['default_map_width'] . '" size="10" /></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">Default Map Height</th>
+						<td><input name="default_map_height" type="text" id="default_map_height" value="' . $wp_geo_options['default_map_height'] . '" size="10" /></td>
 					</tr>
 				</table>
 				<p class="submit">
@@ -579,6 +589,20 @@ class WPGeo
 			<h2>Documentation</h2>
 			<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a location has been set for the post). You can only include the Shortcode once within a post. If you select another Show Post Map option then the Shortcode will be ignored and the map will be positioned automatically.</p>
 		</div>';
+	}
+	
+	
+	
+	/**
+	 * Number Percent Or Px
+	 */
+	function numberPercentOrPx($str = false)
+	{
+		if (is_numeric($str))
+		{
+			$str .= 'px';
+		}
+		return $str;
 	}
 
 
@@ -654,7 +678,7 @@ class WPGeo
 
 
 // Hooks
-register_activation_hook(__FILE__, 'register_activation');
+register_activation_hook(__FILE__, array('WPGeo', 'register_activation'));
 add_shortcode('wp_geo_map', array('WPGeo', 'shortcode_wpgeo_map'));
 
 // Frontend Hooks
