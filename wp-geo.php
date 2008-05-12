@@ -6,7 +6,7 @@
 Plugin Name: WP Geo
 Plugin URI: http://www.benhuson.co.uk/wordpress-plugins/wp-geo/
 Description: Adds geocoding to WordPress.
-Version: 1.3
+Version: 2.0b
 Author: Ben Huson
 Author URI: http://www.benhuson.co.uk/
 Minimum WordPress Version Required: 2.5
@@ -32,7 +32,12 @@ class WPGeo
 			'google_map_type' => 'G_NORMAL_MAP', 
 			'show_post_map' => 'TOP', 
 			'default_map_width' => '100%', 
-			'default_map_height' => '300px'
+			'default_map_height' => '300px',
+			'show_maps_on_home' => 'Y',
+			'show_maps_on_pages' => 'Y',
+			'show_maps_on_posts' => 'Y',
+			'show_maps_in_datearchives' => 'Y',
+			'show_maps_in_categoryarchives' => 'Y'
 		);
 		add_option('wp_geo_options', $options);
 		$wp_geo_options = get_option('wp_geo_options');
@@ -53,14 +58,17 @@ class WPGeo
 	 */
 	function shortcode_wpgeo_map($atts, $content = null)
 	{
+	
+		global $post;
+		$id = $post->ID;
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		
-		if ($wp_geo_options['show_post_map'] == 'HIDE')
+		if (WPGeo::show_maps() && $wp_geo_options['show_post_map'] == 'HIDE')
 		{
 			$map_atts = array('type' => 'G_NORMAL_MAP');
 			extract(shortcode_atts($map_atts, $atts));
-			return '<div id="wp_geo_map" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';">' . $content . '</div>';
+			return '<div id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';">' . $content . '</div>';
 		}
 		else
 		{
@@ -111,12 +119,15 @@ class WPGeo
 	function wp_head()
 	{
 		
+		if (WPGeo::show_maps())
+		{
+		
 		global $posts;
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		
 		// Only add wp_head when viewing a single post or a page.
-		if (!(is_single() || is_page() || is_category())) return;
+		//if (!(is_single() || is_page() || is_category())) return;
 		
 		// Coords to show on map?
 		$coords = array();
@@ -181,6 +192,39 @@ class WPGeo
 					var polyline = new GPolyline([' . $polyline_coords . '], "#ffffff", 2, 0.5, polyOptions);
 						map.addOverlay(polyline);';
 			}
+			
+			// Post Maps and Markers
+			$js_map_inits = '';
+			$js_marker_inits = '';
+			$js_map_writes = '';
+			for ($i = 0; $i < count($coords); $i++)
+			{
+				$js_map_inits .= 'var map' . $coords[$i]['id'] . ' = null; ';
+				$js_marker_inits .= 'var marker' . $coords[$i]['id'] . ' = null; ';
+				$js_map_writes .= '
+					if (document.getElementById("wp_geo_map_' . $coords[$i]['id'] . '"))
+					{
+						map' . $coords[$i]['id'] . ' = new GMap2(document.getElementById("wp_geo_map_' . $coords[$i]['id'] . '"));
+						var mapTypeControl = new GMapTypeControl();
+						var center = new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . ');
+						map' . $coords[$i]['id'] . '.setCenter(center, ' . $zoom . ');
+						map' . $coords[$i]['id'] . '.setMapType(' . $maptype . ');
+						map' . $coords[$i]['id'] . '.addControl(new GLargeMapControl());
+						map' . $coords[$i]['id'] . '.addControl(mapTypeControl);
+						
+						var center' . $coords[$i]['id'] .' = new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . ');
+						marker' . $coords[$i]['id'] .' = new GMarker(center' . $coords[$i]['id'] .', {draggable: false});
+						
+						GEvent.addListener(marker' . $coords[$i]['id'] . ', "dragstart", function() {
+							map.closeInfoWindow();
+						});
+						map' . $coords[$i]['id'] . '.addOverlay(marker' . $coords[$i]['id'] . ');
+						
+						GEvent.addListener(map' . $coords[$i]['id'] . ', "zoomend", function(oldLevel, newLevel) {
+							map' . $coords[$i]['id'] . '.setCenter(marker' . $coords[$i]['id'] . '.getLatLng());
+						});
+					}';
+			}
 					
 			// Script
 			$html_content = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $google_maps_api_key . '" type="text/javascript"></script>';
@@ -188,28 +232,32 @@ class WPGeo
 			<script type="text/javascript">
 			//<![CDATA[
 			
-			var map = null;
-		    var marker = null;
+			var map = null; ' . $js_map_inits . '
+		    var marker = null; ' . $js_marker_inits . '
 			
 			function init_wp_geo_map()
 			{
-				if (GBrowserIsCompatible() && document.getElementById("wp_geo_map"))
+				if (GBrowserIsCompatible())
 				{
-					map = new GMap2(document.getElementById("wp_geo_map"));
-					var mapTypeControl = new GMapTypeControl();
-					var center = new GLatLng(' . $coords[0]['latitude'] . ', ' . $coords[0]['longitude'] . ');
-					map.setCenter(center, ' . $zoom . ');
-					map.setMapType(' . $maptype . ');
-					map.addControl(new GLargeMapControl());
-					map.addControl(mapTypeControl);
-					
-					' . $points_js . '
-					
-					' . $polyline_js . '
-					
-					GEvent.addListener(map, "zoomend", function(oldLevel, newLevel) {
-						map.setCenter(marker_0.getLatLng());
-					});
+					if (document.getElementById("wp_geo_map"))
+					{
+						map = new GMap2(document.getElementById("wp_geo_map"));
+						var mapTypeControl = new GMapTypeControl();
+						var center = new GLatLng(' . $coords[0]['latitude'] . ', ' . $coords[0]['longitude'] . ');
+						map.setCenter(center, ' . $zoom . ');
+						map.setMapType(' . $maptype . ');
+						map.addControl(new GLargeMapControl());
+						map.addControl(mapTypeControl);
+						
+						' . $points_js . '
+						
+						' . $polyline_js . '
+						
+						GEvent.addListener(map, "zoomend", function(oldLevel, newLevel) {
+							map.setCenter(marker_0.getLatLng());
+						});
+					}
+					' . $js_map_writes . '
 				}
 			}
 			if (document.all&&window.attachEvent) { // IE-Win
@@ -229,6 +277,8 @@ class WPGeo
 		// Check if plugin head needed
 		// Check for Google API key
 		// Write Javascripts and CSS
+		
+		}
 		
 	}
 
@@ -483,15 +533,18 @@ class WPGeo
 	function the_content($content = '')
 	{
 	
-		global $posts;
+		if (WPGeo::show_maps())
+		{
+		
+		global $posts, $post;
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		
 		// Only add wp_head when viewing a single post or a page.
-		if (!(is_single() || is_page())) return $content;
+		//if (!(is_single() || is_page())) return $content;
 		
 		// Get the post
-		$post = $posts[0];
+		//$post = $posts[0];
 		$id = $post->ID;
 	
 		// Get latitude and longitude
@@ -504,14 +557,17 @@ class WPGeo
 			if ($wp_geo_options['show_post_map'] == 'TOP')
 			{
 				// Show at top of post
-				return '<div id="wp_geo_map" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>' . $content;
+				return '<div id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>' . $content;
 			}
 			elseif ($wp_geo_options['show_post_map'] == 'BOTTOM')
 			{
 				// Show at bottom of post
-				return $content . '<div id="wp_geo_map" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>';
+				return $content . '<div id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>';
 			}
 		}
+		
+		}
+		
 		return $content;
 		
 	}
@@ -527,6 +583,54 @@ class WPGeo
 		{
 			add_options_page('WP Geo Options', 'WP Geo', 8, __FILE__, array('WPGeo', 'options_page'));
 		}
+	}
+	
+	
+	
+	/**
+	 * Show Maps
+	 */
+	function show_maps()
+	{
+		
+		$wp_geo_options = get_option('wp_geo_options');
+		
+		if (is_home() && $wp_geo_options['show_maps_on_home'] == 'Y')
+		{
+			return true;
+		}
+		if (is_single() && $wp_geo_options['show_maps_on_posts'] == 'Y')
+		{
+			return true;
+		}
+		if (is_page() && $wp_geo_options['show_maps_on_pages'] == 'Y')
+		{
+			return true;
+		}
+		if (is_date() && $wp_geo_options['show_maps_in_datearchives'] == 'Y')
+		{
+			return true;
+		}
+		if (is_category() && $wp_geo_options['show_maps_in_categoryarchives'] == 'Y')
+		{
+			return true;
+		}
+		return false;
+	}
+
+
+
+	/**
+	 * Options Checkbox
+	 */
+	function options_checkbox($id, $val, $checked)
+	{
+		$is_checked = '';
+		if ($val == $checked)
+		{
+			$is_checked = 'checked="checked" ';
+		}
+		return '<input name="' . $id . '" type="checkbox" id="' . $id . '" value="' . $val . '" ' . $is_checked . '/>';
 	}
 
 
@@ -547,6 +651,13 @@ class WPGeo
 			$wp_geo_options['show_post_map'] = $_POST['show_post_map'];
 			$wp_geo_options['default_map_width'] = WPGeo::numberPercentOrPx($_POST['default_map_width']);
 			$wp_geo_options['default_map_height'] = WPGeo::numberPercentOrPx($_POST['default_map_height']);
+			
+			$wp_geo_options['show_maps_on_home'] = $_POST['show_maps_on_home'];
+			$wp_geo_options['show_maps_on_pages'] = $_POST['show_maps_on_pages'];
+			$wp_geo_options['show_maps_on_posts'] = $_POST['show_maps_on_posts'];
+			$wp_geo_options['show_maps_in_datearchives'] = $_POST['show_maps_in_datearchives'];
+			$wp_geo_options['show_maps_in_categoryarchives'] = $_POST['show_maps_in_categoryarchives'];
+			
 			update_option('wp_geo_options', $wp_geo_options);
 			echo '<div class="updated"><p>Options updated</p></div>';
 		}
@@ -578,6 +689,16 @@ class WPGeo
 					<tr valign="top">
 						<th scope="row">Default Map Height</th>
 						<td><input name="default_map_height" type="text" id="default_map_height" value="' . $wp_geo_options['default_map_height'] . '" size="10" /></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">Show Maps On</th>
+						<td>
+							' . WPGeo::options_checkbox('show_maps_on_pages', 'Y', $wp_geo_options['show_maps_on_pages']) . ' Pages<br />
+							' . WPGeo::options_checkbox('show_maps_on_posts', 'Y', $wp_geo_options['show_maps_on_posts']) . ' Posts (single posts)<br />
+							' . WPGeo::options_checkbox('show_maps_on_home', 'Y', $wp_geo_options['show_maps_on_home']) . ' Posts home page<br />
+							' . WPGeo::options_checkbox('show_maps_in_datearchives', 'Y', $wp_geo_options['show_maps_in_datearchives']) . ' Posts in date archives<br />
+							' . WPGeo::options_checkbox('show_maps_in_categoryarchives', 'Y', $wp_geo_options['show_maps_in_categoryarchives']) . ' Posts in category archives
+						</td>
 					</tr>
 				</table>
 				<p class="submit">
