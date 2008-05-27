@@ -6,7 +6,7 @@
 Plugin Name: WP Geo
 Plugin URI: http://www.benhuson.co.uk/wordpress-plugins/wp-geo/
 Description: Adds geocoding to WordPress.
-Version: 2.0
+Version: 2.1
 Author: Ben Huson
 Author URI: http://www.benhuson.co.uk/
 Minimum WordPress Version Required: 2.5
@@ -33,6 +33,7 @@ class WPGeo
 			'show_post_map' => 'TOP', 
 			'default_map_width' => '100%', 
 			'default_map_height' => '300px',
+			'default_map_zoom' => '5',
 			'show_maps_on_home' => 'Y',
 			'show_maps_on_pages' => 'Y',
 			'show_maps_on_posts' => 'Y',
@@ -154,11 +155,11 @@ class WPGeo
 		{
 		
 			$google_maps_api_key = $wp_geo_options['google_api_key'];
-			$zoom = 5;
+			$zoom = $wp_geo_options['default_map_zoom']; //5;
 			
 			if (count($coords) > 1)
 			{
-				$zoom = 3;
+				$zoom = $wp_geo_options['default_map_zoom']; // 3;
 			}
 			
 			$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];			
@@ -320,13 +321,14 @@ class WPGeo
 	{
 		
 		$wp_geo_options = get_option('wp_geo_options');
+		$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];	
 		
 		if (!is_numeric($latitude) || !is_numeric($longitude))
 		{
 			// Centre on London
 			$latitude = 51.492526418807465;
 			$longitude = -0.15754222869873047;
-			$zoom = 5;
+			$zoom = $wp_geo_options['default_map_zoom']; //5;
 			$panel_open = true;
 			$hide_marker = true;
 		}
@@ -394,8 +396,10 @@ class WPGeo
 					var mapTypeControl = new GMapTypeControl();
 					var center = new GLatLng(' . $latitude . ', ' . $longitude . ');
 					map.setCenter(center, ' . $zoom . ');
+					map.addMapType(G_PHYSICAL_MAP);
 					map.addControl(new GLargeMapControl());
 					map.addControl(mapTypeControl);
+					map.setMapType(' . $maptype . ');
 					
 					geocoder = new GClientGeocoder();
 					 
@@ -651,6 +655,7 @@ class WPGeo
 			$wp_geo_options['show_post_map'] = $_POST['show_post_map'];
 			$wp_geo_options['default_map_width'] = WPGeo::numberPercentOrPx($_POST['default_map_width']);
 			$wp_geo_options['default_map_height'] = WPGeo::numberPercentOrPx($_POST['default_map_height']);
+			$wp_geo_options['default_map_zoom'] = $_POST['default_map_zoom'];
 			
 			$wp_geo_options['show_maps_on_home'] = $_POST['show_maps_on_home'];
 			$wp_geo_options['show_maps_on_pages'] = $_POST['show_maps_on_pages'];
@@ -691,6 +696,10 @@ class WPGeo
 						<td><input name="default_map_height" type="text" id="default_map_height" value="' . $wp_geo_options['default_map_height'] . '" size="10" /></td>
 					</tr>
 					<tr valign="top">
+						<th scope="row">Default Map Zoom</th>
+						<td>' . WPGeo::selectMapZoom('menu', $wp_geo_options['default_map_zoom']) . '</td>
+					</tr>
+					<tr valign="top">
 						<th scope="row">Show Maps On</th>
 						<td>
 							' . WPGeo::options_checkbox('show_maps_on_pages', 'Y', $wp_geo_options['show_maps_on_pages']) . ' Pages<br />
@@ -726,6 +735,56 @@ class WPGeo
 		return $str;
 	}
 
+
+
+	/**
+	 * Select Map Zoom
+	 */
+	function selectMapZoom($return = 'array', $selected = '')
+	{
+		
+		// Array
+		$map_type_array = array(
+			'0' 	=> '0 - Zoomed Out', 
+			'1' 	=> '1', 
+			'2' 	=> '2', 
+			'3' 	=> '3', 
+			'4' 	=> '4', 
+			'5' 	=> '5', 
+			'6' 	=> '6', 
+			'7' 	=> '7', 
+			'8' 	=> '8', 
+			'9' 	=> '9', 
+			'10' 	=> '10', 
+			'11' 	=> '11', 
+			'12' 	=> '12', 
+			'13' 	=> '13', 
+			'14' 	=> '14', 
+			'15' 	=> '15', 
+			'16' 	=> '16', 
+			'17' 	=> '17', 
+			'18' 	=> '18', 
+			'19' 	=> '19 - Zoomed In', 
+		);
+		
+		// Menu?
+		if ($return = 'menu')
+		{
+			$menu = '';
+			foreach ($map_type_array as $key => $val)
+			{
+				$is_selected = $selected == $key ? ' selected="selected"' : '';
+				$menu .= '<option value="' . $key . '"' . $is_selected . '>' . $val . '</option>';
+			}
+			$menu = '<select name="default_map_zoom" id="default_map_zoom">' . $menu. '</select>';
+			return $menu;
+		}
+		
+		// Default return
+		return $map_type_array;
+		
+	}
+	
 
 
 	/**
