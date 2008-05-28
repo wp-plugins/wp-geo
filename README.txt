@@ -59,22 +59,22 @@ If upgrading from a previous version of the plugin:
 == Version Log ==
 
 WP Geo 2.1
-* Added setting for default map zoom.
-* Map in admin now defaults to preferred map type.
-* Added screenshots.
+*  Added setting for default map zoom.
+*  Map in admin now defaults to preferred map type.
+*  Added screenshots.
 
 WP Geo 2.0
-* Added options to display posts maps on category and archive pages.
+*  Added options to display posts maps on category and archive pages.
 
 WP Geo 1.3
-* Added options to set default width and height for maps.
+*  Added options to set default width and height for maps.
 
 WP Geo 1.2
-* Added [wp_geo_map] Shortcode to add map within post content.
+*  Added [wp_geo_map] Shortcode to add map within post content.
 
 WP Geo 1.1
-* Added option to set map type.
-* Added option to set wether maps appear at the top or bottom of posts.
+*  Added option to set map type.
+*  Added option to set wether maps appear at the top or bottom of posts.
 
 == License ==
 Copyright (C) 2008 Ben Huson
