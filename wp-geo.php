@@ -69,7 +69,7 @@ class WPGeo
 		{
 			$map_atts = array('type' => 'G_NORMAL_MAP');
 			extract(shortcode_atts($map_atts, $atts));
-			return '<div id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';">' . $content . '</div>';
+			return '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';">' . $content . '</div>';
 		}
 		else
 		{
@@ -107,7 +107,7 @@ class WPGeo
 		
 		if ($showmap)
 		{
-			echo '<div id="wp_geo_map" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>';
+			echo '<div class="wp_geo_map" id="wp_geo_map" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>';
 		}
 		
 	}
@@ -561,12 +561,12 @@ class WPGeo
 			if ($wp_geo_options['show_post_map'] == 'TOP')
 			{
 				// Show at top of post
-				return '<div id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>' . $content;
+				return '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>' . $content;
 			}
 			elseif ($wp_geo_options['show_post_map'] == 'BOTTOM')
 			{
 				// Show at bottom of post
-				return $content . '<div id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>';
+				return $content . '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>';
 			}
 		}
 		
