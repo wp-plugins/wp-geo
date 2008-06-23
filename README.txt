@@ -58,6 +58,10 @@ If upgrading from a previous version of the plugin:
 
 == Version Log ==
 
+WP Geo 2.1.1
+*  Adds external CSS stylesheet to fix image background colours on certain themes.
+*  Added 'wp_geo_map' class to map divs so they can be styled.
+
 WP Geo 2.1
 *  Added setting for default map zoom.
 *  Map in admin now defaults to preferred map type.
