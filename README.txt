@@ -4,7 +4,7 @@ Donate link: http://www.benhuson.co.uk/wordpress-plugins/wp-geo/
 Tags: maps, map, geo, geocoding, google, location
 Requires at least: 2.5
 Tested up to: 2.5.1
-Stable tag: 2.1
+Stable tag: 2.1.1
 
 Add location maps to your posts and pages.
 
