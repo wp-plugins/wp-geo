@@ -120,6 +120,9 @@ class WPGeo
 	function wp_head()
 	{
 		
+		// CSS
+		echo '<link rel="stylesheet" href="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/wp-geo.css" type="text/css" />';
+		
 		if (WPGeo::show_maps())
 		{
 		
