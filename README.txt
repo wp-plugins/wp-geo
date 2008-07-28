@@ -1,10 +1,10 @@
 === WP Geo  ===
 Contributors: Ben Huson
 Donate link: http://www.benhuson.co.uk/wordpress-plugins/wp-geo/
-Tags: maps, map, geo, geocoding, google, location
+Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
 Tested up to: 2.5.1
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 
 Add location maps to your posts and pages.
 
@@ -17,17 +17,20 @@ When editing a post or page, you will be able to set a physically location for t
 
 The WP Geo location selector is styled to fit seemlessly into the latest version of the WordPress admin.
 
+More information can be found at http://www.benhuson.co.uk/wordpress-plugins/wp-geo/.
+
 = Features =
 
-*  NEW - Set default map zoom level.
-*  NEW - Show post maps on category and archive pages.
-*  NEW - Set default width and height for maps
-*  NEW - Shortcode [wp_geo_map] to insert map within your post
-*  Select your preferred map type
-*  Select wether to show your map at the top or bottom of posts (or not at all)
-*  Set a location by clicking on a map or
-*  Set a location by searching for a location, town, city or address or
-*  Set a location by entering the latitude and longitude
+* NEW - GeoRSS points in feeds.
+* NEW - Set default map zoom level.
+* NEW - Show post maps on category and archive pages.
+* NEW - Set default width and height for maps
+* Shortcode [wp_geo_map] to insert map within your post
+* Select your preferred map type
+* Select wether to show your map at the top or bottom of posts (or not at all)
+* Set a location by clicking on a map or
+* Set a location by searching for a location, town, city or address or
+* Set a location by entering the latitude and longitude
 
 == Installation ==
 1. Download the archive file and uncompress it.
@@ -58,27 +61,30 @@ If upgrading from a previous version of the plugin:
 
 == Version Log ==
 
+WP Geo 2.1.2
+* Added capability for feeds including georss points - for more information see http://www.georss.org. 
+
 WP Geo 2.1.1
-*  Adds external CSS stylesheet to fix image background colours on certain themes.
-*  Added 'wp_geo_map' class to map divs so they can be styled.
+* Adds external CSS stylesheet to fix image background colours on certain themes.
+* Added 'wp_geo_map' class to map divs so they can be styled.
 
 WP Geo 2.1
-*  Added setting for default map zoom.
-*  Map in admin now defaults to preferred map type.
-*  Added screenshots.
+* Added setting for default map zoom.
+* Map in admin now defaults to preferred map type.
+* Added screenshots.
 
 WP Geo 2.0
-*  Added options to display posts maps on category and archive pages.
+* Added options to display posts maps on category and archive pages.
 
 WP Geo 1.3
-*  Added options to set default width and height for maps.
+* Added options to set default width and height for maps.
 
 WP Geo 1.2
-*  Added [wp_geo_map] Shortcode to add map within post content.
+* Added [wp_geo_map] Shortcode to add map within post content.
 
 WP Geo 1.1
-*  Added option to set map type.
-*  Added option to set wether maps appear at the top or bottom of posts.
+* Added option to set map type.
+* Added option to set wether maps appear at the top or bottom of posts.
 
 == License ==
 Copyright (C) 2008 Ben Huson
