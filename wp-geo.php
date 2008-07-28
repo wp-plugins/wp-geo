@@ -6,7 +6,7 @@
 Plugin Name: WP Geo
 Plugin URI: http://www.benhuson.co.uk/wordpress-plugins/wp-geo/
 Description: Adds geocoding to WordPress.
-Version: 2.1
+Version: 2.1.2
 Author: Ben Huson
 Author URI: http://www.benhuson.co.uk/
 Minimum WordPress Version Required: 2.5
@@ -38,7 +38,8 @@ class WPGeo
 			'show_maps_on_pages' => 'Y',
 			'show_maps_on_posts' => 'Y',
 			'show_maps_in_datearchives' => 'Y',
-			'show_maps_in_categoryarchives' => 'Y'
+			'show_maps_in_categoryarchives' => 'Y',
+			'add_geo_information_to_rss' => 'Y'
 		);
 		add_option('wp_geo_options', $options);
 		$wp_geo_options = get_option('wp_geo_options');
@@ -337,7 +338,7 @@ class WPGeo
 		}
 		
 		// Vars
-		$google_maps_api_key = $wp_geo_options['google_api_key'];//'ABQIAAAAFI7dhz07QTtQ4ZYBlayWkhQwjJUkeIrZUptL_je98VVn1CFdMRS4IkExSEz1qUoz6w3885JcPVY5CA';
+		$google_maps_api_key = $wp_geo_options['google_api_key'];
 		$panel_open ? $panel_open = 'jQuery(\'#wpgeolocationdiv.postbox h3\').click();' : $panel_open = '';
 		$hide_marker ? $hide_marker = 'marker.hide();' : $hide_marker = '';
 		
@@ -622,6 +623,11 @@ class WPGeo
 		{
 			return true;
 		}
+		if (is_feed() && $wp_geo_options['add_geo_information_to_rss'] == 'Y')
+		{
+			return true;
+		}
+		
 		return false;
 	}
 
@@ -665,6 +671,8 @@ class WPGeo
 			$wp_geo_options['show_maps_on_posts'] = $_POST['show_maps_on_posts'];
 			$wp_geo_options['show_maps_in_datearchives'] = $_POST['show_maps_in_datearchives'];
 			$wp_geo_options['show_maps_in_categoryarchives'] = $_POST['show_maps_in_categoryarchives'];
+			
+			$wp_geo_options['add_geo_information_to_rss'] = $_POST['add_geo_information_to_rss'];
 			
 			update_option('wp_geo_options', $wp_geo_options);
 			echo '<div class="updated"><p>Options updated</p></div>';
@@ -711,6 +719,10 @@ class WPGeo
 							' . WPGeo::options_checkbox('show_maps_in_datearchives', 'Y', $wp_geo_options['show_maps_in_datearchives']) . ' Posts in date archives<br />
 							' . WPGeo::options_checkbox('show_maps_in_categoryarchives', 'Y', $wp_geo_options['show_maps_in_categoryarchives']) . ' Posts in category archives
 						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">Feeds</th>
+						<td>' . WPGeo::options_checkbox('add_geo_information_to_rss', 'Y', $wp_geo_options['add_geo_information_to_rss']) . ' Add geographic information</td>
 					</tr>
 				</table>
 				<p class="submit">
@@ -855,6 +867,45 @@ class WPGeo
 		
 	}
 	
+
+
+	/**
+	 * GeoRSS Namespace
+	 */
+	function georss_namespace() 
+	{
+		if (WPGeo::show_maps())
+		{			
+			echo 'xmlns:georss="http://www.georss.org/georss"';
+		}
+	}
+
+
+
+	/**
+	 * GeoRSS Tag
+	 */
+	function georss_item() 
+	{
+		if (WPGeo::show_maps())
+		{
+			global $post;
+			
+			// Get the post
+			$id = $post->ID;		
+		
+			// Get latitude and longitude
+			$latitude = get_post_meta($post->ID, '_wp_geo_latitude', true);
+			$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
+			
+			// Need a map?
+			if (is_numeric($latitude) && is_numeric($longitude))
+			{
+				echo '<georss:point>' . $latitude . ' ' . $longitude . '</georss:point>';
+			}
+		}
+	}
+	
 	
 
 }
@@ -874,6 +925,15 @@ add_action('admin_head', array('WPGeo', 'admin_head'));
 add_action('dbx_post_advanced', array('WPGeo', 'dbx_post_advanced'));
 add_action('edit_page_form', array('WPGeo', 'dbx_post_advanced'));
 add_action('save_post', array('WPGeo', 'save_post'));
+
+// Feed Hooks
+add_action('rss2_ns', array('WPGeo', 'georss_namespace'));
+add_action('atom_ns', array('WPGeo', 'georss_namespace'));
+add_action('rdf_ns', array('WPGeo', 'georss_namespace'));
+add_action('rss_item', array('WPGeo', 'georss_item'));
+add_action('rss2_item', array('WPGeo', 'georss_item'));
+add_action('atom_entry', array('WPGeo', 'georss_item'));
+add_action('rdf_item', array('WPGeo', 'georss_item'));
 
 
 
