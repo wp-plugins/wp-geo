@@ -62,27 +62,34 @@ If upgrading from a previous version of the plugin:
 == Version Log ==
 
 WP Geo 2.1.2
+
 * Added capability for feeds including georss points - for more information see http://www.georss.org. 
 
 WP Geo 2.1.1
+
 * Adds external CSS stylesheet to fix image background colours on certain themes.
 * Added 'wp_geo_map' class to map divs so they can be styled.
 
 WP Geo 2.1
+
 * Added setting for default map zoom.
 * Map in admin now defaults to preferred map type.
 * Added screenshots.
 
 WP Geo 2.0
+
 * Added options to display posts maps on category and archive pages.
 
 WP Geo 1.3
+
 * Added options to set default width and height for maps.
 
 WP Geo 1.2
+
 * Added [wp_geo_map] Shortcode to add map within post content.
 
 WP Geo 1.1
+
 * Added option to set map type.
 * Added option to set wether maps appear at the top or bottom of posts.
 
