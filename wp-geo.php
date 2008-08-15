@@ -937,4 +937,9 @@ add_action('rdf_item', array('WPGeo', 'georss_item'));
 
 
 
+// Includes
+include('wp-geo-widget.php');
+
+
+
 ?>
