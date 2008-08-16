@@ -232,7 +232,7 @@ class WPGeo
 			}
 					
 			// Script
-			$html_content = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $google_maps_api_key . '" type="text/javascript"></script>';
+			$html_content = WPGeo::mapJavaScriptAPI();
 			$html_content .= '
 			<script type="text/javascript">
 			//<![CDATA[
@@ -319,6 +319,19 @@ class WPGeo
 	
 	
 	/**
+	 * Map JavaScript API
+	 */
+	function mapJavaScriptAPI()
+	{
+	
+		$wp_geo_options = get_option('wp_geo_options');
+		return '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $wp_geo_options['google_api_key'] . '" type="text/javascript"></script>';
+		
+	}
+	
+	
+	
+	/**
 	 * Map Scripts Init
 	 */
 	function mapScriptsInit($latitude, $longitude, $zoom = 5, $panel_open = false, $hide_marker = false)
@@ -343,7 +356,7 @@ class WPGeo
 		$hide_marker ? $hide_marker = 'marker.hide();' : $hide_marker = '';
 		
 		// Script
-		$html_content = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $google_maps_api_key . '" type="text/javascript"></script>';
+		$html_content = WPGeo::mapJavaScriptAPI();
 		$html_content .= '
 			<script type="text/javascript">
 			//<![CDATA[

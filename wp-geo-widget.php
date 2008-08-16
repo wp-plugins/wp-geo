@@ -171,8 +171,7 @@ class WPGeoWidget
 		}
 					
 		// Html JS
-		$html_js = '';
-		$html_js .= '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $google_maps_api_key . '" type="text/javascript"></script>';
+		$html_js = WPGeo::mapJavaScriptAPI();
 		$html_js .= '<script type="text/javascript" src="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/Tooltip.js"></script>';
 		$html_js .= '
 			<script type="text/javascript">
