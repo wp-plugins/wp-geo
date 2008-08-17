@@ -189,7 +189,7 @@ class WPGeoWidget
 		}
 					
 		// Html JS
-		$html_js = WPGeo::mapJavaScriptAPI();
+		WPGeo::includeGoogleMapsJavaScriptAPI();
 		$html_js .= '<script type="text/javascript" src="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/Tooltip.js"></script>';
 		$html_js .= '
 			<script type="text/javascript">
