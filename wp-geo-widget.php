@@ -268,7 +268,7 @@ class WPGeoWidget
 			function createMarker(latlng, title, link) 
 			{	
 				// Create the custom icon for the marker			
-				var icon = createIcon(10, 17, 5, 17, "' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/img/map_marker.png", "' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/img/map_marker_trans.png");
+				var icon = createIcon(10, 17, 5, 17, "' . get_bloginfo('url') . '/wp-content/wp-geo/markers/small-marker.png", "' . get_bloginfo('url') . '/wp-content/wp-geo/markers/small-marker-trans.png");
 							
 				// Create the marker
 				var marker = new GMarker(latlng, icon);
