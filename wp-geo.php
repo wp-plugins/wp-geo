@@ -29,7 +29,7 @@ class WPGeo
 	// Folders
 	/*
 	var $plugin_folder = '/wp-content/plugins/wp-geo';
-	var $content_folder = '/wp-content/wp-geo';
+	var $content_folder = '/wp-content/uploads/wp-geo';
 	*/
 	
 	// Marker images
@@ -87,11 +87,11 @@ class WPGeo
 		// Files
 		clearstatcache();
 		$old_umask = umask(0);
-		mkdir(ABSPATH . '/wp-content/wp-geo');
-		mkdir(ABSPATH . '/wp-content/wp-geo/markers');
+		mkdir(ABSPATH . '/wp-content/uploads/wp-geo');
+		mkdir(ABSPATH . '/wp-content/uploads/wp-geo/markers');
 		
 		$old_marker_image_dir = ABSPATH . '/wp-content/plugins/wp-geo/img/markers/';
-		$new_marker_image_dir = ABSPATH . '/wp-content/wp-geo/markers/';
+		$new_marker_image_dir = ABSPATH . '/wp-content/uploads/wp-geo/markers/';
 		
 		WPGeo::moveFileOrDelete($old_marker_image_dir . 'dot-marker.png', $new_marker_image_dir . 'dot-marker.png');
 		WPGeo::moveFileOrDelete($old_marker_image_dir . 'dot-marker-trans.png', $new_marker_image_dir . 'dot-marker-trans.png');
