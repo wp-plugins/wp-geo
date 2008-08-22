@@ -19,8 +19,39 @@ Minimum WordPress Version Required: 2.5
  */
 class WPGeo
 {
-
-
+	
+	
+	
+	/**
+	 * Properties
+	 */
+	
+	// Folders
+	/*
+	var $plugin_folder = '/wp-content/plugins/wp-geo';
+	var $content_folder = '/wp-content/wp-geo';
+	*/
+	
+	// Marker images
+	/*
+	var $marker_dot = 'dot-marker.png';
+	var $marker_dot_trans = 'dot-marker-trans.png';
+	var $marker_large = 'large-marker.png';
+	var $marker_large_trans = 'large-marker-trans.png';
+	var $marker_small = 'small-marker.png';
+	var $marker_small_trans = 'small-marker-trans.png';
+	*/
+	
+	
+	
+	/**
+	 * Constructor
+	 */
+	function WPGeo()
+	{
+	}
+	
+	
 
 	/**
 	 * Register Activation
@@ -996,6 +1027,9 @@ class WPGeo
 }
 
 
+
+// Init.
+$wpgeo = new WPGeo();
 
 // Hooks
 register_activation_hook(__FILE__, array('WPGeo', 'register_activation'));
