@@ -129,7 +129,7 @@ class WPGeoWidget
 	function add_map($width = '100%', $height = 150, $maptype = '') 
 	{
 	
-		global $posts;
+		global $posts, $wpgeo;
 		
 		// Set default width and height
 		if (empty($width))
@@ -200,6 +200,9 @@ class WPGeoWidget
 						
 			// Html JS
 			WPGeo::includeGoogleMapsJavaScriptAPI();
+			
+			$small_marker = $wpgeo->get_marker_meta('small');
+			
 			$html_js .= '<script type="text/javascript" src="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/Tooltip.js"></script>';
 			$html_js .= '
 				<script type="text/javascript">
@@ -278,7 +281,7 @@ class WPGeoWidget
 				function createMarker(latlng, title, link) 
 				{	
 					// Create the custom icon for the marker			
-					var icon = createIcon(10, 17, 5, 17, "' . get_bloginfo('url') . '/wp-content/uploads/wp-geo/markers/small-marker.png", "' . get_bloginfo('url') . '/wp-content/wp-geo/markers/small-marker-trans.png");
+					var icon = createIcon(' . $small_marker['width'] . ', ' . $small_marker['height'] . ', ' . $small_marker['anchorX'] . ', ' . $small_marker['anchorY'] . ', "' . $small_marker['image'] . '", "' . $small_marker['shadow'] . '");
 								
 					// Create the marker
 					var marker = new GMarker(latlng, icon);
