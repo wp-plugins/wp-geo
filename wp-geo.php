@@ -126,7 +126,7 @@ class WPGeo
 	
 	
 	/**
-	 * Shortcode: [wpgeo_map type="G_NORMAL_MAP"]
+	 * Shortcode: [wp_geo_map type="G_NORMAL_MAP"]
 	 */
 	function shortcode_wpgeo_map($atts, $content = null)
 	{
@@ -148,7 +148,7 @@ class WPGeo
 		}
 		
 	}
-
+	
 
 
 	/**
@@ -403,6 +403,7 @@ class WPGeo
 		if (WPGeo::show_maps())
 		{
 			$wp_geo_options = get_option('wp_geo_options');
+			wp_enqueue_script('jquery');
 			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $wp_geo_options['google_api_key'], false, '');
 			wp_enqueue_script('googlemaps');
 			return '';
