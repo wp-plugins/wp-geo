@@ -94,11 +94,11 @@ class WPGeo
 		$new_marker_image_dir = ABSPATH . '/wp-content/uploads/wp-geo/markers/';
 		
 		WPGeo::moveFileOrDelete($old_marker_image_dir . 'dot-marker.png', $new_marker_image_dir . 'dot-marker.png');
-		WPGeo::moveFileOrDelete($old_marker_image_dir . 'dot-marker-trans.png', $new_marker_image_dir . 'dot-marker-trans.png');
+		WPGeo::moveFileOrDelete($old_marker_image_dir . 'dot-marker-shadow.png', $new_marker_image_dir . 'dot-marker-shadow.png');
 		WPGeo::moveFileOrDelete($old_marker_image_dir . 'large-marker.png', $new_marker_image_dir . 'large-marker.png');
-		WPGeo::moveFileOrDelete($old_marker_image_dir . 'large-marker-trans.png', $new_marker_image_dir . 'large-marker-trans.png');
+		WPGeo::moveFileOrDelete($old_marker_image_dir . 'large-marker-shadow.png', $new_marker_image_dir . 'large-marker-shadow.png');
 		WPGeo::moveFileOrDelete($old_marker_image_dir . 'small-marker.png', $new_marker_image_dir . 'small-marker.png');
-		WPGeo::moveFileOrDelete($old_marker_image_dir . 'small-marker-trans.png', $new_marker_image_dir . 'small-marker-trans.png');
+		WPGeo::moveFileOrDelete($old_marker_image_dir . 'small-marker-shadow.png', $new_marker_image_dir . 'small-marker-shadow.png');
 		
 		umask($old_umask);
 		
@@ -977,6 +977,52 @@ class WPGeo
 		
 		// Default return
 		return $map_type_array;
+		
+	}
+
+
+
+	/**
+	 * Get Marker Meta
+	 */
+	function get_marker_meta($type = 'large')
+	{
+		
+		// Array
+		$marker_types = array();
+		
+		// Large Marker
+		$marker_types['large'] = array(
+			'width' => 10,
+			'height' => 17,
+			'anchorX' => 5,
+			'anchorY' => 17,
+			'image' => get_bloginfo('url') . '/wp-content/uploads/wp-geo/markers/small-marker.png',
+			'shadow' => get_bloginfo('url') . '/wp-content/wp-geo/markers/small-marker-shadow.png'
+		);
+		
+		// Small Marker
+		$marker_types['small'] = array(
+			'width' => 10,
+			'height' => 17,
+			'anchorX' => 5,
+			'anchorY' => 17,
+			'image' => get_bloginfo('url') . '/wp-content/uploads/wp-geo/markers/small-marker.png',
+			'shadow' => get_bloginfo('url') . '/wp-content/wp-geo/markers/small-marker-shadow.png'
+		);			
+		
+		// Dot Marker
+		$marker_types['dot'] = array(
+			'width' => 10,
+			'height' => 17,
+			'anchorX' => 5,
+			'anchorY' => 17,
+			'image' => get_bloginfo('url') . '/wp-content/uploads/wp-geo/markers/small-marker.png',
+			'shadow' => get_bloginfo('url') . '/wp-content/wp-geo/markers/small-marker-shadow.png'
+		);
+		
+		// Default return
+		return $marker_types[$type];
 		
 	}
 	
