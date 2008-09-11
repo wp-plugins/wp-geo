@@ -76,7 +76,8 @@ class WPGeoWidget
 	 */
 	function map_widget_control() 
 	{
-	
+		
+		global $wpgeo;
 		$options = $newoptions = get_option('map_widget');
 		
 		// Get the options
@@ -110,7 +111,7 @@ class WPGeoWidget
 			<p><label for="wpgeo-title">Title: <input class="widefat" id="wpgeo-title" name="wpgeo-title" type="text" value="' . $title . '" /></label></p>
 			<p><label for="wpgeo-width">Width: <input class="widefat" id="wpgeo-width" name="wpgeo-width" type="text" value="' . $width . '" /></label></p>
 			<p><label for="wpgeo-height">Height: <input class="widefat" id="wpgeo-height" name="wpgeo-height" type="text" value="' . $height . '" /></label></p>';
-		echo '<p>' . WPGeo::google_map_types('menu', $maptype) . '</p>';
+		echo '<p>' . $wpgeo->google_map_types('menu', $maptype) . '</p>';
 		/*
 		echo '
 			<p><label for="wpgeo-rss-url-name">View enlarged: <input class="widefat" id="wpgeo-rss-url-name" name="wpgeo-rss-url-name" type="text" value="' . $url_name . '" /></label></p>
@@ -149,6 +150,7 @@ class WPGeoWidget
 		$coords = array();
 		for ($i = 0; $i < count($posts); $i++)
 		{
+		
 			$post 		= $posts[$i];
 			$latitude 	= get_post_meta($post->ID, '_wp_geo_latitude', true);
 			$longitude 	= get_post_meta($post->ID, '_wp_geo_longitude', true);
@@ -158,10 +160,10 @@ class WPGeoWidget
 			if (is_numeric($latitude) && is_numeric($longitude))
 			{
 				$push = array(
-					'id' => $post->ID,
-					'latitude' => $latitude,
+					'id' 		=> $post->ID,
+					'latitude' 	=> $latitude,
 					'longitude' => $longitude,
-					'title' => $title
+					'title' 	=> $title
 				);
 				array_push($coords, $push);
 			}
@@ -199,7 +201,7 @@ class WPGeoWidget
 			}
 						
 			// Html JS
-			WPGeo::includeGoogleMapsJavaScriptAPI();
+			$wpgeo->includeGoogleMapsJavaScriptAPI();
 			
 			$small_marker = $wpgeo->get_marker_meta('small');
 			

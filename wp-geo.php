@@ -58,7 +58,9 @@ class WPGeo
 	 */
 	function register_activation()
 	{
-	
+		
+		global $wpgeo;
+		
 		$options = array(
 			'google_api_key' => '', 
 			'google_map_type' => 'G_NORMAL_MAP', 
@@ -93,12 +95,12 @@ class WPGeo
 		$old_marker_image_dir = ABSPATH . '/wp-content/plugins/wp-geo/img/markers/';
 		$new_marker_image_dir = ABSPATH . '/wp-content/uploads/wp-geo/markers/';
 		
-		WPGeo::moveFileOrDelete($old_marker_image_dir . 'dot-marker.png', $new_marker_image_dir . 'dot-marker.png');
-		WPGeo::moveFileOrDelete($old_marker_image_dir . 'dot-marker-shadow.png', $new_marker_image_dir . 'dot-marker-shadow.png');
-		WPGeo::moveFileOrDelete($old_marker_image_dir . 'large-marker.png', $new_marker_image_dir . 'large-marker.png');
-		WPGeo::moveFileOrDelete($old_marker_image_dir . 'large-marker-shadow.png', $new_marker_image_dir . 'large-marker-shadow.png');
-		WPGeo::moveFileOrDelete($old_marker_image_dir . 'small-marker.png', $new_marker_image_dir . 'small-marker.png');
-		WPGeo::moveFileOrDelete($old_marker_image_dir . 'small-marker-shadow.png', $new_marker_image_dir . 'small-marker-shadow.png');
+		$wpgeo->moveFileOrDelete($old_marker_image_dir . 'dot-marker.png', $new_marker_image_dir . 'dot-marker.png');
+		$wpgeo->moveFileOrDelete($old_marker_image_dir . 'dot-marker-shadow.png', $new_marker_image_dir . 'dot-marker-shadow.png');
+		$wpgeo->moveFileOrDelete($old_marker_image_dir . 'large-marker.png', $new_marker_image_dir . 'large-marker.png');
+		$wpgeo->moveFileOrDelete($old_marker_image_dir . 'large-marker-shadow.png', $new_marker_image_dir . 'large-marker-shadow.png');
+		$wpgeo->moveFileOrDelete($old_marker_image_dir . 'small-marker.png', $new_marker_image_dir . 'small-marker.png');
+		$wpgeo->moveFileOrDelete($old_marker_image_dir . 'small-marker-shadow.png', $new_marker_image_dir . 'small-marker-shadow.png');
 		
 		umask($old_umask);
 		
@@ -131,12 +133,13 @@ class WPGeo
 	function shortcode_wpgeo_map($atts, $content = null)
 	{
 	
-		global $post;
+		global $post, $wpgeo;
+		
 		$id = $post->ID;
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		
-		if (WPGeo::show_maps() && $wp_geo_options['show_post_map'] == 'HIDE')
+		if ($wpgeo->show_maps() && $wp_geo_options['show_post_map'] == 'HIDE')
 		{
 			$map_atts = array('type' => 'G_NORMAL_MAP');
 			extract(shortcode_atts($map_atts, $atts));
@@ -191,10 +194,12 @@ class WPGeo
 	function wp_head()
 	{
 		
+		global $wpgeo;
+		
 		// CSS
 		echo '<link rel="stylesheet" href="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/wp-geo.css" type="text/css" />';
 		
-		if (WPGeo::show_maps())
+		if ($wpgeo->show_maps())
 		{
 		
 			global $posts;
@@ -299,7 +304,7 @@ class WPGeo
 				}
 						
 				// Script
-				WPGeo::includeGoogleMapsJavaScriptAPI();
+				$wpgeo->includeGoogleMapsJavaScriptAPI();
 				$html_content .= '
 				<script type="text/javascript">
 				//<![CDATA[
@@ -324,7 +329,7 @@ class WPGeo
 							' . $points_js . '
 							
 							' . $polyline_js . '
-							
+					
 							GEvent.addListener(map, "zoomend", function(oldLevel, newLevel) {
 								map.setCenter(marker_0.getLatLng());
 							});
@@ -362,8 +367,10 @@ class WPGeo
 	function admin_head()
 	{
 	
+		global $wpgeo;
+		
 		// Only load if on a post or page
-		if (WPGeo::show_maps())
+		if ($wpgeo->show_maps())
 		{
 		
 		//global $post_ID;
@@ -380,12 +387,12 @@ class WPGeo
 			$panel_open = false;
 			$hide_marker = false;
 			
-			echo WPGeo::mapScriptsInit($default_latitude, $default_longitude, $default_zoom, $panel_open, $hide_marker);
+			echo $wpgeo->mapScriptsInit($default_latitude, $default_longitude, $default_zoom, $panel_open, $hide_marker);
 		//}
 		//else
 		//{
 			// Only need on post and page editing pages in the admin
-			//echo WPGeo::mapScriptsInit(null, null);
+			//echo $wpgeo->mapScriptsInit(null, null);
 		//}
 		
 		}
@@ -399,8 +406,10 @@ class WPGeo
 	 */
 	function includeGoogleMapsJavaScriptAPI()
 	{
-	
-		if (WPGeo::show_maps())
+		
+		global $wpgeo;
+		
+		if ($wpgeo->show_maps())
 		{
 			$wp_geo_options = get_option('wp_geo_options');
 			wp_enqueue_script('jquery');
@@ -418,6 +427,8 @@ class WPGeo
 	 */
 	function mapScriptsInit($latitude, $longitude, $zoom = 5, $panel_open = false, $hide_marker = false)
 	{
+		
+		global $wpgeo;
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];	
@@ -438,7 +449,7 @@ class WPGeo
 		$hide_marker ? $hide_marker = 'marker.hide();' : $hide_marker = '';
 		
 		// Script
-		WPGeo::includeGoogleMapsJavaScriptAPI();
+		$wpgeo->includeGoogleMapsJavaScriptAPI();
 		$html_content .= '
 			<script type="text/javascript">
 			//<![CDATA[
@@ -562,14 +573,14 @@ class WPGeo
 	function dbx_post_advanced()
 	{
 	
-		global $post_ID;
+		global $post_ID, $wpgeo;
 		
 		// Get post location
 		$latitude = get_post_meta($post_ID, '_wp_geo_latitude', true);
 		$longitude = get_post_meta($post_ID, '_wp_geo_longitude', true);
 		
 		// Output
-		echo WPGeo::mapForm($latitude, $longitude);
+		echo $wpgeo->mapForm($latitude, $longitude);
 		
 	}
 
@@ -639,7 +650,9 @@ class WPGeo
 	function the_content($content = '')
 	{
 	
-		if (WPGeo::show_maps())
+		global $wpgeo;
+		
+		if ($wpgeo->show_maps())
 		{
 		
 			global $posts, $post;
@@ -684,7 +697,7 @@ class WPGeo
 	
 		if (function_exists('add_options_page'))
 		{
-			add_options_page('WP Geo Options', 'WP Geo', 8, __FILE__, array('WPGeo', 'options_page'));
+			add_options_page('WP Geo Options', 'WP Geo', 8, __FILE__, array($wpgeo, 'options_page'));
 		}
 		
 	}
@@ -764,6 +777,8 @@ class WPGeo
 	function options_page()
 	{
 		
+		global $wpgeo;
+		
 		$wp_geo_options = get_option('wp_geo_options');
 		
 		// Process option updates
@@ -772,8 +787,8 @@ class WPGeo
 			$wp_geo_options['google_api_key'] = $_POST['google_api_key'];
 			$wp_geo_options['google_map_type'] = $_POST['google_map_type'];
 			$wp_geo_options['show_post_map'] = $_POST['show_post_map'];
-			$wp_geo_options['default_map_width'] = WPGeo::numberPercentOrPx($_POST['default_map_width']);
-			$wp_geo_options['default_map_height'] = WPGeo::numberPercentOrPx($_POST['default_map_height']);
+			$wp_geo_options['default_map_width'] = $wpgeo->numberPercentOrPx($_POST['default_map_width']);
+			$wp_geo_options['default_map_height'] = $wpgeo->numberPercentOrPx($_POST['default_map_height']);
 			$wp_geo_options['default_map_zoom'] = $_POST['default_map_zoom'];
 			
 			$wp_geo_options['show_maps_on_home'] = $_POST['show_maps_on_home'];
@@ -802,11 +817,11 @@ class WPGeo
 					</tr>
 					<tr valign="top">
 						<th scope="row">Map Type</th>
-						<td>' . WPGeo::google_map_types('menu', $wp_geo_options['google_map_type']) . '</td>
+						<td>' . $wpgeo->google_map_types('menu', $wp_geo_options['google_map_type']) . '</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">Show Post Map</th>
-						<td>' . WPGeo::post_map_menu('menu', $wp_geo_options['show_post_map']) . '</td>
+						<td>' . $wpgeo->post_map_menu('menu', $wp_geo_options['show_post_map']) . '</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">Default Map Width</th>
@@ -818,21 +833,21 @@ class WPGeo
 					</tr>
 					<tr valign="top">
 						<th scope="row">Default Map Zoom</th>
-						<td>' . WPGeo::selectMapZoom('menu', $wp_geo_options['default_map_zoom']) . '</td>
+						<td>' . $wpgeo->selectMapZoom('menu', $wp_geo_options['default_map_zoom']) . '</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">Show Maps On</th>
 						<td>
-							' . WPGeo::options_checkbox('show_maps_on_pages', 'Y', $wp_geo_options['show_maps_on_pages']) . ' Pages<br />
-							' . WPGeo::options_checkbox('show_maps_on_posts', 'Y', $wp_geo_options['show_maps_on_posts']) . ' Posts (single posts)<br />
-							' . WPGeo::options_checkbox('show_maps_on_home', 'Y', $wp_geo_options['show_maps_on_home']) . ' Posts home page<br />
-							' . WPGeo::options_checkbox('show_maps_in_datearchives', 'Y', $wp_geo_options['show_maps_in_datearchives']) . ' Posts in date archives<br />
-							' . WPGeo::options_checkbox('show_maps_in_categoryarchives', 'Y', $wp_geo_options['show_maps_in_categoryarchives']) . ' Posts in category archives
+							' . $wpgeo->options_checkbox('show_maps_on_pages', 'Y', $wp_geo_options['show_maps_on_pages']) . ' Pages<br />
+							' . $wpgeo->options_checkbox('show_maps_on_posts', 'Y', $wp_geo_options['show_maps_on_posts']) . ' Posts (single posts)<br />
+							' . $wpgeo->options_checkbox('show_maps_on_home', 'Y', $wp_geo_options['show_maps_on_home']) . ' Posts home page<br />
+							' . $wpgeo->options_checkbox('show_maps_in_datearchives', 'Y', $wp_geo_options['show_maps_in_datearchives']) . ' Posts in date archives<br />
+							' . $wpgeo->options_checkbox('show_maps_in_categoryarchives', 'Y', $wp_geo_options['show_maps_in_categoryarchives']) . ' Posts in category archives
 						</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">Feeds</th>
-						<td>' . WPGeo::options_checkbox('add_geo_information_to_rss', 'Y', $wp_geo_options['add_geo_information_to_rss']) . ' Add geographic information</td>
+						<td>' . $wpgeo->options_checkbox('add_geo_information_to_rss', 'Y', $wp_geo_options['add_geo_information_to_rss']) . ' Add geographic information</td>
 					</tr>
 				</table>
 				<p class="submit">
@@ -1034,7 +1049,9 @@ class WPGeo
 	function georss_namespace() 
 	{
 	
-		if (WPGeo::show_maps())
+		global $wpgeo;
+		
+		if ($wpgeo->show_maps())
 		{			
 			echo 'xmlns:georss="http://www.georss.org/georss"';
 		}
@@ -1049,7 +1066,9 @@ class WPGeo
 	function georss_item() 
 	{
 	
-		if (WPGeo::show_maps())
+		global $wpgeo;
+		
+		if ($wpgeo->show_maps())
 		{
 			global $post;
 			
