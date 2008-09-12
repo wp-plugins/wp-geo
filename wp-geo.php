@@ -412,9 +412,18 @@ class WPGeo
 		if ($wpgeo->show_maps())
 		{
 			$wp_geo_options = get_option('wp_geo_options');
+			
+			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $wp_geo_options['google_api_key'], false);
+			wp_register_script('wpgeo', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'));
+			wp_register_script('wpgeotooltip', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/Tooltip.js', array('googlemaps'));
+			
 			wp_enqueue_script('jquery');
-			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $wp_geo_options['google_api_key'], false, '');
 			wp_enqueue_script('googlemaps');
+			wp_enqueue_script('wpgeo');
+			wp_enqueue_script('wpgeotooltip');
+			
+			$html_js .= '<script type="text/javascript" src="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/Tooltip.js"></script>';
+			
 			return '';
 		}
 		

@@ -195,9 +195,11 @@ class WPGeoWidget
 			
 			$polyline_coords_js .= ']';		
 	
+			$small_marker = $wpgeo->get_marker_meta('small');
+			$markers_js .= 'var icon = wpgeo_createIcon(' . $small_marker['width'] . ', ' . $small_marker['height'] . ', ' . $small_marker['anchorX'] . ', ' . $small_marker['anchorY'] . ', "' . $small_marker['image'] . '", "' . $small_marker['shadow'] . '");';
 			for ($i = 0; $i < count($coords); $i++)
 			{
-				$markers_js .= 'marker' . $i . ' = createMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), "' . $coords[$i]['title'] . '", "' . get_permalink($coords[$i]['id']) . '");' . "\n";
+				$markers_js .= 'marker' . $i . ' = wpgeo_createMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), icon, "' . $coords[$i]['title'] . '", "' . get_permalink($coords[$i]['id']) . '");' . "\n";
 			}
 						
 			// Html JS
@@ -205,7 +207,6 @@ class WPGeoWidget
 			
 			$small_marker = $wpgeo->get_marker_meta('small');
 			
-			$html_js .= '<script type="text/javascript" src="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/Tooltip.js"></script>';
 			$html_js .= '
 				<script type="text/javascript">
 				//<![CDATA[
@@ -225,28 +226,8 @@ class WPGeoWidget
 				* Add events to load the map
 				*/
 			
-				GEvent.addDomListener(window,"load",loadMap);
-				GEvent.addDomListener(window,"unload",GUnload);
-				
-				
-				
-				/**
-				* Check for Google maps compatibility and load the map
-				*/
-				
-				function loadMap()
-				{
-					if(GBrowserIsCompatible()) 
-					{
-						createMap();
-						//initWPGeoWidget();
-					}
-					else
-					{
-						alert("Sorry, the Google Maps API is not compatible with this browser.");
-						return;
-					}
-				}
+				GEvent.addDomListener(window, "load", createMapWidget);
+				GEvent.addDomListener(window, "unload", GUnload);
 			
 			
 			
@@ -254,117 +235,30 @@ class WPGeoWidget
 				* Create the map
 				*/
 				
-				function createMap()
+				function createMapWidget()
 				{
-					map = new GMap2(document.getElementById("wp_geo_map_widget"));
-					map.addControl(new GSmallZoomControl());
-					map.setCenter(new GLatLng(0, 0), 0);
-					map.setMapType(' . $maptype . ');
-							
-					bounds = new GLatLngBounds();		
-					
-					// Add the markers	
-					'.	$markers_js .'
-									
-					// draw the polygonal lines between points
-					drawPolylines(' . $polyline_coords_js . ', "#000000", 2, 0.50);
-							
-					// Center the map to show all markers
-					var center = bounds.getCenter();
-					var zoom = map.getBoundsZoomLevel(bounds)
-					
-					map.setCenter(center, zoom);
-				}
-		
-				
-				/**
-				* Create a marker for the map
-				*/
-				function createMarker(latlng, title, link) 
-				{	
-					// Create the custom icon for the marker			
-					var icon = createIcon(' . $small_marker['width'] . ', ' . $small_marker['height'] . ', ' . $small_marker['anchorX'] . ', ' . $small_marker['anchorY'] . ', "' . $small_marker['image'] . '", "' . $small_marker['shadow'] . '");
+					if(GBrowserIsCompatible())
+					{
+						map = new GMap2(document.getElementById("wp_geo_map_widget"));
+						map.addControl(new GSmallZoomControl());
+						map.setCenter(new GLatLng(0, 0), 0);
+						map.setMapType(' . $maptype . ');
 								
-					// Create the marker
-					var marker = new GMarker(latlng, icon);
-				
-					// Create a custom tooltip
-					var tooltip = new Tooltip(marker,title,2)
-					
-					marker.tooltip = tooltip;
-					marker.title = title;
-					marker.link = link;
-					marker.latlng = latlng;
-					
-					GEvent.addListener(marker, "mouseover", overHandler);
-					GEvent.addListener(marker, "mouseout", outHandler);
-					GEvent.addListener(marker, "click", clickHandler);
-		
-					map.addOverlay(marker);
-					map.addOverlay(tooltip);
-					
-					bounds.extend(marker.getPoint());
-					
-					return marker;
-				}
-				
-				
-				/**
-				* Create a custom marker icon for the map
-				*/
-				function createIcon(width, height, anchorX, anchorY, image, transparent) 
-				{
-					var icon = new GIcon();
-					
-					icon.image = image;
-					icon.iconSize = new GSize(width, height);
-					icon.iconAnchor = new GPoint(anchorX, anchorY);
-					icon.shadow = transparent;
-					
-					return icon;
-				}
-				
-		
-				/**
-				* Draw the polygonal lines between markers
-				*/
-				function drawPolylines(coords, color, thickness, alpha)
-				{
-					var polyOptions = {clickable:true, geodesic:true};
-					var polyline = new GPolyline(coords, color, thickness, alpha, polyOptions);
-					
-					map.addOverlay(polyline);		
-				}
-				
-				
-				/**
-				* Handles the roll over event for a marker
-				*/
-				function overHandler() 
-				{
-					if(!(this.isInfoWindowOpen) && !(this.isHidden())){
-						this.tooltip.show();
+						bounds = new GLatLngBounds();		
+						
+						// Add the markers	
+						'.	$markers_js .'
+										
+						// draw the polygonal lines between points
+						map.addOverlay(wpgeo_drawPolylines(' . $polyline_coords_js . ', "#000000", 2, 0.50));
+								
+						// Center the map to show all markers
+						var center = bounds.getCenter();
+						var zoom = map.getBoundsZoomLevel(bounds)
+						
+						map.setCenter(center, zoom);
 					}
 				}
-				
-					
-				/**
-				* Handles the roll out event for a marker
-				*/
-				function outHandler() 
-				{
-					this.tooltip.hide();
-				}
-				
-				
-				/**
-				* Handles the click event for a marker
-				*/
-				function clickHandler() 
-				{
-					window.location.href= this.link;
-				}
-				
 				
 				
 				//]]>
