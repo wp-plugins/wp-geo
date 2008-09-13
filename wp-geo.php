@@ -25,22 +25,9 @@ class WPGeo
 	/**
 	 * Properties
 	 */
-	
-	// Folders
-	/*
-	var $plugin_folder = '/wp-content/plugins/wp-geo';
-	var $content_folder = '/wp-content/uploads/wp-geo';
-	*/
-	
-	// Marker images
-	/*
-	var $marker_dot = 'dot-marker.png';
-	var $marker_dot_trans = 'dot-marker-trans.png';
-	var $marker_large = 'large-marker.png';
-	var $marker_large_trans = 'large-marker-trans.png';
-	var $marker_small = 'small-marker.png';
-	var $marker_small_trans = 'small-marker-trans.png';
-	*/
+	 
+	var $version = '2.1.3';
+	var $markers;
 	
 	
 	
@@ -49,6 +36,9 @@ class WPGeo
 	 */
 	function WPGeo()
 	{
+		
+		$this->markers = new WPGeoMarkers();
+		
 	}
 	
 	
@@ -87,41 +77,7 @@ class WPGeo
 		update_option('wp_geo_options', $wp_geo_options);
 		
 		// Files
-		clearstatcache();
-		$old_umask = umask(0);
-		mkdir(ABSPATH . '/wp-content/uploads/wp-geo');
-		mkdir(ABSPATH . '/wp-content/uploads/wp-geo/markers');
-		
-		$old_marker_image_dir = ABSPATH . '/wp-content/plugins/wp-geo/img/markers/';
-		$new_marker_image_dir = ABSPATH . '/wp-content/uploads/wp-geo/markers/';
-		
-		$wpgeo->moveFileOrDelete($old_marker_image_dir . 'dot-marker.png', $new_marker_image_dir . 'dot-marker.png');
-		$wpgeo->moveFileOrDelete($old_marker_image_dir . 'dot-marker-shadow.png', $new_marker_image_dir . 'dot-marker-shadow.png');
-		$wpgeo->moveFileOrDelete($old_marker_image_dir . 'large-marker.png', $new_marker_image_dir . 'large-marker.png');
-		$wpgeo->moveFileOrDelete($old_marker_image_dir . 'large-marker-shadow.png', $new_marker_image_dir . 'large-marker-shadow.png');
-		$wpgeo->moveFileOrDelete($old_marker_image_dir . 'small-marker.png', $new_marker_image_dir . 'small-marker.png');
-		$wpgeo->moveFileOrDelete($old_marker_image_dir . 'small-marker-shadow.png', $new_marker_image_dir . 'small-marker-shadow.png');
-		
-		umask($old_umask);
-		
-	}
-	
-	
-	
-	/**
-	 * Move File or Delete (if already exists)
-	 */
-	function moveFileOrDelete($old_file, $new_file)
-	{
-		
-		if (!file_exists($new_file))
-		{
-			$ok = copy($old_file, $new_file);
-			if ($ok)
-			{
-				// Moved OK...
-			}
-		}
+		$this->markers->register_activation();
 		
 	}
 	
@@ -270,9 +226,13 @@ class WPGeo
 							map.addOverlay(polyline);';
 				}
 				
+				
+				
 				// Post Maps and Markers
+				$small_marker = $wpgeo->markers->get_marker_meta('small');
 				$js_map_inits = '';
 				$js_marker_inits = '';
+				$js_marker_inits .= 'var icon = wpgeo_createIcon(' . $small_marker['width'] . ', ' . $small_marker['height'] . ', ' . $small_marker['anchorX'] . ', ' . $small_marker['anchorY'] . ', "' . $small_marker['image'] . '", "' . $small_marker['shadow'] . '");';
 				$js_map_writes = '';
 				for ($i = 0; $i < count($coords); $i++)
 				{
@@ -291,6 +251,7 @@ class WPGeo
 							
 							var center' . $coords[$i]['id'] .' = new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . ');
 							marker' . $coords[$i]['id'] .' = new GMarker(center' . $coords[$i]['id'] .', {draggable: false});
+							
 							
 							GEvent.addListener(marker' . $coords[$i]['id'] . ', "dragstart", function() {
 								map.closeInfoWindow();
@@ -372,10 +333,6 @@ class WPGeo
 		// Only load if on a post or page
 		if ($wpgeo->show_maps())
 		{
-		
-		//global $post_ID;
-		//if ($post_ID > 0)
-		//{
 			
 			// Get post location
 			$latitude = get_post_meta($post_ID, '_wp_geo_latitude', true);
@@ -388,12 +345,6 @@ class WPGeo
 			$hide_marker = false;
 			
 			echo $wpgeo->mapScriptsInit($default_latitude, $default_longitude, $default_zoom, $panel_open, $hide_marker);
-		//}
-		//else
-		//{
-			// Only need on post and page editing pages in the admin
-			//echo $wpgeo->mapScriptsInit(null, null);
-		//}
 		
 		}
 		
@@ -447,7 +398,7 @@ class WPGeo
 			// Centre on London
 			$latitude = 51.492526418807465;
 			$longitude = -0.15754222869873047;
-			$zoom = $wp_geo_options['default_map_zoom']; //5;
+			$zoom = $wp_geo_options['default_map_zoom']; // Default 5;
 			$panel_open = true;
 			$hide_marker = true;
 		}
@@ -722,30 +673,12 @@ class WPGeo
 		global $post_ID;
 		$wp_geo_options = get_option('wp_geo_options');
 		
-		if (is_home() && $wp_geo_options['show_maps_on_home'] == 'Y')
-		{
-			return true;
-		}
-		if (is_single() && $wp_geo_options['show_maps_on_posts'] == 'Y')
-		{
-			return true;
-		}
-		if (is_page() && $wp_geo_options['show_maps_on_pages'] == 'Y')
-		{
-			return true;
-		}
-		if (is_date() && $wp_geo_options['show_maps_in_datearchives'] == 'Y')
-		{
-			return true;
-		}
-		if (is_category() && $wp_geo_options['show_maps_in_categoryarchives'] == 'Y')
-		{
-			return true;
-		}
-		if (is_feed() && $wp_geo_options['add_geo_information_to_rss'] == 'Y')
-		{
-			return true;
-		}
+		if (is_home() && $wp_geo_options['show_maps_on_home'] == 'Y')					return true;
+		if (is_single() && $wp_geo_options['show_maps_on_posts'] == 'Y')				return true;
+		if (is_page() && $wp_geo_options['show_maps_on_pages'] == 'Y')					return true;
+		if (is_date() && $wp_geo_options['show_maps_in_datearchives'] == 'Y')			return true;
+		if (is_category() && $wp_geo_options['show_maps_in_categoryarchives'] == 'Y')	return true;
+		if (is_feed() && $wp_geo_options['add_geo_information_to_rss'] == 'Y')			return true;
 		
 		// Activate maps in admin...
 		if (is_admin())
@@ -1003,55 +936,9 @@ class WPGeo
 		return $map_type_array;
 		
 	}
-
-
-
-	/**
-	 * Get Marker Meta
-	 */
-	function get_marker_meta($type = 'large')
-	{
-		
-		// Array
-		$marker_types = array();
-		
-		// Large Marker
-		$marker_types['large'] = array(
-			'width' => 10,
-			'height' => 17,
-			'anchorX' => 5,
-			'anchorY' => 17,
-			'image' => get_bloginfo('url') . '/wp-content/uploads/wp-geo/markers/small-marker.png',
-			'shadow' => get_bloginfo('url') . '/wp-content/wp-geo/markers/small-marker-shadow.png'
-		);
-		
-		// Small Marker
-		$marker_types['small'] = array(
-			'width' => 10,
-			'height' => 17,
-			'anchorX' => 5,
-			'anchorY' => 17,
-			'image' => get_bloginfo('url') . '/wp-content/uploads/wp-geo/markers/small-marker.png',
-			'shadow' => get_bloginfo('url') . '/wp-content/wp-geo/markers/small-marker-shadow.png'
-		);			
-		
-		// Dot Marker
-		$marker_types['dot'] = array(
-			'width' => 10,
-			'height' => 17,
-			'anchorX' => 5,
-			'anchorY' => 17,
-			'image' => get_bloginfo('url') . '/wp-content/uploads/wp-geo/markers/small-marker.png',
-			'shadow' => get_bloginfo('url') . '/wp-content/wp-geo/markers/small-marker-shadow.png'
-		);
-		
-		// Default return
-		return $marker_types[$type];
-		
-	}
 	
-
-
+	
+	
 	/**
 	 * GeoRSS Namespace
 	 */
@@ -1103,33 +990,36 @@ class WPGeo
 
 
 
+// Includes
+include('wp-geo-markers.php');
+
 // Init.
 $wpgeo = new WPGeo();
 
 // Hooks
-register_activation_hook(__FILE__, array('WPGeo', 'register_activation'));
-add_shortcode('wp_geo_map', array('WPGeo', 'shortcode_wpgeo_map'));
-add_action('wp_print_scripts', array('WPGeo', 'includeGoogleMapsJavaScriptAPI'));
+register_activation_hook(__FILE__, array($wpgeo, 'register_activation'));
+add_shortcode('wp_geo_map', array($wpgeo, 'shortcode_wpgeo_map'));
+add_action('wp_print_scripts', array($wpgeo, 'includeGoogleMapsJavaScriptAPI'));
 
 // Frontend Hooks
-add_action('wp_head', array('WPGeo', 'wp_head'));
-add_filter('the_content', array('WPGeo', 'the_content'));
+add_action('wp_head', array($wpgeo, 'wp_head'));
+add_filter('the_content', array($wpgeo, 'the_content'));
 
 // Admin Hooks
-add_action('admin_menu', array('WPGeo', 'admin_menu'));
-add_action('admin_head', array('WPGeo', 'admin_head'));
-add_action('dbx_post_advanced', array('WPGeo', 'dbx_post_advanced'));
-add_action('edit_page_form', array('WPGeo', 'dbx_post_advanced'));
-add_action('save_post', array('WPGeo', 'save_post'));
+add_action('admin_menu', array($wpgeo, 'admin_menu'));
+add_action('admin_head', array($wpgeo, 'admin_head'));
+add_action('dbx_post_advanced', array($wpgeo, 'dbx_post_advanced'));
+add_action('edit_page_form', array($wpgeo, 'dbx_post_advanced'));
+add_action('save_post', array($wpgeo, 'save_post'));
 
 // Feed Hooks
-add_action('rss2_ns', array('WPGeo', 'georss_namespace'));
-add_action('atom_ns', array('WPGeo', 'georss_namespace'));
-add_action('rdf_ns', array('WPGeo', 'georss_namespace'));
-add_action('rss_item', array('WPGeo', 'georss_item'));
-add_action('rss2_item', array('WPGeo', 'georss_item'));
-add_action('atom_entry', array('WPGeo', 'georss_item'));
-add_action('rdf_item', array('WPGeo', 'georss_item'));
+add_action('rss2_ns', array($wpgeo, 'georss_namespace'));
+add_action('atom_ns', array($wpgeo, 'georss_namespace'));
+add_action('rdf_ns', array($wpgeo, 'georss_namespace'));
+add_action('rss_item', array($wpgeo, 'georss_item'));
+add_action('rss2_item', array($wpgeo, 'georss_item'));
+add_action('atom_entry', array($wpgeo, 'georss_item'));
+add_action('rdf_item', array($wpgeo, 'georss_item'));
 
 // Includes
 include('wp-geo-widget.php');

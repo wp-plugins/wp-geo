@@ -4,7 +4,7 @@
 
 /**
 * WP Geo Widget
-* @author Marco Alionso Ramirez, marco@onemarco.com
+* @author Marco Alionso Ramirez, marco@onemarco.com, updated by Ben Huson, ben@thewhiteroom.net
 * @version 1.0
 * Adds a geocoding widget to WordPress (requires WP Geo plugin)
 */
@@ -19,6 +19,14 @@ class WPGeoWidget
 {
 
 
+
+	/**
+	 * Properties
+	 */
+	 
+	var $version = '1.0';
+	
+	
 
 	/**
 	 * Initialize the map widget
@@ -51,8 +59,6 @@ class WPGeoWidget
 		$width 		= empty( $options['width'] ) ? '' : $options['width'];
 		$height 	= empty( $options['height'] ) ? '' : $options['height'];
 		$maptype 	= empty( $options['maptype'] ) ? '' : $options['maptype'];
-		//$url 		= empty( $options['url'] ) ? '' : $options['url'];
-		//$url_name 	= empty( $options['url'] ) ? '' : $options['url_name'];
 		
 		// Start write widget
 		$html_content = '';
@@ -61,7 +67,6 @@ class WPGeoWidget
 		if (!empty($map_content))
 		{
 			$html_content = $before_widget . $before_title . $title . $after_title . WPGeoWidget::add_map($width, $height, $maptype);
-			//$html_content .= '<p><a href="http://maps.google.ch/maps?f=q&hl=de&geocode=&q=' . $url . '&ie=UTF8&t=h&z=6" target="_blank">' . $url_name . '</a></p>';
 			$html_content .= $after_widget;
 		}
 		
@@ -87,8 +92,6 @@ class WPGeoWidget
 			$newoptions['width'] 	= strip_tags(stripslashes($_POST['wpgeo-width']));
 			$newoptions['height'] 	= strip_tags(stripslashes($_POST['wpgeo-height']));
 			$newoptions['maptype'] 	= strip_tags(stripslashes($_POST['google_map_type']));
-			//$newoptions['url'] 		= strip_tags(stripslashes($_POST['wpgeo-rss-url']));
-			//$newoptions['url_name'] = strip_tags(stripslashes($_POST['wpgeo-rss-url-name']));
 		}
 		
 		// Set the options when they differ
@@ -103,8 +106,6 @@ class WPGeoWidget
 		$width 		= attribute_escape($options['width']);
 		$height 	= attribute_escape($options['height']);
 		$maptype 	= attribute_escape($options['maptype']);
-		//$url 		= attribute_escape($options['url']);
-		//$url_name 	= attribute_escape($options['url_name']);
 		
 		// Write the widget controls
 		echo '
@@ -112,11 +113,6 @@ class WPGeoWidget
 			<p><label for="wpgeo-width">Width: <input class="widefat" id="wpgeo-width" name="wpgeo-width" type="text" value="' . $width . '" /></label></p>
 			<p><label for="wpgeo-height">Height: <input class="widefat" id="wpgeo-height" name="wpgeo-height" type="text" value="' . $height . '" /></label></p>';
 		echo '<p>' . $wpgeo->google_map_types('menu', $maptype) . '</p>';
-		/*
-		echo '
-			<p><label for="wpgeo-rss-url-name">View enlarged: <input class="widefat" id="wpgeo-rss-url-name" name="wpgeo-rss-url-name" type="text" value="' . $url_name . '" /></label></p>
-			<p><label for="wpgeo-rss-url">View enlarged GeoRSS: <input class="widefat" id="wpgeo-rss-url" name="wpgeo-rss-url" type="text" value="' . $url . '" /></label></p>';
-		*/
 		echo '<input type="hidden" id="wpgeo-submit" name="wpgeo-submit" value="1" />';
 	
 	}	
@@ -195,7 +191,7 @@ class WPGeoWidget
 			
 			$polyline_coords_js .= ']';		
 	
-			$small_marker = $wpgeo->get_marker_meta('small');
+			$small_marker = $wpgeo->markers->get_marker_meta('small');
 			$markers_js .= 'var icon = wpgeo_createIcon(' . $small_marker['width'] . ', ' . $small_marker['height'] . ', ' . $small_marker['anchorX'] . ', ' . $small_marker['anchorY'] . ', "' . $small_marker['image'] . '", "' . $small_marker['shadow'] . '");';
 			for ($i = 0; $i < count($coords); $i++)
 			{
@@ -205,7 +201,7 @@ class WPGeoWidget
 			// Html JS
 			$wpgeo->includeGoogleMapsJavaScriptAPI();
 			
-			$small_marker = $wpgeo->get_marker_meta('small');
+			$small_marker = $wpgeo->markers->get_marker_meta('small');
 			
 			$html_js .= '
 				<script type="text/javascript">
@@ -250,7 +246,7 @@ class WPGeoWidget
 						'.	$markers_js .'
 										
 						// draw the polygonal lines between points
-						map.addOverlay(wpgeo_drawPolylines(' . $polyline_coords_js . ', "#000000", 2, 0.50));
+						map.addOverlay(wpgeo_createPolyline(' . $polyline_coords_js . ', "#000000", 2, 0.50));
 								
 						// Center the map to show all markers
 						var center = bounds.getCenter();

@@ -74,9 +74,9 @@ function wpgeo_createMarker(latlng, icon, title, link)
 
 
 /**
-* Draw the polygonal lines between markers
+* Create the polygonal lines between markers
 */
-function wpgeo_drawPolylines(coords, color, thickness, alpha)
+function wpgeo_createPolyline(coords, color, thickness, alpha)
 {
 	
 	var polyOptions = { clickable:true, geodesic:true };
