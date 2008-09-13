@@ -191,11 +191,9 @@ class WPGeoWidget
 			
 			$polyline_coords_js .= ']';		
 	
-			$small_marker = $wpgeo->markers->get_marker_meta('small');
-			$markers_js .= 'var icon = wpgeo_createIcon(' . $small_marker['width'] . ', ' . $small_marker['height'] . ', ' . $small_marker['anchorX'] . ', ' . $small_marker['anchorY'] . ', "' . $small_marker['image'] . '", "' . $small_marker['shadow'] . '");';
 			for ($i = 0; $i < count($coords); $i++)
 			{
-				$markers_js .= 'marker' . $i . ' = wpgeo_createMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), icon, "' . $coords[$i]['title'] . '", "' . get_permalink($coords[$i]['id']) . '");' . "\n";
+				$markers_js .= 'marker' . $i . ' = wpgeo_createMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), wpgeo_icon_small, "' . $coords[$i]['title'] . '", "' . get_permalink($coords[$i]['id']) . '");' . "\n";
 			}
 						
 			// Html JS

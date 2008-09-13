@@ -160,6 +160,8 @@ class WPGeo
 		
 			global $posts;
 			
+			$this->markers->wp_head();
+			
 			$wp_geo_options = get_option('wp_geo_options');
 			
 			// Coords to show on map?
@@ -198,10 +200,12 @@ class WPGeo
 				
 				// Points JS
 				$points_js = '';
+				
+				// Category
 				for ($i = 0; $i < count($coords); $i++)
 				{
 					$points_js .= 'center_' . $i .' = new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . ');' . "\n";
-					$points_js .= 'marker_' . $i .' = new GMarker(center_' . $i .', {draggable: false});' . "\n";
+					$points_js .= 'marker_' . $i .' = new GMarker(center_' . $i .', wpgeo_icon_large, {draggable: false});' . "\n";
 					$points_js .= 'GEvent.addListener(marker_' . $i . ', "dragstart", function() {
 							map.closeInfoWindow();
 						});' . "\n";
@@ -250,7 +254,7 @@ class WPGeo
 							map' . $coords[$i]['id'] . '.addControl(mapTypeControl);
 							
 							var center' . $coords[$i]['id'] .' = new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . ');
-							marker' . $coords[$i]['id'] .' = new GMarker(center' . $coords[$i]['id'] .', {draggable: false});
+							marker' . $coords[$i]['id'] .' = new GMarker(center' . $coords[$i]['id'] .', wpgeo_icon_large, {draggable: false});
 							
 							
 							GEvent.addListener(marker' . $coords[$i]['id'] . ', "dragstart", function() {
