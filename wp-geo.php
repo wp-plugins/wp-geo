@@ -332,7 +332,7 @@ class WPGeo
 	function admin_head()
 	{
 	
-		global $wpgeo;
+		global $wpgeo, $post_ID;
 		
 		// Only load if on a post or page
 		if ($wpgeo->show_maps())
@@ -462,7 +462,7 @@ class WPGeo
 				}
 			}
 			
-			function init_wp_geo_map()
+			function init_wp_geo_map_admin()
 			{
 				if (GBrowserIsCompatible() && document.getElementById("wp_geo_map"))
 				{
@@ -516,10 +516,10 @@ class WPGeo
 				}
 			}
 			if (document.all&&window.attachEvent) { // IE-Win
-				window.attachEvent("onload", function () { init_wp_geo_map(); });
+				window.attachEvent("onload", function () { init_wp_geo_map_admin(); });
 				window.attachEvent("onunload", GUnload);
 			} else if (window.addEventListener) { // Others
-				window.addEventListener("load", function () { init_wp_geo_map(); }, false);
+				window.addEventListener("load", function () { init_wp_geo_map_admin(); }, false);
 				window.addEventListener("unload", GUnload, false);
 			}
 			//]]>
@@ -532,9 +532,9 @@ class WPGeo
 
 
 	/**
-	 * Hook: dbx_post_advanced
+	 * Hook: edit_form_advanced
 	 */
-	function dbx_post_advanced()
+	function edit_form_advanced()
 	{
 	
 		global $post_ID, $wpgeo;
@@ -812,6 +812,7 @@ class WPGeo
 				</p>
 				<h2 style="margin-top:30px;">Marker Settings</h2>
 				<p>Custom marker images are automatically created in your WordPress uploads folder and used by WP Geo.<br />A copy of these images will remain in the WP Geo folder in case you need to revert to them at any time.<br />You may edit these marker icons if you wish - they must be PNG files. Each marker consist of a marker image and a shadow image. If you do not wish to show a marker shadow you should use a transparent PNG for the shadow file.</p>
+				<p>Currently you must update this images manually and the anchor point must be the same - looking to provide more control in future versions.</p>
 				<table class="form-table">
 					<tr valign="top">
 						<th scope="row">Large Marker</th>
@@ -1048,8 +1049,8 @@ add_filter('the_content', array($wpgeo, 'the_content'));
 // Admin Hooks
 add_action('admin_menu', array($wpgeo, 'admin_menu'));
 add_action('admin_head', array($wpgeo, 'admin_head'));
-add_action('dbx_post_advanced', array($wpgeo, 'dbx_post_advanced'));
-add_action('edit_page_form', array($wpgeo, 'dbx_post_advanced'));
+add_action('edit_form_advanced', array($wpgeo, 'edit_form_advanced'));
+add_action('edit_page_form', array($wpgeo, 'edit_form_advanced'));
 add_action('save_post', array($wpgeo, 'save_post'));
 
 // Feed Hooks
