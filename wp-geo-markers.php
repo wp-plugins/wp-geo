@@ -15,6 +15,7 @@ class WPGeoMarkers
 	 */
 	 
 	var $version = '1.0';
+	var $marker_image_dir = '/wp-content/uploads/wp-geo/markers/';
 	
 	
 	
@@ -41,7 +42,7 @@ class WPGeoMarkers
 		
 		// Marker Folders
 		$old_marker_image_dir = ABSPATH . '/wp-content/plugins/wp-geo/img/markers/';
-		$new_marker_image_dir = ABSPATH . '/wp-content/uploads/wp-geo/markers/';
+		$new_marker_image_dir = ABSPATH . $this->marker_image_dir;
 		
 		// Marker Files
 		$this->moveFileOrDelete($old_marker_image_dir . 'dot-marker.png', $new_marker_image_dir . 'dot-marker.png');
@@ -88,6 +89,7 @@ class WPGeoMarkers
 		$marker_large = $this->get_marker_meta('large');
 		
 		echo '
+		
 			<script type="text/javascript">
 			//<![CDATA[
 			
@@ -97,7 +99,8 @@ class WPGeoMarkers
 			var wpgeo_icon_large = wpgeo_createIcon(' . $marker_large['width'] . ', ' . $marker_large['height'] . ', ' . $marker_large['anchorX'] . ', ' . $marker_large['anchorY'] . ', "' . $marker_large['image'] . '", "' . $marker_large['shadow'] . '");
 			
 			//]]>
-			</script>';
+			</script>
+			';
 			
 	}
 	
@@ -118,8 +121,8 @@ class WPGeoMarkers
 			'height' => 34,
 			'anchorX' => 10,
 			'anchorY' => 34,
-			'image' => get_bloginfo('url') . '/wp-content/uploads/wp-geo/markers/large-marker.png',
-			'shadow' => get_bloginfo('url') . '/wp-content/wp-geo/markers/large-marker-shadow.png'
+			'image' => get_bloginfo('url') . $this->marker_image_dir . 'large-marker.png',
+			'shadow' => get_bloginfo('url') . $this->marker_image_dir . 'large-marker-shadow.png'
 		);
 		
 		// Small Marker
@@ -128,8 +131,8 @@ class WPGeoMarkers
 			'height' => 17,
 			'anchorX' => 5,
 			'anchorY' => 17,
-			'image' => get_bloginfo('url') . '/wp-content/uploads/wp-geo/markers/small-marker.png',
-			'shadow' => get_bloginfo('url') . '/wp-content/wp-geo/markers/small-marker-shadow.png'
+			'image' => get_bloginfo('url') . $this->marker_image_dir . 'small-marker.png',
+			'shadow' => get_bloginfo('url') . $this->marker_image_dir . 'small-marker-shadow.png'
 		);			
 		
 		// Dot Marker
@@ -138,8 +141,8 @@ class WPGeoMarkers
 			'height' => 8,
 			'anchorX' => 3,
 			'anchorY' => 6,
-			'image' => get_bloginfo('url') . '/wp-content/uploads/wp-geo/markers/dot-marker.png',
-			'shadow' => get_bloginfo('url') . '/wp-content/wp-geo/markers/dot-marker-shadow.png'
+			'image' => get_bloginfo('url') . $this->marker_image_dir . 'dot-marker.png',
+			'shadow' => get_bloginfo('url') . $this->marker_image_dir . 'dot-marker-shadow.png'
 		);
 		
 		// Default return
