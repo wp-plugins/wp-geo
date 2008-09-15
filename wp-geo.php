@@ -204,11 +204,11 @@ class WPGeo
 				// Category
 				for ($i = 0; $i < count($coords); $i++)
 				{
-					$points_js .= 'center_' . $i .' = new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . ');' . "\n";
-					$points_js .= 'marker_' . $i .' = new GMarker(center_' . $i .', wpgeo_icon_large, {draggable: false});' . "\n";
+					$points_js .= 'marker_' . $i .' = new GMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), wpgeo_icon_large, {draggable: false});' . "\n";
 					$points_js .= 'GEvent.addListener(marker_' . $i . ', "dragstart", function() {
 							map.closeInfoWindow();
 						});' . "\n";
+					
 					$points_js .= 'map.addOverlay(marker_' . $i . ');' . "\n";
 				}
 				
