@@ -814,15 +814,21 @@ class WPGeo
 				<table class="form-table">
 					<tr valign="top">
 						<th scope="row">Large Marker</th>
-						<td><img src="' . $markers['large']['image'] . '" /> <img src="' . $markers['large']['shadow'] . '" /><br />This is the default marker used to indicate a location on most maps.</td>
+						<td><img src="' . $markers['large']['image'] . '" /> <img src="' . $markers['large']['shadow'] . '" /><br />
+							This is the default marker used to indicate a location on most maps.<br />
+							{ width:' . $markers['large']['width'] . ', height:' . $markers['large']['height'] . ', anchorX:' . $markers['large']['anchorX'] . ', anchorY:' . $markers['large']['anchorY'] . ' }</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">Small Marker</th>
-						<td><img src="' . $markers['small']['image'] . '" /> <img src="' . $markers['small']['shadow'] . '" /><br />This is the default marker used for the WP Geo sidebar widget.</td>
+						<td><img src="' . $markers['small']['image'] . '" /> <img src="' . $markers['small']['shadow'] . '" /><br />
+							This is the default marker used for the WP Geo sidebar widget.<br />
+							{ width:' . $markers['small']['width'] . ', height:' . $markers['small']['height'] . ', anchorX:' . $markers['small']['anchorX'] . ', anchorY:' . $markers['small']['anchorY'] . ' }</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">Dot Marker</th>
-						<td><img src="' . $markers['dot']['image'] . '" /> <img src="' . $markers['dot']['shadow'] . '" /><br />This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo.</td>
+						<td><img src="' . $markers['dot']['image'] . '" /> <img src="' . $markers['dot']['shadow'] . '" /><br />
+							This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo.<br />
+							{ width:' . $markers['dot']['width'] . ', height:' . $markers['dot']['height'] . ', anchorX:' . $markers['dot']['anchorX'] . ', anchorY:' . $markers['dot']['anchorY'] . ' }</td>
 					</tr>
 				</table>
 			</form>
