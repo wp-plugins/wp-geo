@@ -762,6 +762,7 @@ class WPGeo
 		<div class="wrap">
 			<h2>WP Geo Options</h2>
 			<form method="post">
+				<img style="float:right; padding:0 20px 0 0; margin:0 0 20px 20px;" src="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/img/logo/wp-geo.png" />
 				<h3>General Settings</h3>
 				<p>Before you can use Wp Geo you must acquire a <a href="http://code.google.com/apis/maps/signup.html">Google API Key</a> for your blog - the plugin will not function without it!<br />For more information and documentation about this plugin please visit the <a href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/">WP Geo Plugin</a> home page.</p>
 				<table class="form-table">
@@ -834,6 +835,11 @@ class WPGeo
 			</form>
 			<h2 style="margin-top:30px;">Documentation</h2>
 			<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a location has been set for the post). You can only include the Shortcode once within a post. If you select another Show Post Map option then the Shortcode will be ignored and the map will be positioned automatically.</p>
+			<h3>Feedback</h3>
+			<p>If you experience any problems or bugs with the plugin, or want to suggest an improvement, please visit the <a href="http://code.google.com/p/wp-geo/issues/list">WP Geo Google Code page</a> to log your issue. If you would like to feedback or comment on the plugin please visit the <a href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/">WP Geo plugin</a> page.
+			<h2 style="margin-top:30px;">Related Plugins</h2>
+			<h3><a href="http://wordpress.org/extend/plugins/weather-traveller/">Weather Traveller</a></h3>
+			<p>Designed for people who use their blog while travelling the planet, Weather Traveller allows you to add weather information to the bottom of your posts in an easy way. This means you can let your blog readers know what the weather is like in the location you specify at the time you post. Requires the WP Geo plugin.</p>
 		</div>';
 		
 	}
