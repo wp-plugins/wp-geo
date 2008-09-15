@@ -658,7 +658,9 @@ class WPGeo
 	 */
 	function admin_menu()
 	{
-	
+		
+		global $wpgeo;
+		
 		if (function_exists('add_options_page'))
 		{
 			add_options_page('WP Geo Options', 'WP Geo', 8, __FILE__, array($wpgeo, 'options_page'));
@@ -749,13 +751,19 @@ class WPGeo
 			echo '<div class="updated"><p>Options updated</p></div>';
 		}
 
-		// Create form elements
+		// Markers
+		$markers = array();
+		$markers['large'] = $this->markers->get_marker_meta('large');
+		$markers['small'] = $this->markers->get_marker_meta('small');
+		$markers['dot'] = $this->markers->get_marker_meta('dot');
 		
 		// Write the form
 		echo '
 		<div class="wrap">
 			<h2>WP Geo Options</h2>
 			<form method="post">
+				<h3>General Settings</h3>
+				<p>Before you can use Wp Geo you must acquire a <a href="http://code.google.com/apis/maps/signup.html">Google API Key</a> for your blog - the plugin will not function without it!<br />For more information and documentation about this plugin please visit the <a href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/">WP Geo Plugin</a> home page.</p>
 				<table class="form-table">
 					<tr valign="top">
 						<th scope="row">Google API Key</th>
@@ -801,8 +809,24 @@ class WPGeo
 					<input type="hidden" name="action" value="update" />
 					<input type="hidden" name="option_fields" value="google_api_key,google_map_type,show_post_map" />
 				</p>
+				<h2 style="margin-top:30px;">Marker Settings</h2>
+				<p>Custom marker images are automatically created in your WordPress uploads folder and used by WP Geo.<br />A copy of these images will remain in the WP Geo folder in case you need to revert to them at any time.<br />You may edit these marker icons if you wish - they must be PNG files. Each marker consist of a marker image and a shadow image. If you do not wish to show a marker shadow you should use a transparent PNG for the shadow file.</p>
+				<table class="form-table">
+					<tr valign="top">
+						<th scope="row">Large Marker</th>
+						<td><img src="' . $markers['large']['image'] . '" /> <img src="' . $markers['large']['shadow'] . '" /><br />This is the default marker used to indicate a location on most maps.</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">Small Marker</th>
+						<td><img src="' . $markers['small']['image'] . '" /> <img src="' . $markers['small']['shadow'] . '" /><br />This is the default marker used for the WP Geo sidebar widget.</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">Dot Marker</th>
+						<td><img src="' . $markers['dot']['image'] . '" /> <img src="' . $markers['dot']['shadow'] . '" /><br />This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo.</td>
+					</tr>
+				</table>
 			</form>
-			<h2>Documentation</h2>
+			<h2 style="margin-top:30px;">Documentation</h2>
 			<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a location has been set for the post). You can only include the Shortcode once within a post. If you select another Show Post Map option then the Shortcode will be ignored and the map will be positioned automatically.</p>
 		</div>';
 		
