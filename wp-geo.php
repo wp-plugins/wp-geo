@@ -58,6 +58,13 @@ class WPGeo
 			'default_map_width' => '100%', 
 			'default_map_height' => '300px',
 			'default_map_zoom' => '5',
+			'default_map_control' => 'GLargeMapControl',
+			'show_map_type_normal' => 'Y',
+			'show_map_type_satellite' => 'Y',
+			'show_map_type_hybrid' => 'Y',
+			'show_map_type_physical' => 'Y',
+			'show_map_scale' => 'N',
+			'show_map_overview' => 'N',
 			'show_maps_on_home' => 'Y',
 			'show_maps_on_pages' => 'Y',
 			'show_maps_on_posts' => 'Y',
@@ -739,6 +746,14 @@ class WPGeo
 			$wp_geo_options['default_map_height'] = $wpgeo->numberPercentOrPx($_POST['default_map_height']);
 			$wp_geo_options['default_map_zoom'] = $_POST['default_map_zoom'];
 			
+			$wp_geo_options['default_map_control'] = $_POST['default_map_control'];
+			$wp_geo_options['show_map_type_normal'] = $_POST['show_map_type_normal'];
+			$wp_geo_options['show_map_type_satellite'] = $_POST['show_map_type_satellite'];
+			$wp_geo_options['show_map_type_hybrid'] = $_POST['show_map_type_hybrid'];
+			$wp_geo_options['show_map_type_physical'] = $_POST['show_map_type_physical'];
+			$wp_geo_options['show_map_scale'] = $_POST['show_map_scale'];
+			$wp_geo_options['show_map_overview'] = $_POST['show_map_overview'];
+			
 			$wp_geo_options['show_maps_on_home'] = $_POST['show_maps_on_home'];
 			$wp_geo_options['show_maps_on_pages'] = $_POST['show_maps_on_pages'];
 			$wp_geo_options['show_maps_on_posts'] = $_POST['show_maps_on_posts'];
@@ -789,6 +804,20 @@ class WPGeo
 					<tr valign="top">
 						<th scope="row">Default Map Zoom</th>
 						<td>' . $wpgeo->selectMapZoom('menu', $wp_geo_options['default_map_zoom']) . '</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">Default Map Controls</th>
+						<td>
+							' . $wpgeo->selectMapControl('menu', $wp_geo_options['default_map_control']). '<br />
+							<p style="margin:1em 0 0 0;"><strong>Map Type Controls</strong></p>
+							' . $wpgeo->options_checkbox('show_map_type_normal', 'Y', $wp_geo_options['show_map_type_normal']) . ' Normal map<br />
+							' . $wpgeo->options_checkbox('show_map_type_satellite', 'Y', $wp_geo_options['show_map_type_satellite']) . ' Satellite (photographic map)<br />
+							' . $wpgeo->options_checkbox('show_map_type_hybrid', 'Y', $wp_geo_options['show_map_type_hybrid']) . ' Hybrid (photographic map with normal features)<br />
+							' . $wpgeo->options_checkbox('show_map_type_physical', 'Y', $wp_geo_options['show_map_type_physical']) . ' Physical (terrain map)<br />
+							<p style="margin:1em 0 0 0;"><strong>Other Controls</strong></p>
+							' . $wpgeo->options_checkbox('show_map_scale', 'Y', $wp_geo_options['show_map_scale']) . ' Show map scale<br />
+							' . $wpgeo->options_checkbox('show_map_overview', 'Y', $wp_geo_options['show_map_overview']) . ' Show collapsible overview map (in the corner of the map)
+						</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">Show Maps On</th>
@@ -863,6 +892,40 @@ class WPGeo
 
 
 
+	/**
+	 * Select Map Control
+	 */
+	function selectMapControl($return = 'array', $selected = '')
+	{
+		
+		// Array
+		$map_type_array = array(
+			'GLargeMapControl' 	=> 'Large pan/zoom control', 
+			'GSmallMapControl' 	=> 'Smaller pan/zoom control', 
+			'GSmallZoomControl' => 'Small zoom control (no panning controls)', 
+			'' 					=> 'No pan/zoom controls'
+		);
+		
+		// Menu?
+		if ($return = 'menu')
+		{
+			$menu = '';
+			foreach ($map_type_array as $key => $val)
+			{
+				$is_selected = $selected == $key ? ' selected="selected"' : '';
+				$menu .= '<option value="' . $key . '"' . $is_selected . '>' . $val . '</option>';
+			}
+			$menu = '<select name="default_map_control" id="default_map_control">' . $menu. '</select>';
+			return $menu;
+		}
+		
+		// Default return
+		return $map_type_array;
+		
+	}
+	
+	
+	
 	/**
 	 * Select Map Zoom
 	 */
