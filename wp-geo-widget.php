@@ -50,27 +50,35 @@ class WPGeoWidget
 	function map_widget($args) 
 	{	
 	
-		// Extract the widget options
-	  	extract($args);
-		$options = get_option('map_widget');
-
-		// Get the options for the widget
-		$title 		= empty( $options['title'] ) ? '' : apply_filters('widget_title', __($options['title']));
-		$width 		= empty( $options['width'] ) ? '' : $options['width'];
-		$height 	= empty( $options['height'] ) ? '' : $options['height'];
-		$maptype 	= empty( $options['maptype'] ) ? '' : $options['maptype'];
+		global $wpgeo;
 		
-		// Start write widget
-		$html_content = '';
-		$map_content = WPGeoWidget::add_map($width, $height, $maptype);
-		
-		if (!empty($map_content))
+		// If Google API Key...
+		if ($wpgeo->checkGoogleAPIKey())
 		{
-			$html_content = $before_widget . $before_title . $title . $after_title . WPGeoWidget::add_map($width, $height, $maptype);
-			$html_content .= $after_widget;
-		}
 		
-		echo $html_content;	
+			// Extract the widget options
+			extract($args);
+			$options = get_option('map_widget');
+	
+			// Get the options for the widget
+			$title 		= empty( $options['title'] ) ? '' : apply_filters('widget_title', __($options['title']));
+			$width 		= empty( $options['width'] ) ? '' : $options['width'];
+			$height 	= empty( $options['height'] ) ? '' : $options['height'];
+			$maptype 	= empty( $options['maptype'] ) ? '' : $options['maptype'];
+			
+			// Start write widget
+			$html_content = '';
+			$map_content = WPGeoWidget::add_map($width, $height, $maptype);
+			
+			if (!empty($map_content))
+			{
+				$html_content = $before_widget . $before_title . $title . $after_title . WPGeoWidget::add_map($width, $height, $maptype);
+				$html_content .= $after_widget;
+			}
+			
+			echo $html_content;
+		
+		}
 		
 	}	
 	
@@ -108,6 +116,11 @@ class WPGeoWidget
 		$maptype 	= attribute_escape($options['maptype']);
 		
 		// Write the widget controls
+		if (!$wpgeo->checkGoogleAPIKey())
+		{
+			// NOTE: Check if there is a 'less hard-coded' way to write link to settings page
+			echo '<p class="wp_geo_error">WP Geo is not currently active as you have not entered a Google API Key. Please <a href="' . get_bloginfo('url') . '/wp-admin/options-general.php?page=wp-geo/wp-geo.php">update your WP Geo settings</a>.</p>';
+		}
 		echo '
 			<p><label for="wpgeo-title">Title: <input class="widefat" id="wpgeo-title" name="wpgeo-title" type="text" value="' . $title . '" /></label></p>
 			<p><label for="wpgeo-width">Width: <input class="widefat" id="wpgeo-width" name="wpgeo-width" type="text" value="' . $width . '" /></label></p>
@@ -128,147 +141,153 @@ class WPGeoWidget
 	
 		global $posts, $wpgeo;
 		
-		// Set default width and height
-		if (empty($width))
-		{
-			$width = '100%';
-		}
-		if (empty($height))
-		{
-			$height = '150';
-		}
-		
-		// Get the basic settings of wp geo
-		$wp_geo_options = get_option('wp_geo_options');
-		
-		
-		// Find the coordinates for the posts
-		$coords = array();
-		for ($i = 0; $i < count($posts); $i++)
+		// If Google API Key...
+		if ($wpgeo->checkGoogleAPIKey())
 		{
 		
-			$post 		= $posts[$i];
-			$latitude 	= get_post_meta($post->ID, '_wp_geo_latitude', true);
-			$longitude 	= get_post_meta($post->ID, '_wp_geo_longitude', true);
-			$post_id 	= get_post($post->ID);
-			$title 		= $post_id->post_title;
-			
-			if (is_numeric($latitude) && is_numeric($longitude))
+			// Set default width and height
+			if (empty($width))
 			{
-				$push = array(
-					'id' 		=> $post->ID,
-					'latitude' 	=> $latitude,
-					'longitude' => $longitude,
-					'title' 	=> $title
-				);
-				array_push($coords, $push);
+				$width = '100%';
+			}
+			if (empty($height))
+			{
+				$height = '150';
 			}
 			
-		}
-		
-		// Markers JS (output)
-		$markers_js = '';
-		
-		// Only show map widget if there are coords to show
-		if (count($coords) > 0)
-		{
-		
-			$google_maps_api_key = $wp_geo_options['google_api_key'];
-			$zoom = $wp_geo_options['default_map_zoom'];
+			// Get the basic settings of wp geo
+			$wp_geo_options = get_option('wp_geo_options');
 			
-			if (empty($maptype))
+			
+			// Find the coordinates for the posts
+			$coords = array();
+			for ($i = 0; $i < count($posts); $i++)
 			{
-				$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];			
-			}
 			
-			// Polyline JS
-			$polyline_coords_js = '[';
-			
-			for ($i = 0; $i < count($coords); $i++)
-			{
-				$polyline_coords_js .= 'new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '),';
-			}
-			
-			$polyline_coords_js .= ']';		
-	
-			for ($i = 0; $i < count($coords); $i++)
-			{
-				$markers_js .= 'marker' . $i . ' = wpgeo_createMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), wpgeo_icon_small, "' . $coords[$i]['title'] . '", "' . get_permalink($coords[$i]['id']) . '");' . "\n";
-			}
-						
-			// Html JS
-			$wpgeo->includeGoogleMapsJavaScriptAPI();
-			
-			$small_marker = $wpgeo->markers->get_marker_meta('small');
-			
-			$html_js .= '
-				<script type="text/javascript">
-				//<![CDATA[
+				$post 		= $posts[$i];
+				$latitude 	= get_post_meta($post->ID, '_wp_geo_latitude', true);
+				$longitude 	= get_post_meta($post->ID, '_wp_geo_longitude', true);
+				$post_id 	= get_post($post->ID);
+				$title 		= $post_id->post_title;
 				
-				
-				
-				/**
-				* Define variables
-				*/
-				
-				var map = "";
-				var bounds = "";
-				
-				
-				
-				/**
-				* Add events to load the map
-				*/
-			
-				GEvent.addDomListener(window, "load", createMapWidget);
-				GEvent.addDomListener(window, "unload", GUnload);
-			
-			
-			
-				/**
-				* Create the map
-				*/
-				
-				function createMapWidget()
+				if (is_numeric($latitude) && is_numeric($longitude))
 				{
-					if(GBrowserIsCompatible())
-					{
-						map = new GMap2(document.getElementById("wp_geo_map_widget"));
-						map.addControl(new GSmallZoomControl());
-						map.setCenter(new GLatLng(0, 0), 0);
-						map.setMapType(' . $maptype . ');
-								
-						bounds = new GLatLngBounds();		
-						
-						// Add the markers	
-						'.	$markers_js .'
-										
-						// draw the polygonal lines between points
-						map.addOverlay(wpgeo_createPolyline(' . $polyline_coords_js . ', "#000000", 2, 0.50));
-								
-						// Center the map to show all markers
-						var center = bounds.getCenter();
-						var zoom = map.getBoundsZoomLevel(bounds)
-						
-						map.setCenter(center, zoom);
-					}
+					$push = array(
+						'id' 		=> $post->ID,
+						'latitude' 	=> $latitude,
+						'longitude' => $longitude,
+						'title' 	=> $title
+					);
+					array_push($coords, $push);
 				}
 				
+			}
+			
+			// Markers JS (output)
+			$markers_js = '';
+			
+			// Only show map widget if there are coords to show
+			if (count($coords) > 0)
+			{
+			
+				$google_maps_api_key = $wp_geo_options['google_api_key'];
+				$zoom = $wp_geo_options['default_map_zoom'];
 				
-				//]]>
-				</script>';
+				if (empty($maptype))
+				{
+					$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];			
+				}
+				
+				// Polyline JS
+				$polyline_coords_js = '[';
+				
+				for ($i = 0; $i < count($coords); $i++)
+				{
+					$polyline_coords_js .= 'new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '),';
+				}
+				
+				$polyline_coords_js .= ']';		
+		
+				for ($i = 0; $i < count($coords); $i++)
+				{
+					$markers_js .= 'marker' . $i . ' = wpgeo_createMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), wpgeo_icon_small, "' . $coords[$i]['title'] . '", "' . get_permalink($coords[$i]['id']) . '");' . "\n";
+				}
+							
+				// Html JS
+				$wpgeo->includeGoogleMapsJavaScriptAPI();
+				
+				$small_marker = $wpgeo->markers->get_marker_meta('small');
+				
+				$html_js .= '
+					<script type="text/javascript">
+					//<![CDATA[
+					
+					
+					
+					/**
+					* Define variables
+					*/
+					
+					var map = "";
+					var bounds = "";
+					
+					
+					
+					/**
+					* Add events to load the map
+					*/
+				
+					GEvent.addDomListener(window, "load", createMapWidget);
+					GEvent.addDomListener(window, "unload", GUnload);
+				
+				
+				
+					/**
+					* Create the map
+					*/
+					
+					function createMapWidget()
+					{
+						if(GBrowserIsCompatible())
+						{
+							map = new GMap2(document.getElementById("wp_geo_map_widget"));
+							map.addControl(new GSmallZoomControl());
+							map.setCenter(new GLatLng(0, 0), 0);
+							map.setMapType(' . $maptype . ');
+									
+							bounds = new GLatLngBounds();		
+							
+							// Add the markers	
+							'.	$markers_js .'
+											
+							// draw the polygonal lines between points
+							map.addOverlay(wpgeo_createPolyline(' . $polyline_coords_js . ', "#000000", 2, 0.50));
+									
+							// Center the map to show all markers
+							var center = bounds.getCenter();
+							var zoom = map.getBoundsZoomLevel(bounds)
+							
+							map.setCenter(center, zoom);
+						}
+					}
+					
+					
+					//]]>
+					</script>';
+				
+				// Set width and height
+				if (is_numeric($width))
+					$width = $width . 'px';
+				if (is_numeric($height))
+					$height = $height . 'px';
+				
+				$html_js .= '<div class="wp_geo_map" id="wp_geo_map_widget" style="width:' . $width . '; height:' . $height . ';"></div>';
 			
-			// Set width and height
-			if (is_numeric($width))
-				$width = $width . 'px';
-			if (is_numeric($height))
-				$height = $height . 'px';
+			}
 			
-			$html_js .= '<div class="wp_geo_map" id="wp_geo_map_widget" style="width:' . $width . '; height:' . $height . ';"></div>';
+			return $html_js;
 		
 		}
-		
-		return $html_js;
 		
 	}
 	

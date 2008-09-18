@@ -115,6 +115,23 @@ class WPGeo
 		
 	}
 	
+	
+	
+	/**
+	 * Check Google API Key
+	 */
+	function checkGoogleAPIKey()
+	{
+		
+		$wp_geo_options = get_option('wp_geo_options');
+		if (empty($wp_geo_options['google_api_key']) || !isset($wp_geo_options['google_api_key']))
+		{
+			return false;
+		}
+		return true;
+		
+	}
+	
 
 
 	/**
@@ -253,10 +270,12 @@ class WPGeo
 						if (document.getElementById("wp_geo_map_' . $coords[$i]['id'] . '"))
 						{
 							map' . $coords[$i]['id'] . ' = new GMap2(document.getElementById("wp_geo_map_' . $coords[$i]['id'] . '"));
-							var mapTypeControl = new GMapTypeControl();
 							var center = new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . ');
 							map' . $coords[$i]['id'] . '.setCenter(center, ' . $zoom . ');
 							map' . $coords[$i]['id'] . '.setMapType(' . $maptype . ');
+							
+							// Map Controls
+							var mapTypeControl = new GMapTypeControl();
 							map' . $coords[$i]['id'] . '.addControl(new GLargeMapControl());
 							map' . $coords[$i]['id'] . '.addControl(mapTypeControl);
 							
@@ -291,10 +310,12 @@ class WPGeo
 						if (document.getElementById("wp_geo_map"))
 						{
 							map = new GMap2(document.getElementById("wp_geo_map"));
-							var mapTypeControl = new GMapTypeControl();
 							var center = new GLatLng(' . $coords[0]['latitude'] . ', ' . $coords[0]['longitude'] . ');
 							map.setCenter(center, ' . $zoom . ');
 							map.setMapType(' . $maptype . ');
+							
+							// Map Controls
+							var mapTypeControl = new GMapTypeControl();
 							map.addControl(new GLargeMapControl());
 							map.addControl(mapTypeControl);
 							
@@ -340,6 +361,8 @@ class WPGeo
 	{
 	
 		global $wpgeo, $post_ID;
+		
+		echo '<link rel="stylesheet" href="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/wp-geo.css" type="text/css" />';
 		
 		// Only load if on a post or page
 		if ($wpgeo->show_maps())
@@ -474,12 +497,15 @@ class WPGeo
 				if (GBrowserIsCompatible() && document.getElementById("wp_geo_map"))
 				{
 					map = new GMap2(document.getElementById("wp_geo_map"));
-					var mapTypeControl = new GMapTypeControl();
 					var center = new GLatLng(' . $latitude . ', ' . $longitude . ');
 					map.setCenter(center, ' . $zoom . ');
 					map.addMapType(G_PHYSICAL_MAP);
+					
+					// Map Controls
+					var mapTypeControl = new GMapTypeControl();
 					map.addControl(new GLargeMapControl());
 					map.addControl(mapTypeControl);
+					
 					map.setMapType(' . $maptype . ');
 					
 					geocoder = new GClientGeocoder();

@@ -32,3 +32,15 @@ div.tooltip{
 }
 
 
+
+/**
+ * Settings for admin
+ */
+
+.wp_geo_error, .wp_geo_error a:link, .wp_geo_error a:visited {
+	color:#CC0000;
+}
+
+.wp_geo_error a:hover, .wp_geo_error a:active {
+	color:#333333;
+}
