@@ -266,6 +266,20 @@ class WPGeo
 				{
 					$js_map_inits .= 'var map' . $coords[$i]['id'] . ' = null; ';
 					$js_marker_inits .= 'var marker' . $coords[$i]['id'] . ' = null; ';
+					
+					
+					$js_map_types = '';
+					if ($wp_geo_options['show_map_type_physical'] == 'Y')
+						$js_map_types .= 'map' . $coords[$i]['id'] . '.addMapType(G_PHYSICAL_MAP);';
+					if ($wp_geo_options['show_map_type_normal'] != 'Y')
+						$js_map_types .= 'map' . $coords[$i]['id'] . '.removeMapType(G_NORMAL_MAP);';
+					if ($wp_geo_options['show_map_type_satellite'] != 'Y')
+						$js_map_types .= 'map' . $coords[$i]['id'] . '.removeMapType(G_SATELLITE_MAP);';
+					if ($wp_geo_options['show_map_type_hybrid'] != 'Y')
+						$js_map_types .= 'map' . $coords[$i]['id'] . '.removeMapType(G_HYBRID_MAP);';
+					$js_map_types .= 'map' . $coords[$i]['id'] . '.setMapType(' . $wp_geo_options['google_map_type'] . ');';
+	
+					
 					$js_map_writes .= '
 						if (document.getElementById("wp_geo_map_' . $coords[$i]['id'] . '"))
 						{
@@ -275,8 +289,9 @@ class WPGeo
 							map' . $coords[$i]['id'] . '.setMapType(' . $maptype . ');
 							
 							// Map Controls
+							' . $js_map_types  . '
 							var mapTypeControl = new GMapTypeControl();
-							map' . $coords[$i]['id'] . '.addControl(new GLargeMapControl());
+							map' . $coords[$i]['id'] . '.addControl(new ' . $wp_geo_options['default_map_control'] . '());
 							map' . $coords[$i]['id'] . '.addControl(mapTypeControl);
 							
 							var center' . $coords[$i]['id'] .' = new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . ');
@@ -836,6 +851,7 @@ class WPGeo
 						<td>
 							' . $wpgeo->selectMapControl('menu', $wp_geo_options['default_map_control']). '<br />
 							<p style="margin:1em 0 0 0;"><strong>Map Type Controls</strong></p>
+							<p style="margin:0;">You must select at least 2 map types for the control to show.</p>
 							' . $wpgeo->options_checkbox('show_map_type_normal', 'Y', $wp_geo_options['show_map_type_normal']) . ' Normal map<br />
 							' . $wpgeo->options_checkbox('show_map_type_satellite', 'Y', $wp_geo_options['show_map_type_satellite']) . ' Satellite (photographic map)<br />
 							' . $wpgeo->options_checkbox('show_map_type_hybrid', 'Y', $wp_geo_options['show_map_type_hybrid']) . ' Hybrid (photographic map with normal features)<br />
