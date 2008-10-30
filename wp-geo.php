@@ -409,7 +409,7 @@ class WPGeo
 		
 		global $wpgeo;
 		
-		if ($wpgeo->show_maps())
+		if ($wpgeo->show_maps() && $wpgeo->checkGoogleAPIKey())
 		{
 			$wp_geo_options = get_option('wp_geo_options');
 			
@@ -820,8 +820,14 @@ class WPGeo
 			<form method="post">
 				<img style="float:right; padding:0 20px 0 0; margin:0 0 20px 20px;" src="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/img/logo/wp-geo.png" />
 				<h3>General Settings</h3>
-				<p>Before you can use Wp Geo you must acquire a <a href="http://code.google.com/apis/maps/signup.html">Google API Key</a> for your blog - the plugin will not function without it!<br />For more information and documentation about this plugin please visit the <a href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/">WP Geo Plugin</a> home page.</p>
-				<table class="form-table">
+				<p>For more information and documentation about this plugin please visit the <a href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/">WP Geo Plugin</a> home page.<br />
+					If you experience any problems/bugs with the plugin, please <a href="http://code.google.com/p/wp-geo/issues/list">log it here</a>.
+				</p>';
+		if (!$this->checkGoogleAPIKey())
+		{
+			echo '<div class="error"><p>Before you can use Wp Geo you must acquire a <a href="http://code.google.com/apis/maps/signup.html">Google API Key</a> for your blog - the plugin will not function without it!</p></div>';
+		}
+		echo '<table class="form-table">
 					<tr valign="top">
 						<th scope="row">Google API Key</th>
 						<td><input name="google_api_key" type="text" id="google_api_key" value="' . $wp_geo_options['google_api_key'] . '" size="50" /></td>
