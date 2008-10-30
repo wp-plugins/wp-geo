@@ -102,7 +102,7 @@ class WPGeo
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		
-		if ($wpgeo->show_maps() && $wp_geo_options['show_post_map'] == 'HIDE')
+		if ($wpgeo->show_maps() && $wp_geo_options['show_post_map'] == 'HIDE' && $this->checkGoogleAPIKey())
 		{
 			$map_atts = array('type' => 'G_NORMAL_MAP');
 			extract(shortcode_atts($map_atts, $atts));
@@ -159,7 +159,7 @@ class WPGeo
 			
 		}
 		
-		if ($showmap)
+		if ($showmap && $this->checkGoogleAPIKey())
 		{
 			echo '<div class="wp_geo_map" id="wp_geo_map" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>';
 		}
@@ -605,30 +605,33 @@ class WPGeo
 	{
 	
 		// Output
-		$edit_html = '
-			<div id="wpgeolocationdiv" class="postbox if-js-open">
-				<h3>WP Geo Location</h3>
-				<div class="inside">
-					<table cellpadding="3" cellspacing="5" class="form-table">
-						<tr>
-							<th scope="row">Search for location<br /><span style="font-weight:normal;">(town, postcode or address)</span></th>
-							<td><input name="wp_geo_search" type="text" size="45" id="wp_geo_search" value="' . $search . '" /> <span class="submit"><input type="button" id="wp_geo_search_button" name="wp_geo_search_button" value="Search" onclick="wp_geo_showAddress();" /></span></td>
-						</tr>
-						<tr>
-							<td colspan="2">
-							<div id="wp_geo_map" style="height:300px; width:100%; padding:0px; margin:0px;">
-								Loading Google map...
-							</div>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Latitude, Longitude<br /><a href="#" onclick="clearLatLngFields(); return false;">clear location</a></th>
-							<td><input name="wp_geo_latitude" type="text" size="25" id="wp_geo_latitude" value="' . $latitude . '" /> <input name="wp_geo_longitude" type="text" size="25" id="wp_geo_longitude" value="' . $longitude . '" /></td>
-						</tr>
-					</table>
-				</div>
-			</div>';
-		
+		$edit_html = '';
+		if ($this->checkGoogleAPIKey())
+		{
+			$edit_html = '
+				<div id="wpgeolocationdiv" class="postbox if-js-open">
+					<h3>WP Geo Location</h3>
+					<div class="inside">
+						<table cellpadding="3" cellspacing="5" class="form-table">
+							<tr>
+								<th scope="row">Search for location<br /><span style="font-weight:normal;">(town, postcode or address)</span></th>
+								<td><input name="wp_geo_search" type="text" size="45" id="wp_geo_search" value="' . $search . '" /> <span class="submit"><input type="button" id="wp_geo_search_button" name="wp_geo_search_button" value="Search" onclick="wp_geo_showAddress();" /></span></td>
+							</tr>
+							<tr>
+								<td colspan="2">
+								<div id="wp_geo_map" style="height:300px; width:100%; padding:0px; margin:0px;">
+									Loading Google map...
+								</div>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">Latitude, Longitude<br /><a href="#" onclick="clearLatLngFields(); return false;">clear location</a></th>
+								<td><input name="wp_geo_latitude" type="text" size="25" id="wp_geo_latitude" value="' . $latitude . '" /> <input name="wp_geo_longitude" type="text" size="25" id="wp_geo_longitude" value="' . $longitude . '" /></td>
+							</tr>
+						</table>
+					</div>
+				</div>';
+		}
 		return $edit_html;
 		
 	}
