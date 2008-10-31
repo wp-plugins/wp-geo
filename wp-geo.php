@@ -6,7 +6,7 @@
 Plugin Name: WP Geo
 Plugin URI: http://www.benhuson.co.uk/wordpress-plugins/wp-geo/
 Description: Adds geocoding to WordPress.
-Version: 2.1.2
+Version: 2.2
 Author: Ben Huson
 Author URI: http://www.benhuson.co.uk/
 Minimum WordPress Version Required: 2.5
@@ -26,7 +26,7 @@ class WPGeo
 	 * Properties
 	 */
 	 
-	var $version = '2.1.3';
+	var $version = '2.2';
 	var $markers;
 	
 	
@@ -896,21 +896,33 @@ class WPGeo
 				<table class="form-table">
 					<tr valign="top">
 						<th scope="row">Large Marker</th>
-						<td><img src="' . $markers['large']['image'] . '" /> <img src="' . $markers['large']['shadow'] . '" /><br />
-							This is the default marker used to indicate a location on most maps.<br />
-							{ width:' . $markers['large']['width'] . ', height:' . $markers['large']['height'] . ', anchorX:' . $markers['large']['anchorX'] . ', anchorY:' . $markers['large']['anchorY'] . ' }</td>
+						<td>
+							<p style="margin:0px; background-image:url(' . $markers['large']['shadow'] . '); background-repeat:no-repeat;"><img src="' . $markers['large']['image'] . '" /></p>
+							<p style="margin:10px 0 0 0;">
+								This is the default marker used to indicate a location on most maps.<br />
+								{ width:' . $markers['large']['width'] . ', height:' . $markers['large']['height'] . ', anchorX:' . $markers['large']['anchorX'] . ', anchorY:' . $markers['large']['anchorY'] . ' }
+							</p>
+						</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">Small Marker</th>
-						<td><img src="' . $markers['small']['image'] . '" /> <img src="' . $markers['small']['shadow'] . '" /><br />
-							This is the default marker used for the WP Geo sidebar widget.<br />
-							{ width:' . $markers['small']['width'] . ', height:' . $markers['small']['height'] . ', anchorX:' . $markers['small']['anchorX'] . ', anchorY:' . $markers['small']['anchorY'] . ' }</td>
+						<td>
+							<p style="margin:0px; background-image:url(' . $markers['small']['shadow'] . '); background-repeat:no-repeat;"><img src="' . $markers['small']['image'] . '" /></p>
+							<p style="margin:10px 0 0 0;">
+								This is the default marker used for the WP Geo sidebar widget.<br />
+								{ width:' . $markers['small']['width'] . ', height:' . $markers['small']['height'] . ', anchorX:' . $markers['small']['anchorX'] . ', anchorY:' . $markers['small']['anchorY'] . ' }
+							</p>
+						</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">Dot Marker</th>
-						<td><img src="' . $markers['dot']['image'] . '" /> <img src="' . $markers['dot']['shadow'] . '" /><br />
-							This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo.<br />
-							{ width:' . $markers['dot']['width'] . ', height:' . $markers['dot']['height'] . ', anchorX:' . $markers['dot']['anchorX'] . ', anchorY:' . $markers['dot']['anchorY'] . ' }</td>
+						<td>
+							<p style="margin:0px; background-image:url(' . $markers['dot']['shadow'] . '); background-repeat:no-repeat;"><img src="' . $markers['dot']['image'] . '" /></p>
+							<p style="margin:10px 0 0 0;">
+								This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo.<br />
+								{ width:' . $markers['dot']['width'] . ', height:' . $markers['dot']['height'] . ', anchorX:' . $markers['dot']['anchorX'] . ', anchorY:' . $markers['dot']['anchorY'] . ' }
+							</p>
+						</td>
 					</tr>
 				</table>
 			</form>
