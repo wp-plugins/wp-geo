@@ -29,6 +29,7 @@ class WPGeo
 	var $version = '3.0';
 	var $markers;
 	var $show_maps_external = false;
+	var $plugin_message = '<strong>Please note: </strong> If you have customised your templates for a previous version of WP Geo you may have to change static class references such as <code>WPGeo::categoryMap();</code> to global references <code>$wpgeo->categoryMap();</code>';
 	
 	
 	
@@ -1123,6 +1124,22 @@ class WPGeo
 	
 	
 	/**
+	 * Hook: after_plugin_row
+	 */
+	function after_plugin_row($plugin)
+	{
+		
+		if ('wp-geo/wp-geo.php' == $plugin && !empty($this->plugin_message))
+		{
+			echo '<td colspan="5" class="plugin-update" style="line-height:1.2em;">' . $this->plugin_message . '</td>';
+			return;
+		}
+		
+	}
+	
+	
+	
+	/**
 	 * GeoRSS Namespace
 	 */
 	function georss_namespace() 
@@ -1194,6 +1211,7 @@ add_action('admin_head', array($wpgeo, 'admin_head'));
 add_action('edit_form_advanced', array($wpgeo, 'edit_form_advanced'));
 add_action('edit_page_form', array($wpgeo, 'edit_form_advanced'));
 add_action('save_post', array($wpgeo, 'save_post'));
+add_action('after_plugin_row', array($wpgeo, 'after_plugin_row'));
 
 // Feed Hooks
 add_action('rss2_ns', array($wpgeo, 'georss_namespace'));
