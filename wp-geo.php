@@ -6,7 +6,7 @@
 Plugin Name: WP Geo
 Plugin URI: http://www.benhuson.co.uk/wordpress-plugins/wp-geo/
 Description: Adds geocoding to WordPress.
-Version: 2.2
+Version: 3.0
 Author: Ben Huson
 Author URI: http://www.benhuson.co.uk/
 Minimum WordPress Version Required: 2.5
@@ -26,8 +26,9 @@ class WPGeo
 	 * Properties
 	 */
 	 
-	var $version = '2.2';
+	var $version = '3.0';
 	var $markers;
+	var $show_maps_external = false;
 	
 	
 	
@@ -393,7 +394,10 @@ class WPGeo
 			$panel_open = false;
 			$hide_marker = false;
 			
-			echo $wpgeo->mapScriptsInit($default_latitude, $default_longitude, $default_zoom, $panel_open, $hide_marker);
+			if (!$wpgeo->show_maps_external)
+			{
+				echo $wpgeo->mapScriptsInit($default_latitude, $default_longitude, $default_zoom, $panel_open, $hide_marker);
+			}
 		
 		}
 		
@@ -727,7 +731,8 @@ class WPGeo
 	function show_maps()
 	{
 	
-		global $post_ID;
+		global $post_ID, $pagenow;
+		
 		$wp_geo_options = get_option('wp_geo_options');
 		
 		if (is_home() && $wp_geo_options['show_maps_on_home'] == 'Y')					return true;
@@ -740,11 +745,22 @@ class WPGeo
 		// Activate maps in admin...
 		if (is_admin())
 		{
-			// Note: Can easily detect manage post/page pages but possible to detect new post/page pages?
-			//if (is_numeric($post_ID) && $post_ID > 0)
-			//{
+			// If editing a post or page...
+			if (is_numeric($post_ID) && $post_ID > 0)
+			{
 				return true;
-			//}
+			}
+			// If writing a new post or page...
+			if ($pagenow == 'post-new.php' || $pagenow == 'page-new.php')
+			{
+				return true;
+			}
+		}
+		
+		// Do Action
+		if ($this->show_maps_external)
+		{
+			return true;
 		}
 		
 		return false;
