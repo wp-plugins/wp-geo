@@ -5,7 +5,7 @@
 /**
 * WP Geo Widget
 * @author Marco Alionso Ramirez, marco@onemarco.com, updated by Ben Huson, ben@thewhiteroom.net
-* @version 1.0
+* @version 1.1
 * Adds a geocoding widget to WordPress (requires WP Geo plugin)
 */
 
@@ -24,7 +24,7 @@ class WPGeoWidget
 	 * Properties
 	 */
 	 
-	var $version = '1.0';
+	var $version = '1.1';
 	
 	
 
@@ -261,8 +261,8 @@ class WPGeoWidget
 							'.	$markers_js .'
 											
 							// draw the polygonal lines between points
-							map.addOverlay(wpgeo_createPolyline(' . $polyline_coords_js . ', "#000000", 2, 0.50));
-									
+							map.addOverlay(wpgeo_createPolyline(' . $polyline_coords_js . ', "#ffffff", 2, 0.50));
+							
 							// Center the map to show all markers
 							var center = bounds.getCenter();
 							var zoom = map.getBoundsZoomLevel(bounds)
