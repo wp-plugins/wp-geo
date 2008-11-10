@@ -1140,6 +1140,71 @@ class WPGeo
 	
 	
 	/**
+	 * Hook: get_wpgeo_posts
+	 */
+	function get_wpgeo_posts($args = 'numberposts=5')
+	{
+		
+		global $customFields;
+		
+		$default_args = array('numberposts' => 5);
+		$arguments = wp_parse_args($args, $default_args);
+		extract($arguments, EXTR_SKIP);
+		
+		$customFields = "'_wp_geo_longitude', '_wp_geo_latitude'";
+		$customPosts = new WP_Query();
+		
+		add_filter('posts_join', array($this, 'get_custom_field_posts_join'));
+		add_filter('posts_groupby', array($this, 'get_custom_field_posts_group'));
+		
+		$customPosts->query('showposts=' . $numberposts); // Uses same parameters as query_posts
+		
+		remove_filter('posts_join', array($this, 'get_custom_field_posts_join'));
+		remove_filter('posts_groupby', array($this, 'get_custom_field_posts_group'));
+		
+		$points = array();
+		
+		while ($customPosts->have_posts()) : $customPosts->the_post();
+			$id   = get_the_ID();
+			$long = get_post_custom_values("_wp_geo_longitude");
+			$lat  = get_post_custom_values("_wp_geo_latitude");
+			$points[] = array('id' => $id, 'long' => $long, 'lat' => $lat);
+		endwhile;
+		
+		return $points;
+		
+	}
+	
+	
+	
+	/**
+	 * Get Custom Field Posts Join
+	 */
+	function get_custom_field_posts_join($join)
+	{
+	
+		global $wpdb, $customFields;
+		return $join . " JOIN $wpdb->postmeta postmeta ON (postmeta.post_id = $wpdb->posts.ID and postmeta.meta_key in ($customFields))";
+	
+	}
+	
+	
+	
+	/**
+	 * Get Custom Field Posts Group
+	 */
+	function get_custom_field_posts_group($group)
+	{
+	
+		global $wpdb;
+		$group .= " $wpdb->posts.ID ";
+		return $group;
+		
+	}
+	
+	
+	
+	/**
 	 * GeoRSS Namespace
 	 */
 	function georss_namespace() 
@@ -1222,7 +1287,7 @@ add_action('rss2_item', array($wpgeo, 'georss_item'));
 add_action('atom_entry', array($wpgeo, 'georss_item'));
 add_action('rdf_item', array($wpgeo, 'georss_item'));
 
-// Includes
+// More Includes
 include('wp-geo-widget.php');
 
 
