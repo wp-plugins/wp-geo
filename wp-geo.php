@@ -30,7 +30,7 @@ class WPGeo
 	var $markers;
 	var $show_maps_external = false;
 	var $plugin_message = '<strong>Please note: </strong> If you have customised your templates for a previous version of WP Geo you may have to change static class references such as <code>WPGeo::categoryMap();</code> to global references <code>$wpgeo->categoryMap();</code>';
-	
+	var $maps;
 	
 	
 	/**
@@ -39,6 +39,7 @@ class WPGeo
 	function WPGeo()
 	{
 		
+		$this->maps = array();
 		$this->markers = new WPGeoMarkers();
 		
 	}
@@ -163,7 +164,7 @@ class WPGeo
 		
 		if ($showmap && $this->checkGoogleAPIKey())
 		{
-			echo '<div class="wp_geo_map" id="wp_geo_map" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>';
+			echo '<div class="wp_geo_map" id="wp_geo_map_visible" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>';
 		}
 		
 	}
@@ -189,6 +190,7 @@ class WPGeo
 			$this->markers->wp_head();
 			
 			$wp_geo_options = get_option('wp_geo_options');
+			$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];
 			
 			// Coords to show on map?
 			$coords = array();
@@ -203,9 +205,38 @@ class WPGeo
 					$push = array(
 						'id' => $post->ID,
 						'latitude' => $latitude,
-						'longitude' => $longitude
+						'longitude' => $longitude,
+						'title' => $post->post_title,
+						'link' => $post->guid
 					);
 					array_push($coords, $push);
+					
+					
+					// ----------- Start - Create maps for visible posts and pages -----------
+					
+					$map = new WPGeoMap($post->ID);										// Create map
+					
+					// Add point
+					$map->addPoint($latitude, $longitude, 'wpgeo_icon_large', $post->post_title, $post->guid);
+					
+					$map->setMapZoom($wp_geo_options['default_map_zoom']);				// Set zoom
+					$map->setMapType($maptype);											// Set map type
+					
+					if ($wp_geo_options['show_map_type_physical'] == 'Y')
+						$map->addMapType('G_PHYSICAL_MAP');								// Show PHYSICAL map?
+					if ($wp_geo_options['show_map_type_normal'] == 'Y')
+						$map->addMapType('G_NORMAL_MAP');								// Show NORMAL map?
+					if ($wp_geo_options['show_map_type_satellite'] == 'Y')
+						$map->addMapType('G_SATELLITE_MAP');							// Show SATELLITE map?
+					if ($wp_geo_options['show_map_type_hybrid'] == 'Y')
+						$map->addMapType('G_HYBRID_MAP');								// Show HYBRID map?
+						
+					$map->setMapControl($wp_geo_options['default_map_control']);		// Set map control
+					array_push($this->maps, $map);										// Add map to maps array
+					
+					// ----------- End - Create maps for visible posts and pages -----------
+					
+					
 				}
 				
 			}
@@ -214,101 +245,44 @@ class WPGeo
 			if (count($coords) > 0)
 			{
 			
+			
+				// ----------- Start - Create map for visible posts and pages -----------
+				
+				$map = new WPGeoMap('visible');
+				$map->show_polyline = true;
+				
+				// Add points
+				for ($j = 0; $j < count($coords); $j++)
+				{
+					$map->addPoint($coords[$j]['latitude'], $coords[$j]['longitude'], 'wpgeo_icon_small', $coords[$j]['title'], $coords[$j]['link']);
+				}
+				
+				$map->setMapZoom($wp_geo_options['default_map_zoom']);			// Set zoom
+				$map->setMapType($maptype);										// Set map type
+				
+				if ($wp_geo_options['show_map_type_physical'] == 'Y')			// Show PHYSICAL map?
+					$map->addMapType('G_PHYSICAL_MAP');
+				if ($wp_geo_options['show_map_type_normal'] == 'Y')				// Show NORMAL map?
+					$map->addMapType('G_NORMAL_MAP');
+				if ($wp_geo_options['show_map_type_satellite'] == 'Y')			// Show SATELLITE map?
+					$map->addMapType('G_SATELLITE_MAP');
+				if ($wp_geo_options['show_map_type_hybrid'] == 'Y')				// Show HYBRID map?
+					$map->addMapType('G_HYBRID_MAP');
+				
+				$map->setMapControl($wp_geo_options['default_map_control']);	// Set map control
+				array_push($this->maps, $map);									// Add map to maps array
+				
+				// ----------- End - Create map for visible posts and pages -----------
+				
+					
 				$google_maps_api_key = $wp_geo_options['google_api_key'];
-				$zoom = $wp_geo_options['default_map_zoom']; //5;
+				$zoom = $wp_geo_options['default_map_zoom'];
 				
-				if (count($coords) > 1)
-				{
-					$zoom = $wp_geo_options['default_map_zoom']; // 3;
-				}
-				
-				$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];			
-				
-				// Points JS
-				$points_js = '';
-				
-				// Category
-				for ($i = 0; $i < count($coords); $i++)
-				{
-					$points_js .= 'marker_' . $i .' = new GMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), wpgeo_icon_large, {draggable: false});' . "\n";
-					$points_js .= 'GEvent.addListener(marker_' . $i . ', "dragstart", function() {
-							map.closeInfoWindow();
-						});' . "\n";
-					
-					$points_js .= 'map.addOverlay(marker_' . $i . ');' . "\n";
-				}
-				
-				// Polyline JS
-				$polyline_js = '';
-				if (count($coords) > 1)
-				{
-					$polyline_coords = '';
-					for ($i = 0; $i < count($coords); $i++)
-					{
-						if ($i > 0)
-						{
-							$polyline_coords .= ',';
-						}
-						$polyline_coords .= 'new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . ')';
-					}
-					$polyline_js = 'var polyOptions = {geodesic:true}; 
-						var polyline = new GPolyline([' . $polyline_coords . '], "#ffffff", 2, 0.5, polyOptions);
-							map.addOverlay(polyline);';
-				}
-				
-				
-				
-				// Post Maps and Markers
-				$small_marker = $wpgeo->markers->get_marker_meta('small');
-				$js_map_inits = '';
-				$js_marker_inits = '';
-				$js_marker_inits .= 'var icon = wpgeo_createIcon(' . $small_marker['width'] . ', ' . $small_marker['height'] . ', ' . $small_marker['anchorX'] . ', ' . $small_marker['anchorY'] . ', "' . $small_marker['image'] . '", "' . $small_marker['shadow'] . '");';
+				// Loop through maps to get Javascript
 				$js_map_writes = '';
-				for ($i = 0; $i < count($coords); $i++)
+				foreach ($this->maps as $map)
 				{
-					$js_map_inits .= 'var map' . $coords[$i]['id'] . ' = null; ';
-					$js_marker_inits .= 'var marker' . $coords[$i]['id'] . ' = null; ';
-					
-					
-					$js_map_types = '';
-					if ($wp_geo_options['show_map_type_physical'] == 'Y')
-						$js_map_types .= 'map' . $coords[$i]['id'] . '.addMapType(G_PHYSICAL_MAP);';
-					if ($wp_geo_options['show_map_type_normal'] != 'Y')
-						$js_map_types .= 'map' . $coords[$i]['id'] . '.removeMapType(G_NORMAL_MAP);';
-					if ($wp_geo_options['show_map_type_satellite'] != 'Y')
-						$js_map_types .= 'map' . $coords[$i]['id'] . '.removeMapType(G_SATELLITE_MAP);';
-					if ($wp_geo_options['show_map_type_hybrid'] != 'Y')
-						$js_map_types .= 'map' . $coords[$i]['id'] . '.removeMapType(G_HYBRID_MAP);';
-					$js_map_types .= 'map' . $coords[$i]['id'] . '.setMapType(' . $wp_geo_options['google_map_type'] . ');';
-	
-					
-					$js_map_writes .= '
-						if (document.getElementById("wp_geo_map_' . $coords[$i]['id'] . '"))
-						{
-							map' . $coords[$i]['id'] . ' = new GMap2(document.getElementById("wp_geo_map_' . $coords[$i]['id'] . '"));
-							var center = new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . ');
-							map' . $coords[$i]['id'] . '.setCenter(center, ' . $zoom . ');
-							map' . $coords[$i]['id'] . '.setMapType(' . $maptype . ');
-							
-							// Map Controls
-							' . $js_map_types  . '
-							var mapTypeControl = new GMapTypeControl();
-							map' . $coords[$i]['id'] . '.addControl(new ' . $wp_geo_options['default_map_control'] . '());
-							map' . $coords[$i]['id'] . '.addControl(mapTypeControl);
-							
-							var center' . $coords[$i]['id'] .' = new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . ');
-							marker' . $coords[$i]['id'] .' = new GMarker(center' . $coords[$i]['id'] .', wpgeo_icon_large, {draggable: false});
-							
-							
-							GEvent.addListener(marker' . $coords[$i]['id'] . ', "dragstart", function() {
-								map.closeInfoWindow();
-							});
-							map' . $coords[$i]['id'] . '.addOverlay(marker' . $coords[$i]['id'] . ');
-							
-							GEvent.addListener(map' . $coords[$i]['id'] . ', "zoomend", function(oldLevel, newLevel) {
-								map' . $coords[$i]['id'] . '.setCenter(marker' . $coords[$i]['id'] . '.getLatLng());
-							});
-						}';
+					$js_map_writes .= $map->renderMapJS();
 				}
 						
 				// Script
@@ -324,26 +298,6 @@ class WPGeo
 				{
 					if (GBrowserIsCompatible())
 					{
-						if (document.getElementById("wp_geo_map"))
-						{
-							map = new GMap2(document.getElementById("wp_geo_map"));
-							var center = new GLatLng(' . $coords[0]['latitude'] . ', ' . $coords[0]['longitude'] . ');
-							map.setCenter(center, ' . $zoom . ');
-							map.setMapType(' . $maptype . ');
-							
-							// Map Controls
-							var mapTypeControl = new GMapTypeControl();
-							map.addControl(new GLargeMapControl());
-							map.addControl(mapTypeControl);
-							
-							' . $points_js . '
-							
-							' . $polyline_js . '
-					
-							GEvent.addListener(map, "zoomend", function(oldLevel, newLevel) {
-								map.setCenter(marker_0.getLatLng());
-							});
-						}
 						' . $js_map_writes . '
 					}
 				}
@@ -1257,6 +1211,7 @@ class WPGeo
 
 // Includes
 include('wp-geo-markers.php');
+include('wp-geo-map.php');
 
 // Init.
 $wpgeo = new WPGeo();
