@@ -1,0 +1,47 @@
+
+
+
+/**
+ * Settings for all maps
+ */
+
+div.wp_geo_map {
+	overflow: hidden;
+}
+
+div.wp_geo_map img {
+	background: transparent;
+	border: none;
+	padding: 0px;
+	max-width:none;
+}
+
+
+
+/**
+ * Settings for the widget
+ */
+
+div.tooltip{
+	background-color:#FFFFFF;
+	border:1px solid #CCCCCC;
+	padding:3px;
+	white-space:nowrap;
+	font-weight: bold;
+	text-transform: uppercase;
+	color: #000000;
+}
+
+
+
+/**
+ * Settings for admin
+ */
+
+.wp_geo_error, .wp_geo_error a:link, .wp_geo_error a:visited {
+	color:#CC0000;
+}
+
+.wp_geo_error a:hover, .wp_geo_error a:active {
+	color:#333333;
+}
