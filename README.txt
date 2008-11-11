@@ -3,7 +3,7 @@ Contributors: Ben Huson
 Donate link: http://www.wpgeo.com/
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
-Tested up to: 2.6.2
+Tested up to: 2.6.3
 Stable tag: 3.0.1
 
 Add location maps to your posts and pages.
