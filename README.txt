@@ -4,7 +4,7 @@ Donate link: http://www.wpgeo.com/
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
 Tested up to: 2.6.2
-Stable tag: 3.0
+Stable tag: 3.0.1
 
 Add location maps to your posts and pages.
 
@@ -21,6 +21,7 @@ More information can be found at http://www.benhuson.co.uk/wordpress-plugins/wp-
 
 = Features =
 
+* NEW - Markers links to posts
 * NEW - Settings for default controls
 * NEW - Custom Markers
 * NEW - Sidebar Widget
@@ -66,6 +67,11 @@ If upgrading from a previous version of the plugin:
 3. Admin Settings
 
 == Release Notes ==
+
+= WP Geo 3.0.1 =
+
+* Markers link to posts.
+* Map scale and corner map settings now fixed.
 
 = WP Geo 3.0 =
 
