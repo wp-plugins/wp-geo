@@ -20,6 +20,8 @@ class WPGeoMap
 	var $maptype = 'G_NORMAL_MAP';
 	var $maptypes;
 	var $mapcontrol = 'GLargeMapControl';
+	var $show_map_scale = false;
+	var $show_map_overview = false;
 	var $show_polyline = false;
 	
 	
@@ -109,6 +111,13 @@ class WPGeoMap
 				});';
 		}
 		
+		// Controls
+		$js_controls = '';
+		if ($this->show_map_scale)
+			$js_controls .= 'map_' . $map_id . '.addControl(new GScaleControl());';
+		if ($this->show_map_overview)
+			$js_controls .= 'map_' . $map_id . '.addControl(new GOverviewMapControl());';
+		
 		// Map Javascript
 		$js = '
 			if (document.getElementById("' . $div . '"))
@@ -131,6 +140,7 @@ class WPGeoMap
 				' . $js_markers . '
 				' . $js_polyline . '
     			' . $js_zoom . '
+    			' . $js_controls . '
 				
 			}';
 		
@@ -215,6 +225,30 @@ class WPGeoMap
 	{
 	
 		$this->zoom = $zoom;
+		
+	}
+	
+	
+	
+	/**
+	 * Show Map Scale
+	 */
+	function showMapScale($bool = true)
+	{
+	
+		$this->show_map_scale = $bool;
+		
+	}
+	
+	
+	
+	/**
+	 * Show Map Overview
+	 */
+	function showMapOverview($bool = true)
+	{
+	
+		$this->show_map_overview = $bool;
 		
 	}
 	
