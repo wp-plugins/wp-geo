@@ -700,6 +700,10 @@ class WPGeo
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		
+		// Widget active
+		if (is_active_widget(array('WPGeoWidget', 'map_widget'))) return true;
+		
+		// Check settings
 		if (is_home() && $wp_geo_options['show_maps_on_home'] == 'Y')					return true;
 		if (is_single() && $wp_geo_options['show_maps_on_posts'] == 'Y')				return true;
 		if (is_page() && $wp_geo_options['show_maps_on_pages'] == 'Y')					return true;
