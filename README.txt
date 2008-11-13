@@ -17,7 +17,7 @@ When editing a post or page, you will be able to set a physically location for t
 
 The WP Geo location selector is styled to fit seemlessly into the latest version of the WordPress admin.
 
-More information can be found at http://www.benhuson.co.uk/wordpress-plugins/wp-geo/.
+More information can be found at http://www.wpgeo.com/.
 
 = Features =
 
