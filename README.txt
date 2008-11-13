@@ -3,7 +3,7 @@ Contributors: Ben Huson
 Donate link: http://www.wpgeo.com/
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
-Tested up to: 2.6.2
+Tested up to: 2.6.3
 Stable tag: 3.0.1
 
 Add location maps to your posts and pages.
@@ -17,7 +17,7 @@ When editing a post or page, you will be able to set a physically location for t
 
 The WP Geo location selector is styled to fit seemlessly into the latest version of the WordPress admin.
 
-More information can be found at http://www.benhuson.co.uk/wordpress-plugins/wp-geo/.
+More information can be found at http://www.wpgeo.com/.
 
 = Features =
 
