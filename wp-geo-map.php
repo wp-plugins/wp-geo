@@ -70,7 +70,7 @@ class WPGeoMap
 		{
 			for ($i = 0; $i < count($this->points); $i++)
 			{
-				$js_markers .= 'var marker_' . $map_id .'_' . $i . ' = new wpgeo_createMarker2(map_' . $map_id . ', new GLatLng(' . $this->points[$i]['latitude'] . ', ' . $this->points[$i]['longitude'] . '), ' . $this->points[$i]['icon'] . ', \'' . $this->points[$i]['title'] . '\', \'' . $this->points[$i]['link'] . '\');' . "\n";
+				$js_markers .= 'var marker_' . $map_id .'_' . $i . ' = new wpgeo_createMarker2(map_' . $map_id . ', new GLatLng(' . $this->points[$i]['latitude'] . ', ' . $this->points[$i]['longitude'] . '), ' . $this->points[$i]['icon'] . ', \'' . addslashes($this->points[$i]['title']) . '\', \'' . $this->points[$i]['link'] . '\');' . "\n";
 				$js_markers .= 'bounds.extend(new GLatLng(' . $this->points[$i]['latitude'] . ', ' . $this->points[$i]['longitude'] . '));';
 			}
 		}
