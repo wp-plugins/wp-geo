@@ -336,6 +336,21 @@ class WPGeo
 
 
 	/**
+	 * Hook: admin_init
+	 */
+	function admin_init()
+	{
+	
+		if (function_exists('register_setting'))
+		{
+			register_setting('wp-geo-options', 'wp_geo_options', '');
+		}
+		
+	}
+
+
+
+	/**
 	 * Hook: admin_head
 	 */
 	function admin_head()
@@ -909,8 +924,12 @@ class WPGeo
 							</p>
 						</td>
 					</tr>
-				</table>
-			</form>
+				</table>';
+		if (function_exists('register_setting') && function_exists('settings_fields'))
+		{
+			settings_fields('wp-geo-options'); 
+		}	
+		echo '</form>
 			<h2 style="margin-top:30px;">Documentation</h2>
 			<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a location has been set for the post). You can only include the Shortcode once within a post. If you select another Show Post Map option then the Shortcode will be ignored and the map will be positioned automatically.</p>
 			<h3>Feedback</h3>
@@ -1240,6 +1259,7 @@ add_action('wp_head', array($wpgeo, 'wp_head'));
 add_filter('the_content', array($wpgeo, 'the_content'));
 
 // Admin Hooks
+add_action('admin_init', array($wpgeo, 'admin_init'));
 add_action('admin_menu', array($wpgeo, 'admin_menu'));
 add_action('admin_head', array($wpgeo, 'admin_head'));
 add_action('edit_form_advanced', array($wpgeo, 'edit_form_advanced'));
