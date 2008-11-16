@@ -106,9 +106,7 @@ class WPGeoMap
 		}
 		if (count($this->points) == 1)
 		{
-			$js_zoom .= 'GEvent.addListener(map_' . $map_id . ', "zoomend", function(oldLevel, newLevel) {
-					map_' . $map_id . '.setCenter(marker_' . $map_id . '_0.getLatLng());
-				});';
+			$js_zoom .= 'map_' . $map_id . '.setCenter(marker_' . $map_id . '_0.getLatLng());';
 		}
 		
 		// Controls
