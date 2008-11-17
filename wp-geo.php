@@ -715,6 +715,12 @@ class WPGeo
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		
+		// Check if domain is correct
+		if (!$this->check_domain())
+		{
+			return false;
+		}
+		
 		// Widget active
 		if (is_active_widget(array('WPGeoWidget', 'map_widget'))) return true;
 		
@@ -748,6 +754,26 @@ class WPGeo
 		}
 		
 		return false;
+		
+	}
+	
+	
+	
+	/**
+	 * ---------- Check Domain ----------
+	 * This function checks that the domainname of the page matches the blog site url.
+	 * If it doesn't match we can prevent maps from showing as the Google API Key will not be valid.
+	 * This prevent warnings if the site is accessed through Google cache.
+	 */
+	function check_domain()
+	{
+	
+		$host = 'http://' . rtrim($_SERVER["HTTP_HOST"], "/");
+		$blog = get_bloginfo('siteurl');
+		
+		$match = $host == $blog ? true : false;
+		
+		return $match;
 		
 	}
 
