@@ -124,7 +124,7 @@ class WPGeoWidget
 		echo '
 			<p><label for="wpgeo-title">' . __('Title', 'wp-geo') . ': <input class="widefat" id="wpgeo-title" name="wpgeo-title" type="text" value="' . $title . '" /></label></p>
 			<p><label for="wpgeo-width">' . __('Width', 'wp-geo') . ': <input class="widefat" id="wpgeo-width" name="wpgeo-width" type="text" value="' . $width . '" /></label></p>
-			<p><label for="wpgeo-height">' . __('Height', 'wp-geo' . ': <input class="widefat" id="wpgeo-height" name="wpgeo-height" type="text" value="' . $height . '" /></label></p>';
+			<p><label for="wpgeo-height">' . __('Height', 'wp-geo') . ': <input class="widefat" id="wpgeo-height" name="wpgeo-height" type="text" value="' . $height . '" /></label></p>';
 		echo '<p>' . $wpgeo->google_map_types('menu', $maptype) . '</p>';
 		echo '<input type="hidden" id="wpgeo-submit" name="wpgeo-submit" value="1" />';
 	
