@@ -122,9 +122,9 @@ class WPGeoWidget
 			echo '<p class="wp_geo_error">WP Geo is not currently active as you have not entered a Google API Key. Please <a href="' . get_bloginfo('url') . '/wp-admin/options-general.php?page=wp-geo/wp-geo.php">update your WP Geo settings</a>.</p>';
 		}
 		echo '
-			<p><label for="wpgeo-title">Title: <input class="widefat" id="wpgeo-title" name="wpgeo-title" type="text" value="' . $title . '" /></label></p>
-			<p><label for="wpgeo-width">Width: <input class="widefat" id="wpgeo-width" name="wpgeo-width" type="text" value="' . $width . '" /></label></p>
-			<p><label for="wpgeo-height">Height: <input class="widefat" id="wpgeo-height" name="wpgeo-height" type="text" value="' . $height . '" /></label></p>';
+			<p><label for="wpgeo-title">' . __('Title') . ': <input class="widefat" id="wpgeo-title" name="wpgeo-title" type="text" value="' . $title . '" /></label></p>
+			<p><label for="wpgeo-width">' . __('Width') . ': <input class="widefat" id="wpgeo-width" name="wpgeo-width" type="text" value="' . $width . '" /></label></p>
+			<p><label for="wpgeo-height">' . __('Height') . ': <input class="widefat" id="wpgeo-height" name="wpgeo-height" type="text" value="' . $height . '" /></label></p>';
 		echo '<p>' . $wpgeo->google_map_types('menu', $maptype) . '</p>';
 		echo '<input type="hidden" id="wpgeo-submit" name="wpgeo-submit" value="1" />';
 	
