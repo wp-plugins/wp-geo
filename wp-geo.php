@@ -598,8 +598,8 @@ class WPGeo
 					<div class="inside">
 						<table cellpadding="3" cellspacing="5" class="form-table">
 							<tr>
-								<th scope="row">' . __('Search for location') . '<br /><span style="font-weight:normal;">(' . __('town, postcode or address') . ')</span></th>
-								<td><input name="wp_geo_search" type="text" size="45" id="wp_geo_search" value="' . $search . '" /> <span class="submit"><input type="button" id="wp_geo_search_button" name="wp_geo_search_button" value="' . __('Search') . '" onclick="wp_geo_showAddress();" /></span></td>
+								<th scope="row">' . __('Search for location', 'wp-geo') . '<br /><span style="font-weight:normal;">(' . __('town, postcode or address', 'wp-geo') . ')</span></th>
+								<td><input name="wp_geo_search" type="text" size="45" id="wp_geo_search" value="' . $search . '" /> <span class="submit"><input type="button" id="wp_geo_search_button" name="wp_geo_search_button" value="' . __('Search', 'wp-geo') . '" onclick="wp_geo_showAddress();" /></span></td>
 							</tr>
 							<tr>
 								<td colspan="2">
@@ -609,7 +609,7 @@ class WPGeo
 								</td>
 							</tr>
 							<tr>
-								<th scope="row">' . __('Latitude') . ', ' . __('Longitude') . '<br /><a href="#" onclick="clearLatLngFields(); return false;">' . __('clear location') . '</a></th>
+								<th scope="row">' . __('Latitude', 'wp-geo') . ', ' . __('Longitude', 'wp-geo') . '<br /><a href="#" onclick="clearLatLngFields(); return false;">' . __('clear location', 'wp-geo') . '</a></th>
 								<td><input name="wp_geo_latitude" type="text" size="25" id="wp_geo_latitude" value="' . $latitude . '" /> <input name="wp_geo_longitude" type="text" size="25" id="wp_geo_longitude" value="' . $longitude . '" /></td>
 							</tr>
 						</table>
@@ -833,7 +833,7 @@ class WPGeo
 			$wp_geo_options['add_geo_information_to_rss'] = $_POST['add_geo_information_to_rss'];
 			
 			update_option('wp_geo_options', $wp_geo_options);
-			echo '<div class="updated"><p>' . __('WP Geo settings updated') . '</p></div>';
+			echo '<div class="updated"><p>' . __('WP Geo settings updated', 'wp-geo') . '</p></div>';
 		}
 
 		// Markers
@@ -845,10 +845,10 @@ class WPGeo
 		// Write the form
 		echo '
 		<div class="wrap">
-			<h2>' . __('WP Geo Settings') . '</h2>
+			<h2>' . __('WP Geo Settings', 'wp-geo') . '</h2>
 			<form method="post">
 				<img style="float:right; padding:0 20px 0 0; margin:0 0 20px 20px;" src="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/img/logo/wp-geo.png" />
-				<h3>' . __('General Settings') . '</h3>
+				<h3>' . __('General Settings', 'wp-geo') . '</h3>
 				<p>For more information and documentation about this plugin please visit the <a href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/">WP Geo Plugin</a> home page.<br />
 					If you experience any problems/bugs with the plugin, please <a href="http://code.google.com/p/wp-geo/issues/list">log it here</a>.
 				</p>';
@@ -858,31 +858,31 @@ class WPGeo
 		}
 		echo '<table class="form-table">
 					<tr valign="top">
-						<th scope="row">' . __('Google API Key') . '</th>
+						<th scope="row">' . __('Google API Key', 'wp-geo') . '</th>
 						<td><input name="google_api_key" type="text" id="google_api_key" value="' . $wp_geo_options['google_api_key'] . '" size="50" /></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">' . __('Map Type') . '</th>
+						<th scope="row">' . __('Map Type', 'wp-geo') . '</th>
 						<td>' . $wpgeo->google_map_types('menu', $wp_geo_options['google_map_type']) . '</td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">' . __('Show Post Map') . '</th>
+						<th scope="row">' . __('Show Post Map', 'wp-geo') . '</th>
 						<td>' . $wpgeo->post_map_menu('menu', $wp_geo_options['show_post_map']) . '</td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">' . __('Default Map Width') . '</th>
+						<th scope="row">' . __('Default Map Width', 'wp-geo') . '</th>
 						<td><input name="default_map_width" type="text" id="default_map_width" value="' . $wp_geo_options['default_map_width'] . '" size="10" /></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">' . __('Default Map Height') . '</th>
+						<th scope="row">' . __('Default Map Height', 'wp-geo') . '</th>
 						<td><input name="default_map_height" type="text" id="default_map_height" value="' . $wp_geo_options['default_map_height'] . '" size="10" /></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">' . __('Default Map Zoom') . '</th>
+						<th scope="row">' . __('Default Map Zoom', 'wp-geo') . '</th>
 						<td>' . $wpgeo->selectMapZoom('menu', $wp_geo_options['default_map_zoom']) . '</td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">' . __('Default Map Controls') . '</th>
+						<th scope="row">' . __('Default Map Controls', 'wp-geo') . '</th>
 						<td>
 							' . $wpgeo->selectMapControl('menu', $wp_geo_options['default_map_control']). '<br />
 							<p style="margin:1em 0 0 0;"><strong>Map Type Controls</strong></p>
@@ -897,7 +897,7 @@ class WPGeo
 						</td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">' . __('Show Maps On') . '</th>
+						<th scope="row">' . __('Show Maps On', 'wp-geo') . '</th>
 						<td>
 							' . $wpgeo->options_checkbox('show_maps_on_pages', 'Y', $wp_geo_options['show_maps_on_pages']) . ' Pages<br />
 							' . $wpgeo->options_checkbox('show_maps_on_posts', 'Y', $wp_geo_options['show_maps_on_posts']) . ' Posts (single posts)<br />
@@ -907,45 +907,45 @@ class WPGeo
 						</td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">' . __('Feeds') . '</th>
+						<th scope="row">' . __('Feeds', 'wp-geo') . '</th>
 						<td>' . $wpgeo->options_checkbox('add_geo_information_to_rss', 'Y', $wp_geo_options['add_geo_information_to_rss']) . ' Add geographic information</td>
 					</tr>
 				</table>
 				<p class="submit">
-					<input type="submit" name="Submit" value="' . __('Save Changes') . '" />
+					<input type="submit" name="Submit" value="' . __('Save Changes', 'wp-geo') . '" />
 					<input type="hidden" name="action" value="update" />
 					<input type="hidden" name="option_fields" value="google_api_key,google_map_type,show_post_map" />
 				</p>
-				<h2 style="margin-top:30px;">' . __('Marker Settings') . '</h2>
+				<h2 style="margin-top:30px;">' . __('Marker Settings', 'wp-geo') . '</h2>
 				<p>Custom marker images are automatically created in your WordPress uploads folder and used by WP Geo.<br />A copy of these images will remain in the WP Geo folder in case you need to revert to them at any time.<br />You may edit these marker icons if you wish - they must be PNG files. Each marker consist of a marker image and a shadow image. If you do not wish to show a marker shadow you should use a transparent PNG for the shadow file.</p>
 				<p>Currently you must update these images manually and the anchor point must be the same - looking to provide more control in future versions.</p>
 				<table class="form-table">
 					<tr valign="top">
-						<th scope="row">' . __('Large Marker') . '</th>
+						<th scope="row">' . __('Large Marker', 'wp-geo') . '</th>
 						<td>
 							<p style="margin:0px; background-image:url(' . $markers['large']['shadow'] . '); background-repeat:no-repeat;"><img src="' . $markers['large']['image'] . '" /></p>
 							<p style="margin:10px 0 0 0;">
-								' . __('This is the default marker used to indicate a location on most maps.') . '<br />
+								' . __('This is the default marker used to indicate a location on most maps.', 'wp-geo') . '<br />
 								{ width:' . $markers['large']['width'] . ', height:' . $markers['large']['height'] . ', anchorX:' . $markers['large']['anchorX'] . ', anchorY:' . $markers['large']['anchorY'] . ' }
 							</p>
 						</td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">' . __('Small Marker') . '</th>
+						<th scope="row">' . __('Small Marker', 'wp-geo') . '</th>
 						<td>
 							<p style="margin:0px; background-image:url(' . $markers['small']['shadow'] . '); background-repeat:no-repeat;"><img src="' . $markers['small']['image'] . '" /></p>
 							<p style="margin:10px 0 0 0;">
-								' . __('This is the default marker used for the WP Geo sidebar widget.') . '<br />
+								' . __('This is the default marker used for the WP Geo sidebar widget.', 'wp-geo') . '<br />
 								{ width:' . $markers['small']['width'] . ', height:' . $markers['small']['height'] . ', anchorX:' . $markers['small']['anchorX'] . ', anchorY:' . $markers['small']['anchorY'] . ' }
 							</p>
 						</td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">' . __('Dot Marker') . '</th>
+						<th scope="row">' . __('Dot Marker', 'wp-geo') . '</th>
 						<td>
 							<p style="margin:0px; background-image:url(' . $markers['dot']['shadow'] . '); background-repeat:no-repeat;"><img src="' . $markers['dot']['image'] . '" /></p>
 							<p style="margin:10px 0 0 0;">
-								' . __('This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo.') . '<br />
+								' . __('This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo.', 'wp-geo') . '<br />
 								{ width:' . $markers['dot']['width'] . ', height:' . $markers['dot']['height'] . ', anchorX:' . $markers['dot']['anchorX'] . ', anchorY:' . $markers['dot']['anchorY'] . ' }
 							</p>
 						</td>
