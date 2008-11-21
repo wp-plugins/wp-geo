@@ -594,7 +594,7 @@ class WPGeo
 		{
 			$edit_html = '
 				<div id="wpgeolocationdiv" class="postbox if-js-open">
-					<h3>WP Geo Location</h3>
+					<h3>' . __('WP Geo Location') . '</h3>
 					<div class="inside">
 						<table cellpadding="3" cellspacing="5" class="form-table">
 							<tr>
