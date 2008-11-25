@@ -130,9 +130,12 @@ class WPGeoMap
 				map_' . $map_id . '.setMapType(' . $this->maptype . ');
 				
 				var mapTypeControl = new GMapTypeControl();
-				map_' . $map_id . '.addControl(new ' . $this->mapcontrol . '());
-				map_' . $map_id . '.addControl(mapTypeControl);
-				
+				map_' . $map_id . '.addControl(mapTypeControl);';
+		if ($this->mapcontrol != "")
+		{
+			$js .= 'map_' . $map_id . '.addControl(new ' . $this->mapcontrol . '());';
+		}
+		$js .= '
 				var center_' . $map_id .' = new GLatLng(' . $this->points[0]['latitude'] . ', ' . $this->points[0]['longitude'] . ');
 				
 				' . $js_markers . '
