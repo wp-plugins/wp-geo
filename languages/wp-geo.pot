@@ -70,6 +70,18 @@ msgstr ""
 msgid "Show Post Map"
 msgstr ""
 
+# Settings - Show Post Map - At top of post
+msgid "At top of post"
+msgstr ""
+
+# Settings - Show Post Map - At bottom of post
+msgid "At bottom of post"
+msgstr ""
+
+# Settings - Show Post Map - Manually
+msgid "Manually"
+msgstr ""
+
 # Settings - Label for Default Map Width field
 msgid "Default Map Width"
 msgstr ""
@@ -82,16 +94,100 @@ msgstr ""
 msgid "Default Map Zoom"
 msgstr ""
 
+# Settings - Default Map Zoom - Zoomed In
+msgid "Zoomed In"
+msgstr ""
+
+# Settings - Default Map Zoom - Zoomed Out
+msgid "Zoomed Out"
+msgstr ""
+
 # Settings - Label for Default Map Controls fields
 msgid "Default Map Controls"
+msgstr "
+
+# Settings - Default Map Controls - Large pan/zoom control
+msgid "Large pan/zoom control"
+msgstr "
+
+# Settings - Default Map Controls - Smaller pan/zoom control
+msgid "Smaller pan/zoom control"
+msgstr "
+
+# Settings - Default Map Controls - Small zoom control (no panning controls)
+msgid "Small zoom control (no panning controls)"
+msgstr "
+
+# Settings - Default Map Controls - No pan/zoom controls
+msgid "No pan/zoom controls"
+msgstr "
+
+# Settings - Default Map Controls - Map Type
+msgid "Map Type Controls"
+msgstr ""
+
+# Settings - Default Map Controls - Map Type - Message
+msgid "You must select at least 2 map types for the control to show."
+msgstr ""
+
+# Settings - Default Map Controls - Map Type - Normal
+msgid "Normal"
+msgstr ""
+
+# Settings - Default Map Controls - Map Type - Satellite
+msgid "Satellite (photographic map)"
+msgstr ""
+
+# Settings - Default Map Controls - Map Type - Hybrid
+msgid "Hybrid (photographic map with normal features)"
+msgstr ""
+
+# Settings - Default Map Controls - Map Type - Physical
+msgid "Physical (terrain map)"
+msgstr ""
+
+# Settings - Default Map Controls - Other
+msgid "Other Controls"
+msgstr ""
+
+# Settings - Default Map Controls - Other - Show map scale
+msgid "Show map scale"
+msgstr ""
+
+# Settings - Default Map Controls - Other - Show collapsible overview map (in the corner of the map)
+msgid "Show collapsible overview map (in the corner of the map)"
 msgstr ""
 
 # Settings - Label for Show Maps On fields
 msgid "Show Maps On"
 msgstr ""
 
+# Settings - Show Maps On - Pages
+msgid "Pages"
+msgstr ""
+
+# Settings - Show Maps On - Posts (single posts)
+msgid "Posts (single posts)"
+msgstr ""
+
+# Settings - Show Maps On - Posts home page
+msgid "Posts home page"
+msgstr ""
+
+# Settings - Show Maps On - Posts in date archives
+msgid "Posts in date archives"
+msgstr ""
+
+# Settings - Show Maps On - Posts in category archives
+msgid "Posts in category archives"
+msgstr ""
+
 # Settings - Label for Feeds fields
 msgid "Feeds"
+msgstr ""
+
+# Settings - Feeds - Checkbox
+msgid "Add geographic information"
 msgstr ""
 
 # Settings - Save Changes Button Text
