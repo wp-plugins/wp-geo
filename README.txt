@@ -68,6 +68,11 @@ If upgrading from a previous version of the plugin:
 
 == Release Notes ==
 
+= WP Geo 3.0.2 =
+
+* Add language support.
+* Various bug fixes.
+
 = WP Geo 3.0.1 =
 
 * Markers link to posts.
