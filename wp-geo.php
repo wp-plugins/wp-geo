@@ -802,7 +802,7 @@ class WPGeo
 	{
 	
 		$host = 'http://' . rtrim($_SERVER["HTTP_HOST"], "/");
-		$blog = get_bloginfo('siteurl');
+		$blog = preg_replace("/(http:\/\/[^\/]*).*/", "$1", get_bloginfo('siteurl')); // Blog might not be in site root so strip to domain
 		
 		$match = $host == $blog ? true : false;
 		
