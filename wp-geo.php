@@ -6,10 +6,11 @@
 Plugin Name: WP Geo
 Plugin URI: http://www.benhuson.co.uk/wordpress-plugins/wp-geo/
 Description: Adds geocoding to WordPress.
-Version: 3.0.1
+Version: 3.0.2
 Author: Ben Huson
 Author URI: http://www.benhuson.co.uk/
 Minimum WordPress Version Required: 2.5
+Tested up to: 2.7
 */
 
 
@@ -107,8 +108,15 @@ class WPGeo
 		
 		if ($wpgeo->show_maps() && $wp_geo_options['show_post_map'] == 'HIDE' && $this->checkGoogleAPIKey())
 		{
-			$map_atts = array('type' => 'G_NORMAL_MAP');
+			$map_atts = array(
+				'lon' => null,
+				'lat' => null,
+				'type' => 'G_NORMAL_MAP'
+			);
 			extract(shortcode_atts($map_atts, $atts));
+			
+			// To Do: Add in lon/lat check and output map if needed
+			
 			return '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';">' . $content . '</div>';
 		}
 		else
@@ -169,6 +177,34 @@ class WPGeo
 		
 	}
 	
+	
+	/**
+	 * meta_tags
+	 */
+	function meta_tags()
+	{
+		
+		if (is_single())
+		{
+			
+			global $post;
+			
+			$lat =  get_post_meta($post->ID, '_wp_geo_latitude', true);
+			$long =  get_post_meta($post->ID, '_wp_geo_longitude', true);
+			$nl = "\n";
+			
+			if (is_numeric($lat) && is_numeric($long))
+			{
+				echo '<meta name="geo.position" content="' . $lat . ';' . $long . '" />' . $nl; // Geo-Tag: Latitude and longitude
+				//echo '<meta name="geo.region" content="DE-BY" />' . $nl;               // Geo-Tag: Country code (ISO 3166-1) and regional code (ISO 3166-2)
+				//echo '<meta name="geo.placename" content="MŸnchen" />' . $nl;          // Geo-Tag: City or the nearest town
+				//echo '<meta name="DC.title" content="Geo Tag Validator" />' . $nl;     // Dublin Core Meta Tag Title (used by some geo databases)
+				echo '<meta name="ICBM" content="' . $lat . ', ' . $long . '" />' . $nl;        // ICBM Tag (prior existing equivalent to the geo.position)
+			}
+		}
+		
+	}
+	
 
 
 	/**
@@ -178,6 +214,8 @@ class WPGeo
 	{
 		
 		global $wpgeo;
+		
+		$this->meta_tags();
 		
 		// WP Geo Default Settings
 		$wp_geo_options = get_option('wp_geo_options');
@@ -433,11 +471,13 @@ class WPGeo
 			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $wp_geo_options['google_api_key'], false);
 			wp_register_script('wpgeo', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'));
 			wp_register_script('wpgeotooltip', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/Tooltip.js', array('googlemaps'));
+			wp_register_script('jquerywpgeo', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'));
 			
 			wp_enqueue_script('jquery');
 			wp_enqueue_script('googlemaps');
 			wp_enqueue_script('wpgeo');
 			wp_enqueue_script('wpgeotooltip');
+			wp_enqueue_script('jquerywpgeo');
 			
 			$html_js .= '<script type="text/javascript" src="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/Tooltip.js"></script>';
 			
