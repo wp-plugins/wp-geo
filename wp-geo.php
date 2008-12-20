@@ -109,8 +109,8 @@ class WPGeo
 		if ($wpgeo->show_maps() && $wp_geo_options['show_post_map'] == 'HIDE' && $this->checkGoogleAPIKey())
 		{
 			$map_atts = array(
-				'lon' => null,
 				'lat' => null,
+				'long' => null,
 				'type' => 'G_NORMAL_MAP'
 			);
 			extract(shortcode_atts($map_atts, $atts));
@@ -701,15 +701,19 @@ class WPGeo
 	function save_post($post_id)
 	{
 	
-		delete_post_meta($post_id, '_wp_geo_latitude');
-		delete_post_meta($post_id, '_wp_geo_longitude');
 		if (isset($_POST['wp_geo_latitude']) && isset($_POST['wp_geo_longitude']))
 		{
+			
+			// Only delete post meta if isset (to avoid deletion in bulk/quick edit mode)
+			delete_post_meta($post_id, '_wp_geo_latitude');
+			delete_post_meta($post_id, '_wp_geo_longitude');
+			
 			if (is_numeric($_POST['wp_geo_latitude']) && is_numeric($_POST['wp_geo_longitude']))
 			{
 				add_post_meta($post_id, '_wp_geo_latitude', $_POST['wp_geo_latitude']);
 				add_post_meta($post_id, '_wp_geo_longitude', $_POST['wp_geo_longitude']);
 			}
+			
 		}
 		
 	}
