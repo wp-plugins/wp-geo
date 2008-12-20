@@ -69,11 +69,16 @@ If upgrading from a previous version of the plugin:
 
 == Release Notes ==
 
-= WP Geo 3.0.2 =
+= WP Geo 3.0.3 =
 
 * Added Geo Meta Tags on single post pages.
 * Fixed issue when geo data was deleted in quick/bulk edit mode or when scheduled post when live.
 * Fixed domain check to work with blogs in a subfolder of a domain.
+
+= WP Geo 3.0.2 =
+
+* Add language support.
+* Various bug fixes.
 
 = WP Geo 3.0.1 =
 
