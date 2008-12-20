@@ -3,8 +3,8 @@ Contributors: Ben Huson
 Donate link: http://www.wpgeo.com/
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
-Tested up to: 2.6.3
-Stable tag: 3.0.2
+Tested up to: 2.7
+Stable tag: 3.0.3
 
 Add location maps to your posts and pages.
 
@@ -21,6 +21,7 @@ More information can be found at http://www.wpgeo.com/.
 
 = Features =
 
+* NEW - Geo Meta Tags
 * NEW - Markers links to posts
 * NEW - Settings for default controls
 * NEW - Custom Markers
@@ -67,6 +68,12 @@ If upgrading from a previous version of the plugin:
 3. Admin Settings
 
 == Release Notes ==
+
+= WP Geo 3.0.3 =
+
+* Added Geo Meta Tags on single post pages.
+* Fixed issue when geo data was deleted in quick/bulk edit mode or when scheduled post when live.
+* Fixed domain check to work with blogs in a subfolder of a domain.
 
 = WP Geo 3.0.2 =
 
