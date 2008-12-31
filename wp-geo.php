@@ -6,7 +6,7 @@
 Plugin Name: WP Geo
 Plugin URI: http://www.benhuson.co.uk/wordpress-plugins/wp-geo/
 Description: Adds geocoding to WordPress.
-Version: 3.0.3
+Version: 3.0.4
 Author: Ben Huson
 Author URI: http://www.benhuson.co.uk/
 Minimum WordPress Version Required: 2.5
@@ -27,7 +27,7 @@ class WPGeo
 	 * Properties
 	 */
 	 
-	var $version = '3.0.3';
+	var $version = '3.0.4';
 	var $markers;
 	var $show_maps_external = false;
 	var $plugin_message = '<strong>Please note: </strong> If you have customised your templates for a previous version of WP Geo you may have to change static class references such as <code>WPGeo::categoryMap();</code> to global references <code>$wpgeo->categoryMap();</code>';
@@ -471,13 +471,13 @@ class WPGeo
 			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $wp_geo_options['google_api_key'], false);
 			wp_register_script('wpgeo', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'));
 			wp_register_script('wpgeotooltip', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/Tooltip.js', array('googlemaps'));
-			wp_register_script('jquerywpgeo', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'));
+			//wp_register_script('jquerywpgeo', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'));
 			
 			wp_enqueue_script('jquery');
 			wp_enqueue_script('googlemaps');
 			wp_enqueue_script('wpgeo');
 			wp_enqueue_script('wpgeotooltip');
-			wp_enqueue_script('jquerywpgeo');
+			//wp_enqueue_script('jquerywpgeo');
 			
 			$html_js .= '<script type="text/javascript" src="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/Tooltip.js"></script>';
 			
