@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Geo 1.0\n"
+"Project-Id-Version: WP Geo 1.1\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: Ben Huson <ben@thewhiteroom.net>\n"
+"Last-Translator: Ivan Graf <contact@bildergallery.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -168,11 +168,11 @@ msgstr "Seiten"
 
 # Settings - Show Maps On - Posts (single posts)
 msgid "Posts (single posts)"
-msgstr "Artikel (Einzelne)"
+msgstr "Artikel"
 
 # Settings - Show Maps On - Posts home page
 msgid "Posts home page"
-msgstr "Artikel (Hauptseite)"
+msgstr "Artikel auf der Startseite"
 
 # Settings - Show Maps On - Posts in date archives
 msgid "Posts in date archives"
@@ -192,7 +192,7 @@ msgstr "Geografische Informationen hinzufügen"
 
 # Settings - Save Changes Button Text
 msgid "Save Changes"
-msgstr "Einstellungen Speichern"
+msgstr "Änderungen speichern"
 
 # Settings - <h2> Marker Settings Title
 msgid "Marker Settings"
