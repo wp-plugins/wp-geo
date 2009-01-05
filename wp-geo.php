@@ -27,7 +27,7 @@ class WPGeo
 	 * Properties
 	 */
 	 
-	var $version = '3.0.4';
+	var $version = '3.0.5';
 	var $markers;
 	var $show_maps_external = false;
 	var $plugin_message = '<strong>Please note: </strong> If you have customised your templates for a previous version of WP Geo you may have to change static class references such as <code>WPGeo::categoryMap();</code> to global references <code>$wpgeo->categoryMap();</code>';
@@ -111,9 +111,16 @@ class WPGeo
 			$map_atts = array(
 				'lat' => null,
 				'long' => null,
-				'type' => 'G_NORMAL_MAP'
+				'type' => 'G_NORMAL_MAP',
+				'escape' => false
 			);
 			extract(shortcode_atts($map_atts, $atts));
+			
+			// Escape?
+			if ($escape == "true")
+			{
+				return '[wp_geo_map]';
+			}
 			
 			// To Do: Add in lon/lat check and output map if needed
 			
