@@ -4,11 +4,11 @@
 
 /*
 Plugin Name: WP Geo
-Plugin URI: http://www.benhuson.co.uk/wordpress-plugins/wp-geo/
+Plugin URI: http://www.wpgeo.com/
 Description: Adds geocoding to WordPress.
 Version: 3.0.5
 Author: Ben Huson
-Author URI: http://www.benhuson.co.uk/
+Author URI: http://www.wpgeo.com/
 Minimum WordPress Version Required: 2.5
 Tested up to: 2.7
 */
