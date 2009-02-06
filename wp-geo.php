@@ -1223,12 +1223,14 @@ class WPGeo
 	/**
 	 * Hook: after_plugin_row
 	 */
+	// This function can be used to insert text after the WP Geo plugin row on the plugins page.
+	// Useful if you need to tell people something important before they upgrade.
 	function after_plugin_row($plugin)
 	{
 		
 		if ('wp-geo/wp-geo.php' == $plugin && !empty($this->plugin_message))
 		{
-			echo '<td colspan="5" class="plugin-update" style="line-height:1.2em;">' . $this->plugin_message . '</td>';
+			//echo '<td colspan="5" class="plugin-update" style="line-height:1.2em;">' . $this->plugin_message . '</td>';
 			return;
 		}
 		
