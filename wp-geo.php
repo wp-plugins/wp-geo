@@ -27,7 +27,7 @@ class WPGeo
 	 * Properties
 	 */
 	 
-	var $version = '3.0.5';
+	var $version = '3.0.6';
 	var $markers;
 	var $show_maps_external = false;
 	var $plugin_message = '<strong>Please note: </strong> If you have customised your templates for a previous version of WP Geo you may have to change static class references such as <code>WPGeo::categoryMap();</code> to global references <code>$wpgeo->categoryMap();</code>';
@@ -470,10 +470,18 @@ class WPGeo
 	{
 		
 		global $wpgeo;
+		$wp_geo_options = get_option('wp_geo_options');
+		
+		// Google AJAX API
+		// (always loads on all pages)
+		if ($wpgeo->checkGoogleAPIKey())
+		{
+			wp_register_script('google_jsapi', 'http://www.google.com/jsapi?key=' . $wp_geo_options['google_api_key'], false);
+			wp_enqueue_script('google_jsapi');
+		}
 		
 		if ($wpgeo->show_maps() && $wpgeo->checkGoogleAPIKey())
 		{
-			$wp_geo_options = get_option('wp_geo_options');
 			
 			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $wp_geo_options['google_api_key'], false);
 			wp_register_script('wpgeo', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'));
@@ -1358,8 +1366,10 @@ class WPGeo
 load_plugin_textdomain('wp-geo', PLUGINDIR . '/wp-geo/languages');
 
 // Includes
+include('filters.php');
 include('wp-geo-markers.php');
 include('wp-geo-map.php');
+include('functions.php');
 
 // Init.
 $wpgeo = new WPGeo();
