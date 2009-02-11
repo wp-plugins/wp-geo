@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Geo\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-02-03 20:27+0100\n"
+"PO-Revision-Date: 2009-02-11 21:54+0100\n"
 "Last-Translator: Ben Huson <ben@thewhiteroom.net>\n"
 "Language-Team: Spanish Translator <alberto@berriart.com>\n"
 "MIME-Version: 1.0\n"
@@ -129,7 +129,7 @@ msgstr "Controlador de tipo de mapa"
 
 # Settings - Default Map Controls - Map Type - Message
 msgid "You must select at least 2 map types for the control to show."
-msgstr "Tienes que escoger al menos 2 tipos de controlador"
+msgstr "Debes escoger al menos 2 tipos de mapa para que se muestre el controlador"
 
 # Settings - Default Map Controls - Map Type - Normal
 msgid "Normal"
