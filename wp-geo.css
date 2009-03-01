@@ -97,3 +97,21 @@ div.tooltip{
 }
 
 
+
+/**
+ * Tooltip Style
+ */
+
+#tooltip2 {
+	z-index: 1000;
+	position: absolute;
+	border: 1px solid #CCCCCC;
+	padding: 3px 5px;
+	background-color: #FFFFFF;
+	max-width: 300px;
+	text-align: left;
+	display: none;
+	font-family: Arial, sans-serif;
+	font-size: 11px;
+}
+

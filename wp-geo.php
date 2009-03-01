@@ -485,7 +485,7 @@ class WPGeo
 			
 			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $wp_geo_options['google_api_key'], false);
 			wp_register_script('wpgeo', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'));
-			wp_register_script('wpgeotooltip', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/Tooltip.js', array('googlemaps'));
+			wp_register_script('wpgeotooltip', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/Tooltip.js', array('googlemaps', 'jquery'));
 			//wp_register_script('jquerywpgeo', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'));
 			
 			wp_enqueue_script('jquery');

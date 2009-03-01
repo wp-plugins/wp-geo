@@ -1,67 +1,64 @@
-/**
-* @author Marco Alionso Ramirez, marco@onemarco.com
-* @version 1.0
-* The Tooltip class is an addon designed for the Google
-* Maps GMarker class.
-*/
 
 
 
 /**
-* @constructor
+* Tooltip Constructor
 * @param {GMarker} marker
 * @param {String} text
-* @param {Number} padding
 */
-function Tooltip(marker, text, padding)
+function Tooltip(marker, text)
 {
 	this.marker_ = marker;
 	this.text_ = text;
-	this.padding_ = padding;
 }
 
-Tooltip.prototype = new GOverlay();
 
-Tooltip.prototype.initialize = function(map)
-{
-	var div = document.createElement("div");
-	div.appendChild(document.createTextNode(this.text_));
-	div.className = 'tooltip';
-	div.style.position = 'absolute';
-	div.style.visibility = 'hidden';
-	map.getPane(G_MAP_FLOAT_PANE).appendChild(div);
-	this.map_ = map;
-	this.div_ = div;
-}
 
-Tooltip.prototype.remove = function()
-{
-	this.div_.parentNode.removeChild(this.div_);
-}
-
-Tooltip.prototype.copy = function()
-{
-	return new Tooltip(this.marker_,this.text_,this.padding_);
-}
-
-Tooltip.prototype.redraw = function(force)
-{
-	if (!force)
-		return;
-	var markerPos = this.map_.fromLatLngToDivPixel(this.marker_.getPoint());
-	var iconAnchor = this.marker_.getIcon().iconAnchor;
-	var xPos = Math.round(markerPos.x - this.div_.clientWidth / 2);
-	var yPos = markerPos.y - iconAnchor.y - this.div_.clientHeight - this.padding_;
-	this.div_.style.top = yPos + 'px';
-	this.div_.style.left = xPos + 'px';
-}
-
+/**
+* Tooltip: Show Method
+*/	
 Tooltip.prototype.show = function()
 {
-	this.div_.style.visibility = 'visible';
+	jQuery('#tooltip2').text(this.text_);
+	jQuery('#tooltip2').show();
 }
 
+
+
+/**
+* Tooltip: Hide Method
+*/
 Tooltip.prototype.hide = function()
 {
-	this.div_.style.visibility = 'hidden';
+	jQuery('#tooltip2').text("");
+	jQuery('#tooltip2').hide();
 }
+
+
+
+/**
+* jQuery Tooltip Init.
+*/
+jQuery(document).ready(function() {
+
+	t = "";
+	jQuery("body").append("<p id='tooltip2'>" + t + "</p>");
+	jQuery('#tooltip2').hide();
+	
+	jQuery().mousemove(function(e)
+	{
+		var left = e.pageX - (jQuery('#tooltip2').width() / 3);
+		var top = e.pageY - 25 - jQuery('#tooltip2').height();
+		
+		if (left < 5)
+			left = 5;
+		if (top < 5)
+			top = 5;
+		
+		jQuery('#tooltip2').css('left', left);
+		jQuery('#tooltip2').css('top', top);
+	});
+	
+});
+
+
