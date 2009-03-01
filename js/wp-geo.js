@@ -43,7 +43,7 @@ function wpgeo_createMarker(latlng, icon, title, link)
 	// Create a custom tooltip
 	if (title)
 	{
-		tooltip = new Tooltip(marker, title, 2)
+		tooltip = new Tooltip(marker, title)
 	}
 	
 	marker.latlng = latlng;
@@ -63,7 +63,6 @@ function wpgeo_createMarker(latlng, icon, title, link)
 	}
 	
 	map.addOverlay(marker);
-	map.addOverlay(tooltip);
 	
 	bounds.extend(marker.getPoint());
 	
@@ -87,7 +86,7 @@ function wpgeo_createMarker2(map, latlng, icon, title, link)
 	// Create a custom tooltip
 	if (title)
 	{
-		tooltip = new Tooltip(marker, title, 2)
+		tooltip = new Tooltip(marker, title)
 	}
 	
 	marker.latlng = latlng;
@@ -107,7 +106,6 @@ function wpgeo_createMarker2(map, latlng, icon, title, link)
 	}
 	
 	map.addOverlay(marker);
-	map.addOverlay(tooltip);
 	
 	return marker;
 	
