@@ -1,5 +1,9 @@
 
 
+var Tooltip_mouse_x = 0;
+var Tooltip_mouse_t = 0;
+
+
 
 /**
 * Tooltip Constructor
@@ -19,8 +23,21 @@ function Tooltip(marker, text)
 */	
 Tooltip.prototype.show = function()
 {
+	
 	jQuery('#tooltip2').text(this.text_);
 	jQuery('#tooltip2').show();
+		
+	var left = Tooltip_mouse_x - (jQuery('#tooltip2').width() / 3);
+	var top = Tooltip_mouse_y - 25 - jQuery('#tooltip2').height();
+	
+	if (left < 5)
+		left = 5;
+	if (top < 5)
+		top = 5;
+	
+	jQuery('#tooltip2').css('left', left);
+	jQuery('#tooltip2').css('top', top);
+	
 }
 
 
@@ -47,6 +64,10 @@ jQuery(document).ready(function() {
 	
 	jQuery().mousemove(function(e)
 	{
+		
+		Tooltip_mouse_x = e.pageX;
+		Tooltip_mouse_y = e.pageY;
+		
 		var left = e.pageX - (jQuery('#tooltip2').width() / 3);
 		var top = e.pageY - 25 - jQuery('#tooltip2').height();
 		
