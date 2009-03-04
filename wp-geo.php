@@ -1366,10 +1366,10 @@ class WPGeo
 load_plugin_textdomain('wp-geo', PLUGINDIR . '/wp-geo/languages');
 
 // Includes
-include('filters.php');
+//include('filters.php');
 include('wp-geo-markers.php');
 include('wp-geo-map.php');
-include('functions.php');
+//include('functions.php');
 
 // Init.
 $wpgeo = new WPGeo();
