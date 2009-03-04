@@ -1,0 +1,231 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Geo 1.0\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Diego Pierotto <ita.translations@tiscali.it>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: ITALY\n"
+
+# Latitude
+msgid "Latitude"
+msgstr "Latitudine"
+
+# Longitude
+msgid "Longitude"
+msgstr "Longitudine"
+
+# Label for location search field in admin
+msgid "Search for location"
+msgstr "Cerca una posizione"
+
+# Label for location search field in admin (in brackets)
+msgid "town, postcode or address"
+msgstr "città, codice postale o indirizzo"
+
+# Admin search button
+msgid "Search"
+msgstr "Cerca"
+
+# Clear location link in admin
+msgid "clear location"
+msgstr "cancella la posizione"
+
+# Widget options - Title
+msgid "Title"
+msgstr "Titolo"
+
+# Widget options - Width
+msgid "Width"
+msgstr "Larghezza"
+
+# Widget options - Height
+msgid "Height"
+msgstr "Altezza"
+
+# Settings - Updated Message
+msgid "WP Geo settings updated"
+msgstr "Impostazioni di WP Geo aggiornate"
+
+# Settings - <h2> Page Title
+msgid "WP Geo Settings"
+msgstr "Impostazioni WP Geo"
+
+# Settings - <h3> General Settings Title
+msgid "General Settings"
+msgstr "Impostazioni generali"
+
+# Settings - Label for Google API Key field
+msgid "Google API Key"
+msgstr "Chiave API Google"
+
+# Settings - Label for Map Type field
+msgid "Map Type"
+msgstr "Tipo di mappa"
+
+# Settings - Label for Show Post Map field
+msgid "Show Post Map"
+msgstr "Mostra mappa nell'articolo"
+
+# Settings - Show Post Map - At top of post
+msgid "At top of post"
+msgstr "All'inizio dell'articolo"
+
+# Settings - Show Post Map - At bottom of post
+msgid "At bottom of post"
+msgstr "Alla fine dell'articolo"
+
+# Settings - Show Post Map - Manually
+msgid "Manually"
+msgstr "Manuale"
+
+# Settings - Label for Default Map Width field
+msgid "Default Map Width"
+msgstr "Larghezza mappa predefinita"
+
+# Settings - Label for Default Map Height field
+msgid "Default Map Height"
+msgstr "Altezza mappa predefinita"
+
+# Settings - Label for Default Map Zoom field
+msgid "Default Map Zoom"
+msgstr "Ingrandimento mappa predefinito"
+
+# Settings - Default Map Zoom - Zoomed In
+msgid "Zoomed In"
+msgstr "Aumenta ingrandimento"
+
+# Settings - Default Map Zoom - Zoomed Out
+msgid "Zoomed Out"
+msgstr "Riduci ingrandimento"
+
+# Settings - Label for Default Map Controls fields
+msgid "Default Map Controls"
+msgstr "Controlli mappa predefiniti"
+
+# Settings - Default Map Controls - Large pan/zoom control
+msgid "Large pan/zoom control"
+msgstr "Controlli grandi per panorama/ingrandimento"
+
+# Settings - Default Map Controls - Smaller pan/zoom control
+msgid "Smaller pan/zoom control"
+msgstr "Controlli piccoli per panorama/ingrandimento"
+
+# Settings - Default Map Controls - Small zoom control (no panning controls)
+msgid "Small zoom control (no panning controls)"
+msgstr "Controlli piccoli di ingrandimento (nessun controllo di spostamento)"
+
+# Settings - Default Map Controls - No pan/zoom controls
+msgid "No pan/zoom controls"
+msgstr "Nessun controllo panorama/ingrandimento"
+
+# Settings - Default Map Controls - Map Type
+msgid "Map Type Controls"
+msgstr "Controlli del tipo di mappa"
+
+# Settings - Default Map Controls - Map Type - Message
+msgid "You must select at least 2 map types for the control to show."
+msgstr "Devi selezionare almeno 2 tipi di mappe per i controlli da mostrare."
+
+# Settings - Default Map Controls - Map Type - Normal
+msgid "Normal"
+msgstr "Normale"
+
+# Settings - Default Map Controls - Map Type - Satellite
+msgid "Satellite (photographic map)"
+msgstr "Satellite (mappa fotografica)"
+
+# Settings - Default Map Controls - Map Type - Hybrid
+msgid "Hybrid (photographic map with normal features)"
+msgstr "Ibrida (mappa fotografica con le normali funzioni)"
+
+# Settings - Default Map Controls - Map Type - Physical
+msgid "Physical (terrain map)"
+msgstr "Terreno (mappa del terreno)"
+
+# Settings - Default Map Controls - Other
+msgid "Other Controls"
+msgstr "Altri controlli"
+
+# Settings - Default Map Controls - Other - Show map scale
+msgid "Show map scale"
+msgstr "Mostra la scala della mappa"
+
+# Settings - Default Map Controls - Other - Show collapsible overview map (in the corner of the map)
+msgid "Show collapsible overview map (in the corner of the map)"
+msgstr "Mostra una mappa sommario a comparsa (nell'angolo della mappa)"
+
+# Settings - Label for Show Maps On fields
+msgid "Show Maps On"
+msgstr "Mostra mappa in"
+
+# Settings - Show Maps On - Pages
+msgid "Pages"
+msgstr "Pagine"
+
+# Settings - Show Maps On - Posts (single posts)
+msgid "Posts (single posts)"
+msgstr "Articoli (articoli singoli)"
+
+# Settings - Show Maps On - Posts home page
+msgid "Posts home page"
+msgstr "Articoli nella pagina principale"
+
+# Settings - Show Maps On - Posts in date archives
+msgid "Posts in date archives"
+msgstr "Articoli negli archivi delle date"
+
+# Settings - Show Maps On - Posts in category archives
+msgid "Posts in category archives"
+msgstr "Articoli negli archivi delle categorie"
+
+# Settings - Label for Feeds fields
+msgid "Feeds"
+msgstr "Feed"
+
+# Settings - Feeds - Checkbox
+msgid "Add geographic information"
+msgstr "Aggiungi informazione geografica"
+
+# Settings - Save Changes Button Text
+msgid "Save Changes"
+msgstr "Salva le modifiche"
+
+# Settings - <h2> Marker Settings Title
+msgid "Marker Settings"
+msgstr "Impostazioni del marcatore"
+
+# Settings - Large Marker Title
+msgid "Large Marker"
+msgstr "Marcatore grande"
+
+# Settings - Large Marker Description
+msgid "This is the default marker used to indicate a location on most maps."
+msgstr "Questo è il marcatore predefinito usato per indicare la posizione nella maggior parte delle mappe."
+
+# Settings - Small Marker Title
+msgid "Small Marker"
+msgstr "Marcatore piccolo"
+
+# Settings - Small Marker Description
+msgid "This is the default marker used for the WP Geo sidebar widget."
+msgstr "Questo è il marcatore predefinito usato per il widget della barra laterale di WP Geo."
+
+# Settings - Dot Marker Title
+msgid "Dot Marker"
+msgstr "Marcatore a forma di punto"
+
+# Settings - Dot Marker Description
+msgid "This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo."
+msgstr "Questa immagine del marcatore non è attualmente usata ma indica che sarà usata per indicare posizioni di minor importanza nelle versioni future di WP Geo."
+
+# Admin Section Title
+msgid "WP Geo Location"
+msgstr "Posizione WP Geo"
+
