@@ -121,8 +121,8 @@ class WPGeoMarkers
 			'height' => 34,
 			'anchorX' => 10,
 			'anchorY' => 34,
-			'image' => get_bloginfo('url') . $this->marker_image_dir . 'large-marker.png',
-			'shadow' => get_bloginfo('url') . $this->marker_image_dir . 'large-marker-shadow.png'
+			'image' => get_bloginfo('wpurl') . $this->marker_image_dir . 'large-marker.png',
+			'shadow' => get_bloginfo('wpurl') . $this->marker_image_dir . 'large-marker-shadow.png'
 		);
 		
 		// Small Marker
@@ -131,8 +131,8 @@ class WPGeoMarkers
 			'height' => 17,
 			'anchorX' => 5,
 			'anchorY' => 17,
-			'image' => get_bloginfo('url') . $this->marker_image_dir . 'small-marker.png',
-			'shadow' => get_bloginfo('url') . $this->marker_image_dir . 'small-marker-shadow.png'
+			'image' => get_bloginfo('wpurl') . $this->marker_image_dir . 'small-marker.png',
+			'shadow' => get_bloginfo('wpurl') . $this->marker_image_dir . 'small-marker-shadow.png'
 		);			
 		
 		// Dot Marker
@@ -141,8 +141,8 @@ class WPGeoMarkers
 			'height' => 8,
 			'anchorX' => 3,
 			'anchorY' => 6,
-			'image' => get_bloginfo('url') . $this->marker_image_dir . 'dot-marker.png',
-			'shadow' => get_bloginfo('url') . $this->marker_image_dir . 'dot-marker-shadow.png'
+			'image' => get_bloginfo('wpurl') . $this->marker_image_dir . 'dot-marker.png',
+			'shadow' => get_bloginfo('wpurl') . $this->marker_image_dir . 'dot-marker-shadow.png'
 		);
 		
 		// Default return

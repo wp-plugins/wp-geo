@@ -6,7 +6,7 @@
 Plugin Name: WP Geo
 Plugin URI: http://www.wpgeo.com/
 Description: Adds geocoding to WordPress.
-Version: 3.0.6.1
+Version: 3.0.6.2
 Author: Ben Huson
 Author URI: http://www.wpgeo.com/
 Minimum WordPress Version Required: 2.5
@@ -27,7 +27,7 @@ class WPGeo
 	 * Properties
 	 */
 	 
-	var $version = '3.0.6.1';
+	var $version = '3.0.6.2';
 	var $markers;
 	var $show_maps_external = false;
 	var $plugin_message = '<strong>Please note: </strong> If you have customised your templates for a previous version of WP Geo you may have to change static class references such as <code>WPGeo::categoryMap();</code> to global references <code>$wpgeo->categoryMap();</code>';
@@ -258,7 +258,7 @@ class WPGeo
 			';
 		
 		// CSS
-		echo '<link rel="stylesheet" href="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/wp-geo.css" type="text/css" />';
+		echo '<link rel="stylesheet" href="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/wp-geo.css" type="text/css" />';
 		
 		if ($wpgeo->show_maps())
 		{
@@ -436,7 +436,7 @@ class WPGeo
 	
 		global $wpgeo, $post_ID;
 		
-		echo '<link rel="stylesheet" href="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/wp-geo.css" type="text/css" />';
+		echo '<link rel="stylesheet" href="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/wp-geo.css" type="text/css" />';
 		
 		// Only load if on a post or page
 		if ($wpgeo->show_maps())
@@ -484,9 +484,9 @@ class WPGeo
 		{
 			
 			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $wp_geo_options['google_api_key'], false);
-			wp_register_script('wpgeo', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'));
-			wp_register_script('wpgeotooltip', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/Tooltip.js', array('googlemaps', 'jquery'));
-			//wp_register_script('jquerywpgeo', get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'));
+			wp_register_script('wpgeo', get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'));
+			wp_register_script('wpgeotooltip', get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/Tooltip.js', array('googlemaps', 'jquery'));
+			//wp_register_script('jquerywpgeo', get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'));
 			
 			wp_enqueue_script('jquery');
 			wp_enqueue_script('googlemaps');
@@ -494,7 +494,7 @@ class WPGeo
 			wp_enqueue_script('wpgeotooltip');
 			//wp_enqueue_script('jquerywpgeo');
 			
-			$html_js .= '<script type="text/javascript" src="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/js/Tooltip.js"></script>';
+			$html_js .= '<script type="text/javascript" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/Tooltip.js"></script>';
 			
 			return '';
 		}
@@ -939,7 +939,7 @@ class WPGeo
 		<div class="wrap">
 			<h2>' . __('WP Geo Settings', 'wp-geo') . '</h2>
 			<form method="post">
-				<img style="float:right; padding:0 20px 0 0; margin:0 0 20px 20px;" src="' . get_bloginfo('url') . '/wp-content/plugins/wp-geo/img/logo/wp-geo.png" />
+				<img style="float:right; padding:0 20px 0 0; margin:0 0 20px 20px;" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/img/logo/wp-geo.png" />
 				<h3>' . __('General Settings', 'wp-geo') . '</h3>
 				<p>For more information and documentation about this plugin please visit the <a href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/">WP Geo Plugin</a> home page.<br />
 					If you experience any problems/bugs with the plugin, please <a href="http://code.google.com/p/wp-geo/issues/list">log it here</a>.
