@@ -3,8 +3,8 @@ Contributors: Ben Huson
 Donate link: http://www.wpgeo.com/
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
-Tested up to: 2.7
-Stable tag: 3.0.6.1
+Tested up to: 2.7.1
+Stable tag: 3.0.6.2
 
 Add location maps to your posts and pages.
 
@@ -68,6 +68,15 @@ If upgrading from a previous version of the plugin:
 3. Admin Settings
 
 == Release Notes ==
+
+= WP Geo 3.0.6.2 =
+
+* 'Show Maps On' setting now works correctly when widget is active.
+* Fixes paths if WordPress is installed in a subdirectory.
+
+= WP Geo 3.0.6.1 =
+
+* Include files removed (fix)
 
 = WP Geo 3.0.6 =
 
