@@ -10,7 +10,7 @@ Version: 3.0.6.2
 Author: Ben Huson
 Author URI: http://www.wpgeo.com/
 Minimum WordPress Version Required: 2.5
-Tested up to: 2.7
+Tested up to: 2.7.1
 */
 
 
@@ -260,7 +260,7 @@ class WPGeo
 		// CSS
 		echo '<link rel="stylesheet" href="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/wp-geo.css" type="text/css" />';
 		
-		if ($wpgeo->show_maps())
+		if ($wpgeo->show_maps() || $wpgeo->widget_is_active())
 		{
 		
 			global $posts;
@@ -480,7 +480,7 @@ class WPGeo
 			wp_enqueue_script('google_jsapi');
 		}
 		
-		if ($wpgeo->show_maps() && $wpgeo->checkGoogleAPIKey())
+		if (($wpgeo->show_maps() || $wpgeo->widget_is_active()) && $wpgeo->checkGoogleAPIKey())
 		{
 			
 			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $wp_geo_options['google_api_key'], false);
@@ -794,6 +794,18 @@ class WPGeo
 		}
 		
 	}
+
+	
+	
+	/**
+	 * Widget Is Active
+	 */
+	function widget_is_active()
+	{
+		
+		return is_active_widget(array('WPGeoWidget', 'map_widget'));
+		
+	}
 	
 	
 	
@@ -814,7 +826,7 @@ class WPGeo
 		}
 		
 		// Widget active
-		if (is_active_widget(array('WPGeoWidget', 'map_widget'))) return true;
+		//if (is_active_widget(array('WPGeoWidget', 'map_widget'))) return true;
 		
 		// Check settings
 		if (is_home() && $wp_geo_options['show_maps_on_home'] == 'Y')					return true;
@@ -1370,6 +1382,7 @@ load_plugin_textdomain('wp-geo', PLUGINDIR . '/wp-geo/languages');
 include('wp-geo-markers.php');
 include('wp-geo-map.php');
 //include('functions.php');
+//include('shortcodes.php');
 
 // Init.
 $wpgeo = new WPGeo();
