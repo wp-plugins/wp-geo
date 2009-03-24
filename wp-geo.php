@@ -483,7 +483,7 @@ class WPGeo
 		if (($wpgeo->show_maps() || $wpgeo->widget_is_active()) && $wpgeo->checkGoogleAPIKey())
 		{
 			
-			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . $wp_geo_options['google_api_key'], false);
+			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&v=2.118&key=' . $wp_geo_options['google_api_key'] . '&sensor=false', false);
 			wp_register_script('wpgeo', get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'));
 			wp_register_script('wpgeotooltip', get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/Tooltip.js', array('googlemaps', 'jquery'));
 			//wp_register_script('jquerywpgeo', get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'));
@@ -494,7 +494,7 @@ class WPGeo
 			wp_enqueue_script('wpgeotooltip');
 			//wp_enqueue_script('jquerywpgeo');
 			
-			$html_js .= '<script type="text/javascript" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/Tooltip.js"></script>';
+			//$html_js .= '<script type="text/javascript" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/Tooltip.js"></script>';
 			
 			return '';
 		}
