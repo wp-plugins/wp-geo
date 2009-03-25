@@ -419,11 +419,15 @@ class WPGeo
 	 */
 	function admin_init()
 	{
-	
+		
+		// Register Settings
 		if (function_exists('register_setting'))
 		{
 			register_setting('wp-geo-options', 'wp_geo_options', '');
 		}
+		
+		// Editor
+		$this->editor_add_buttons();
 		
 	}
 
@@ -1373,6 +1377,60 @@ class WPGeo
 			}
 		}
 		
+	}
+	
+	
+	
+	/* =============== Editor =============== */
+	
+	
+	
+	/**
+	 * ---------- Editor: Add Buttons ----------
+	 * This function add buttons to the Rich Editor.
+	 */
+	function editor_add_buttons()
+	{
+	
+		// Don't bother doing this stuff if the current user lacks permissions
+		if (!current_user_can('edit_posts') && !current_user_can('edit_pages'))
+			return;
+		
+		// Add only in Rich Editor mode
+		if (get_user_option('rich_editing') == 'true')
+		{
+			add_filter("mce_external_plugins", array($this, 'editor_add_map_plugin'));
+			add_filter('mce_buttons', array($this, 'editor_register_map_button'));
+		}
+	
+	}
+	
+	
+	
+	/**
+	 * ---------- Editor: Register Map Button ----------
+	 * This function add the WP Geo map button to the editor.
+	 */
+	function editor_register_map_button($buttons)
+	{
+	
+		array_push($buttons, "separator", "wpgeomap");
+		return $buttons;
+	
+	}
+	
+	
+	
+	/**
+	 * ---------- Editor: Load TinyMCE WP Geo Plugin ----------
+	 * This function add the WP Geo map button to the editor.
+	 */
+	function editor_add_map_plugin($plugin_array)
+	{
+	
+		$plugin_array['wpgeomap'] = get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/tinymce/plugins/wpgeomap/editor_plugin.js';
+		return $plugin_array;
+	
 	}
 	
 	
