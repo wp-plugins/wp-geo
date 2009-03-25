@@ -234,3 +234,15 @@ msgstr ""
 msgid "Please update your WP Geo settings"
 msgstr ""
 
+# Admin - Default (general)
+msgid "Default"
+msgstr ""
+
+# Admin - Show Polylines
+msgid "Show Polylines"
+msgstr ""
+
+# Admin - Hide Polylines
+msgid "Hide Polylines"
+msgstr ""
+
