@@ -67,6 +67,10 @@ class WPGeoWidget
 			$height 		= empty( $options['height'] ) ? '' : $options['height'];
 			$maptype 		= empty( $options['maptype'] ) ? '' : $options['maptype'];
 			$showpolylines 	= $wp_geo_options['show_polylines'] == 'Y' ? true : false;
+			if ($options['show_polylines'] == 'Y' || $options['show_polylines'] == 'N')
+			{
+				$showpolylines = $options['show_polylines'] == 'Y' ? true : false;
+			}
 			
 			// Start write widget
 			$html_content = '';
@@ -102,6 +106,7 @@ class WPGeoWidget
 			$newoptions['width'] 	= strip_tags(stripslashes($_POST['wpgeo-width']));
 			$newoptions['height'] 	= strip_tags(stripslashes($_POST['wpgeo-height']));
 			$newoptions['maptype'] 	= strip_tags(stripslashes($_POST['google_map_type']));
+			$newoptions['show_polylines'] 	= strip_tags(stripslashes($_POST['show_polylines']));
 		}
 		
 		// Set the options when they differ
@@ -112,10 +117,11 @@ class WPGeoWidget
 		}
 	
 		// Clean up the options
-		$title 		= attribute_escape($options['title']);
-		$width 		= attribute_escape($options['width']);
-		$height 	= attribute_escape($options['height']);
-		$maptype 	= attribute_escape($options['maptype']);
+		$title 			= attribute_escape($options['title']);
+		$width 			= attribute_escape($options['width']);
+		$height 		= attribute_escape($options['height']);
+		$maptype 		= attribute_escape($options['maptype']);
+		$show_polylines	= attribute_escape($options['show_polylines']);
 		
 		// Write the widget controls
 		if (!$wpgeo->checkGoogleAPIKey())
@@ -128,8 +134,42 @@ class WPGeoWidget
 			<p><label for="wpgeo-width">' . __('Width', 'wp-geo') . ': <input class="widefat" id="wpgeo-width" name="wpgeo-width" type="text" value="' . $width . '" /></label></p>
 			<p><label for="wpgeo-height">' . __('Height', 'wp-geo') . ': <input class="widefat" id="wpgeo-height" name="wpgeo-height" type="text" value="' . $height . '" /></label></p>';
 		echo '<p>' . $wpgeo->google_map_types('menu', $maptype) . '</p>';
+		echo '<p>' . WPGeoWidget::show_polylines_options('menu', $show_polylines) . '</p>';
 		echo '<input type="hidden" id="wpgeo-submit" name="wpgeo-submit" value="1" />';
 	
+	}
+	
+
+
+	/**
+	 * Select: Show Polylines Options
+	 */
+	function show_polylines_options($return = 'array', $selected = '')
+	{
+		
+		// Array
+		$map_type_array = array(
+			''	=> __('Default', 'wp-geo'), 
+			'Y'	=> __('Show Polylines', 'wp-geo'), 
+			'N'	=> __('Hide Polylines', 'wp-geo')
+		);
+		
+		// Menu?
+		if ($return = 'menu')
+		{
+			$menu = '';
+			foreach ($map_type_array as $key => $val)
+			{
+				$is_selected = $selected == $key ? ' selected="selected"' : '';
+				$menu .= '<option value="' . $key . '"' . $is_selected . '>' . $val . '</option>';
+			}
+			$menu = '<select name="show_polylines" id="show_polylines">' . $menu. '</select>';
+			return $menu;
+		}
+		
+		// Default return
+		return $map_type_array;
+		
 	}	
 	
 	
