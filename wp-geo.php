@@ -1444,6 +1444,7 @@ load_plugin_textdomain('wp-geo', PLUGINDIR . '/wp-geo/languages');
 //include('filters.php');
 include('wp-geo-markers.php');
 include('wp-geo-map.php');
+include('dashboard.php');
 //include('functions.php');
 //include('shortcodes.php');
 
