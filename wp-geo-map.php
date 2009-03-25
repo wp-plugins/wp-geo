@@ -46,6 +46,8 @@ class WPGeoMap
 	function renderMapJS($map_id = false)
 	{
 	
+		$wp_geo_options = get_option('wp_geo_options');
+		
 		// ID of div for map output
 		$map_id = $map_id ? $map_id : $this->id;
 		$div = 'wp_geo_map_' . $map_id;
@@ -77,22 +79,25 @@ class WPGeoMap
 		
 		// Show Polyline
 		$js_polyline = '';
-		if ($this->show_polyline)
+		if ($wp_geo_options['show_polylines'] == 'Y')
 		{
-			if (count($this->points) > 1)
+			if ($this->show_polyline)
 			{
-				$polyline_coords = '';
-				for ($i = 0; $i < count($this->points); $i++)
+				if (count($this->points) > 1)
 				{
-					if ($i > 0)
+					$polyline_coords = '';
+					for ($i = 0; $i < count($this->points); $i++)
 					{
-						$polyline_coords .= ',';
+						if ($i > 0)
+						{
+							$polyline_coords .= ',';
+						}
+						$polyline_coords .= 'new GLatLng(' . $this->points[$i]['latitude'] . ', ' . $this->points[$i]['longitude'] . ')' . "\n";
 					}
-					$polyline_coords .= 'new GLatLng(' . $this->points[$i]['latitude'] . ', ' . $this->points[$i]['longitude'] . ')' . "\n";
+					$js_polyline = 'var polyOptions = {geodesic:true};' . "\n";
+					$js_polyline .= 'var polyline = new GPolyline([' . $polyline_coords . '], "#ffffff", 2, 0.5, polyOptions);' . "\n";
+					$js_polyline .= 'map_' . $map_id . '.addOverlay(polyline);' . "\n";
 				}
-				$js_polyline = 'var polyOptions = {geodesic:true};' . "\n";
-				$js_polyline .= 'var polyline = new GPolyline([' . $polyline_coords . '], "#ffffff", 2, 0.5, polyOptions);' . "\n";
-				$js_polyline .= 'map_' . $map_id . '.addOverlay(polyline);' . "\n";
 			}
 		}
 		

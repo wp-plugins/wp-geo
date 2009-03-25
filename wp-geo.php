@@ -6,7 +6,7 @@
 Plugin Name: WP Geo
 Plugin URI: http://www.wpgeo.com/
 Description: Adds geocoding to WordPress.
-Version: 3.0.6.2
+Version: 3.0.7
 Author: Ben Huson
 Author URI: http://www.wpgeo.com/
 Minimum WordPress Version Required: 2.5
@@ -27,7 +27,7 @@ class WPGeo
 	 * Properties
 	 */
 	 
-	var $version = '3.0.6.2';
+	var $version = '3.0.7';
 	var $markers;
 	var $show_maps_external = false;
 	var $plugin_message = '<strong>Please note: </strong> If you have customised your templates for a previous version of WP Geo you may have to change static class references such as <code>WPGeo::categoryMap();</code> to global references <code>$wpgeo->categoryMap();</code>';
@@ -69,6 +69,7 @@ class WPGeo
 			'show_map_type_physical' => 'Y',
 			'show_map_scale' => 'N',
 			'show_map_overview' => 'N',
+			'show_polylines' => 'Y',
 			'show_maps_on_home' => 'Y',
 			'show_maps_on_pages' => 'Y',
 			'show_maps_on_posts' => 'Y',
@@ -928,6 +929,8 @@ class WPGeo
 			$wp_geo_options['show_map_scale'] = $_POST['show_map_scale'];
 			$wp_geo_options['show_map_overview'] = $_POST['show_map_overview'];
 			
+			$wp_geo_options['show_polylines'] = $_POST['show_polylines'];
+			
 			$wp_geo_options['show_maps_on_home'] = $_POST['show_maps_on_home'];
 			$wp_geo_options['show_maps_on_pages'] = $_POST['show_maps_on_pages'];
 			$wp_geo_options['show_maps_on_posts'] = $_POST['show_maps_on_posts'];
@@ -999,6 +1002,10 @@ class WPGeo
 							' . $wpgeo->options_checkbox('show_map_scale', 'Y', $wp_geo_options['show_map_scale']) . ' ' . __('Show map scale', 'wp-geo') . '<br />
 							' . $wpgeo->options_checkbox('show_map_overview', 'Y', $wp_geo_options['show_map_overview']) . ' ' . __('Show collapsible overview map (in the corner of the map)', 'wp-geo') . '
 						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">' . __('Polylines', 'wp-geo') . '</th>
+						<td>' . $wpgeo->options_checkbox('show_polylines', 'Y', $wp_geo_options['show_polylines']) . ' ' . __('Show polyines (to connect multiple points on a single map)', 'wp-geo') . '</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">' . __('Show Maps On', 'wp-geo') . '</th>

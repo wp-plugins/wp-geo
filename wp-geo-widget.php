@@ -5,7 +5,7 @@
 /**
 * WP Geo Widget
 * @author Marco Alionso Ramirez, marco@onemarco.com, updated by Ben Huson, ben@thewhiteroom.net
-* @version 1.1
+* @version 1.2
 * Adds a geocoding widget to WordPress (requires WP Geo plugin)
 */
 
@@ -24,7 +24,7 @@ class WPGeoWidget
 	 * Properties
 	 */
 	 
-	var $version = '1.1';
+	var $version = '1.2';
 	
 	
 
@@ -58,21 +58,23 @@ class WPGeoWidget
 		
 			// Extract the widget options
 			extract($args);
+			$wp_geo_options = get_option('wp_geo_options');
 			$options = get_option('map_widget');
 	
 			// Get the options for the widget
-			$title 		= empty( $options['title'] ) ? '' : apply_filters('widget_title', __($options['title']));
-			$width 		= empty( $options['width'] ) ? '' : $options['width'];
-			$height 	= empty( $options['height'] ) ? '' : $options['height'];
-			$maptype 	= empty( $options['maptype'] ) ? '' : $options['maptype'];
+			$title 			= empty( $options['title'] ) ? '' : apply_filters('widget_title', __($options['title']));
+			$width 			= empty( $options['width'] ) ? '' : $options['width'];
+			$height 		= empty( $options['height'] ) ? '' : $options['height'];
+			$maptype 		= empty( $options['maptype'] ) ? '' : $options['maptype'];
+			$showpolylines 	= $wp_geo_options['show_polylines'] == 'Y' ? true : false;
 			
 			// Start write widget
 			$html_content = '';
-			$map_content = WPGeoWidget::add_map($width, $height, $maptype);
+			$map_content = WPGeoWidget::add_map($width, $height, $maptype, $showpolylines);
 			
 			if (!empty($map_content))
 			{
-				$html_content = $before_widget . $before_title . $title . $after_title . WPGeoWidget::add_map($width, $height, $maptype);
+				$html_content = $before_widget . $before_title . $title . $after_title . WPGeoWidget::add_map($width, $height, $maptype, $showpolylines);
 				$html_content .= $after_widget;
 			}
 			
@@ -136,7 +138,7 @@ class WPGeoWidget
 	 * Add the map to the widget
 	 * TODO: integrate the code better into the existing one
 	 */
-	function add_map($width = '100%', $height = 150, $maptype = '') 
+	function add_map($width = '100%', $height = 150, $maptype = '', $showpolylines = false) 
 	{
 	
 		global $posts, $wpgeo;
@@ -261,8 +263,13 @@ class WPGeoWidget
 							'.	$markers_js .'
 											
 							// draw the polygonal lines between points
-							map.addOverlay(wpgeo_createPolyline(' . $polyline_coords_js . ', "#ffffff", 2, 0.50));
-							
+							';
+					
+				if ($showpolylines)
+				{
+					$html_js .= 'map.addOverlay(wpgeo_createPolyline(' . $polyline_coords_js . ', "#ffffff", 2, 0.50));';
+				}
+				$html_js .='
 							// Center the map to show all markers
 							var center = bounds.getCenter();
 							var zoom = map.getBoundsZoomLevel(bounds)
