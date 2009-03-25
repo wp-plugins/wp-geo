@@ -499,8 +499,6 @@ class WPGeo
 			wp_enqueue_script('wpgeotooltip');
 			//wp_enqueue_script('jquerywpgeo');
 			
-			//$html_js .= '<script type="text/javascript" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/Tooltip.js"></script>';
-			
 			return '';
 		}
 		
