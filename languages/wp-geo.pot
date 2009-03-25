@@ -225,3 +225,12 @@ msgstr ""
 # Admin Section Title
 msgid "WP Geo Location"
 msgstr ""
+
+# Admin - Google API Key Notice
+msgid "WP Geo is not currently active as you have not entered a Google API Key"
+msgstr ""
+
+# Admin - Please update your WP Geo settings
+msgid "Please update your WP Geo settings"
+msgstr ""
+
