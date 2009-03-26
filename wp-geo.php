@@ -404,9 +404,9 @@ class WPGeo
 				
 			}
 	
-		// Check if plugin head needed
-		// Check for Google API key
-		// Write Javascripts and CSS
+			// Check if plugin head needed
+			// Check for Google API key
+			// Write Javascripts and CSS
 		
 		}
 		
@@ -1520,12 +1520,8 @@ class WPGeo
 load_plugin_textdomain('wp-geo', PLUGINDIR . '/wp-geo/languages');
 
 // Includes
-//include('filters.php');
 include('wp-geo-markers.php');
 include('wp-geo-map.php');
-include('dashboard.php');
-//include('functions.php');
-//include('shortcodes.php');
 
 // Init.
 $wpgeo = new WPGeo();
@@ -1540,14 +1536,10 @@ add_action('wp_head', array($wpgeo, 'wp_head'));
 add_filter('the_content', array($wpgeo, 'the_content'));
 
 // Admin Hooks
-
 add_action('init', array($wpgeo, 'init'));
 add_action('admin_init', array($wpgeo, 'admin_init'));
 add_action('admin_menu', array($wpgeo, 'admin_menu'));
 add_action('admin_head', array($wpgeo, 'admin_head'));
-//add_action('edit_form_advanced', array($wpgeo, 'edit_form_advanced'));
-//add_action('edit_page_form', array($wpgeo, 'edit_form_advanced'));
-//add_action('save_post', array($wpgeo, 'save_post'));
 add_action('after_plugin_row', array($wpgeo, 'after_plugin_row'));
 
 // Feed Hooks
@@ -1560,6 +1552,7 @@ add_action('atom_entry', array($wpgeo, 'georss_item'));
 add_action('rdf_item', array($wpgeo, 'georss_item'));
 		
 // More Includes
+include('dashboard.php');
 include('wp-geo-widget.php');
 
 
