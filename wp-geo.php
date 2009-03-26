@@ -415,6 +415,28 @@ class WPGeo
 
 
 	/**
+	 * Hook: Init
+	 */
+	function init()
+	{
+	
+		// Only show admin things if Google API Key valid
+		if ($this->checkGoogleAPIKey())
+		{
+		
+			// Use the admin_menu action to define the custom boxes
+			add_action('admin_menu', array($this, 'add_custom_boxes'));
+			
+			// Use the save_post action to do something with the data entered
+			add_action('save_post', array($this, 'wpgeo_location_save_postdata'));
+			
+		}
+		
+	}
+	
+	
+
+	/**
 	 * Hook: admin_init
 	 */
 	function admin_init()
@@ -426,8 +448,11 @@ class WPGeo
 			register_setting('wp-geo-options', 'wp_geo_options', '');
 		}
 		
-		// Editor
-		$this->editor_add_buttons();
+		// Only show editor if Google API Key valid
+		if ($this->checkGoogleAPIKey())
+		{
+			$this->editor_add_buttons();
+		}
 		
 	}
 
@@ -651,91 +676,7 @@ class WPGeo
 		return $html_content;
 		
 	}
-
-
-
-	/**
-	 * Hook: edit_form_advanced
-	 */
-	function edit_form_advanced()
-	{
 	
-		global $post_ID, $wpgeo;
-		
-		// Get post location
-		$latitude = get_post_meta($post_ID, '_wp_geo_latitude', true);
-		$longitude = get_post_meta($post_ID, '_wp_geo_longitude', true);
-		
-		// Output
-		echo $wpgeo->mapForm($latitude, $longitude);
-		
-	}
-
-
-
-	/**
-	 * Map Form
-	 */
-	function mapForm($latitude = null, $longitude = null, $search = '')
-	{
-	
-		// Output
-		$edit_html = '';
-		if ($this->checkGoogleAPIKey())
-		{
-			$edit_html = '
-				<div id="wpgeolocationdiv" class="postbox if-js-open">
-					<h3>' . __('WP Geo Location') . '</h3>
-					<div class="inside">
-						<table cellpadding="3" cellspacing="5" class="form-table">
-							<tr>
-								<th scope="row">' . __('Search for location', 'wp-geo') . '<br /><span style="font-weight:normal;">(' . __('town, postcode or address', 'wp-geo') . ')</span></th>
-								<td><input name="wp_geo_search" type="text" size="45" id="wp_geo_search" value="' . $search . '" /> <span class="submit"><input type="button" id="wp_geo_search_button" name="wp_geo_search_button" value="' . __('Search', 'wp-geo') . '" onclick="wp_geo_showAddress();" /></span></td>
-							</tr>
-							<tr>
-								<td colspan="2">
-								<div id="wp_geo_map" style="height:300px; width:100%; padding:0px; margin:0px;">
-									Loading Google map...
-								</div>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row">' . __('Latitude', 'wp-geo') . ', ' . __('Longitude', 'wp-geo') . '<br /><a href="#" onclick="clearLatLngFields(); return false;">' . __('clear location', 'wp-geo') . '</a></th>
-								<td><input name="wp_geo_latitude" type="text" size="25" id="wp_geo_latitude" value="' . $latitude . '" /> <input name="wp_geo_longitude" type="text" size="25" id="wp_geo_longitude" value="' . $longitude . '" /></td>
-							</tr>
-						</table>
-					</div>
-				</div>';
-		}
-		return $edit_html;
-		
-	}
-
-
-
-	/**
-	 * Hook: save_post
-	 */
-	function save_post($post_id)
-	{
-	
-		if (isset($_POST['wp_geo_latitude']) && isset($_POST['wp_geo_longitude']))
-		{
-			
-			// Only delete post meta if isset (to avoid deletion in bulk/quick edit mode)
-			delete_post_meta($post_id, '_wp_geo_latitude');
-			delete_post_meta($post_id, '_wp_geo_longitude');
-			
-			if (is_numeric($_POST['wp_geo_latitude']) && is_numeric($_POST['wp_geo_longitude']))
-			{
-				add_post_meta($post_id, '_wp_geo_latitude', $_POST['wp_geo_latitude']);
-				add_post_meta($post_id, '_wp_geo_longitude', $_POST['wp_geo_longitude']);
-			}
-			
-		}
-		
-	}
-
 
 
 	/**
@@ -1379,6 +1320,144 @@ class WPGeo
 	
 	
 	
+	/* =============== Admin Edit Pages =============== */
+	
+	
+
+	/**
+	 * ---------- Add Custom Boxes ----------
+	 * Adds a custom section to the "advanced" Post and Page edit screens
+	 * using the admin_menu hook
+	 */
+	function add_custom_boxes()
+	{
+	
+		if (function_exists( 'add_meta_box'))
+		{
+			add_meta_box('wpgeo_location', __('WP Geo Location', 'wpgeo'), array($this, 'wpgeo_location_inner_custom_box'), 'post', 'advanced');
+			add_meta_box('wpgeo_location', __('WP Geo Location', 'wpgeo'), array($this, 'wpgeo_location_inner_custom_box'), 'page', 'advanced');
+		}
+		else
+		{
+			add_action('dbx_post_advanced', array($this, 'wpgeo_location_old_custom_box'));
+			add_action('dbx_page_advanced', array($this, 'wpgeo_location_old_custom_box'));
+		}
+		
+	}
+	
+	
+	
+	/**
+	 * ---------- WP Geo Location: Inner Custom Box ----------
+	 * Prints the inner fields for the custom post/page section.
+	 */
+	function wpgeo_location_inner_custom_box()
+	{
+		
+		global $post;
+		
+		$latitude = get_post_meta($post-ID, '_wp_geo_latitude', true);
+		$longitude = get_post_meta($post-ID, '_wp_geo_longitude', true);
+		
+		// Use nonce for verification
+		echo '<input type="hidden" name="wpgeo_location_noncename" id="wpgeo_location_noncename" value="' . wp_create_nonce(plugin_basename(__FILE__)) . '" />';
+		
+		// The actual fields for data entry
+		echo '<table cellpadding="3" cellspacing="5" class="form-table">
+			<tr>
+				<th scope="row">' . __('Search for location', 'wp-geo') . '<br /><span style="font-weight:normal;">(' . __('town, postcode or address', 'wp-geo') . ')</span></th>
+				<td><input name="wp_geo_search" type="text" size="45" id="wp_geo_search" value="' . $search . '" /> <span class="submit"><input type="button" id="wp_geo_search_button" name="wp_geo_search_button" value="' . __('Search', 'wp-geo') . '" onclick="wp_geo_showAddress();" /></span></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<div id="wp_geo_map" style="height:300px; width:100%; padding:0px; margin:0px;">
+					Loading Google map...
+				</div>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">' . __('Latitude', 'wp-geo') . ', ' . __('Longitude', 'wp-geo') . '<br /><a href="#" onclick="clearLatLngFields(); return false;">' . __('clear location', 'wp-geo') . '</a></th>
+				<td><input name="wp_geo_latitude" type="text" size="25" id="wp_geo_latitude" value="' . $latitude . '" /> <input name="wp_geo_longitude" type="text" size="25" id="wp_geo_longitude" value="' . $longitude . '" /></td>
+			</tr>
+		</table>';
+		
+	}
+	
+	
+	
+	/**
+	 * ---------- WP Geo Location: Old Custom Box ----------
+	 * Prints the edit form for pre-WordPress 2.5 post/page.
+	 */
+	function wpgeo_location_old_custom_box()
+	{
+	
+		echo '<div class="dbx-b-ox-wrapper">' . "\n";
+		echo '<fieldset id="wpgeo_location_fieldsetid" class="dbx-box">' . "\n";
+		echo '<div class="dbx-h-andle-wrapper"><h3 class="dbx-handle">' . __('WP Geo Location', 'wpgeo') . "</h3></div>";   
+		echo '<div class="dbx-c-ontent-wrapper"><div class="dbx-content">';
+		
+		// output editing form
+		wpgeo_location_inner_custom_box();
+		
+		echo "</div></div></fieldset></div>\n";
+		
+	}
+	
+	
+	
+	/**
+	 * ---------- WP Geo Location: Save post data ----------
+	 * When the post is saved, saves our custom data.
+	 */
+	function wpgeo_location_save_postdata($post_id)
+	{
+	
+		// Verify this came from the our screen and with proper authorization,
+		// because save_post can be triggered at other times
+		if (!wp_verify_nonce($_POST['wpgeo_location_noncename'], plugin_basename(__FILE__)))
+		{
+			return $post_id;
+		}
+		
+		// Authenticate user
+		if ('page' == $_POST['post_type'])
+		{
+			if (!current_user_can('edit_page', $post_id))
+				return $post_id;
+		}
+		else
+		{
+			if (!current_user_can('edit_post', $post_id))
+				return $post_id;
+		}
+		
+		// Find and save the data
+		if (isset($_POST['wp_geo_latitude']) && isset($_POST['wp_geo_longitude']))
+		{
+			
+			// Only delete post meta if isset (to avoid deletion in bulk/quick edit mode)
+			delete_post_meta($post_id, '_wp_geo_latitude');
+			delete_post_meta($post_id, '_wp_geo_longitude');
+			
+			if (is_numeric($_POST['wp_geo_latitude']) && is_numeric($_POST['wp_geo_longitude']))
+			{
+				add_post_meta($post_id, '_wp_geo_latitude', $_POST['wp_geo_latitude']);
+				add_post_meta($post_id, '_wp_geo_longitude', $_POST['wp_geo_longitude']);
+				
+				$mydata = array('_wp_geo_latitude' => $_POST['wp_geo_latitude'], '_wp_geo_longitude' => $_POST['wp_geo_longitude']);
+				return $mydata;
+		
+			}
+			
+		}
+		
+		return false;
+	
+	}
+	
+	
+	
 	/* =============== Editor =============== */
 	
 	
@@ -1461,12 +1540,14 @@ add_action('wp_head', array($wpgeo, 'wp_head'));
 add_filter('the_content', array($wpgeo, 'the_content'));
 
 // Admin Hooks
+
+add_action('init', array($wpgeo, 'init'));
 add_action('admin_init', array($wpgeo, 'admin_init'));
 add_action('admin_menu', array($wpgeo, 'admin_menu'));
 add_action('admin_head', array($wpgeo, 'admin_head'));
-add_action('edit_form_advanced', array($wpgeo, 'edit_form_advanced'));
-add_action('edit_page_form', array($wpgeo, 'edit_form_advanced'));
-add_action('save_post', array($wpgeo, 'save_post'));
+//add_action('edit_form_advanced', array($wpgeo, 'edit_form_advanced'));
+//add_action('edit_page_form', array($wpgeo, 'edit_form_advanced'));
+//add_action('save_post', array($wpgeo, 'save_post'));
 add_action('after_plugin_row', array($wpgeo, 'after_plugin_row'));
 
 // Feed Hooks
@@ -1477,7 +1558,7 @@ add_action('rss_item', array($wpgeo, 'georss_item'));
 add_action('rss2_item', array($wpgeo, 'georss_item'));
 add_action('atom_entry', array($wpgeo, 'georss_item'));
 add_action('rdf_item', array($wpgeo, 'georss_item'));
-
+		
 // More Includes
 include('wp-geo-widget.php');
 
