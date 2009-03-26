@@ -80,7 +80,7 @@ if (!class_exists('WPGeoDashboard'))
 			// Include WordPress native RSS functions.
 			include_once(ABSPATH . WPINC . '/rss.php');
 
-			$rss = fetch_rss('http://www.wpgeo.com/feed/');
+			$rss = fetch_rss('http://feeds2.feedburner.com/wpgeo');
 			$items = array_slice($rss->items, 0, 2);
 			
 			if (empty($items))
