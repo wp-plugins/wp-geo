@@ -70,6 +70,7 @@ class WPGeo
 			'show_map_scale' => 'N',
 			'show_map_overview' => 'N',
 			'show_polylines' => 'Y',
+			'polyline_colour' => '#FFFFFF',
 			'show_maps_on_home' => 'Y',
 			'show_maps_on_pages' => 'Y',
 			'show_maps_on_posts' => 'Y',
@@ -873,6 +874,7 @@ class WPGeo
 			$wp_geo_options['show_map_overview'] = $_POST['show_map_overview'];
 			
 			$wp_geo_options['show_polylines'] = $_POST['show_polylines'];
+			$wp_geo_options['polyline_colour'] = $_POST['polyline_colour'];
 			
 			$wp_geo_options['show_maps_on_home'] = $_POST['show_maps_on_home'];
 			$wp_geo_options['show_maps_on_pages'] = $_POST['show_maps_on_pages'];
@@ -949,6 +951,10 @@ class WPGeo
 					<tr valign="top">
 						<th scope="row">' . __('Polylines', 'wp-geo') . '</th>
 						<td>' . $wpgeo->options_checkbox('show_polylines', 'Y', $wp_geo_options['show_polylines']) . ' ' . __('Show polyines (to connect multiple points on a single map)', 'wp-geo') . '</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">' . __('Polyline Colour', 'wp-geo') . '</th>
+						<td><input name="polyline_colour" type="text" id="polyline_colour" value="' . $wp_geo_options['polyline_colour'] . '" size="7" /></td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">' . __('Show Maps On', 'wp-geo') . '</th>

@@ -307,7 +307,7 @@ class WPGeoWidget
 					
 				if ($showpolylines)
 				{
-					$html_js .= 'map.addOverlay(wpgeo_createPolyline(' . $polyline_coords_js . ', "#ffffff", 2, 0.50));';
+					$html_js .= 'map.addOverlay(wpgeo_createPolyline(' . $polyline_coords_js . ', "' . $wp_geo_options['polyline_colour'] . '", 2, 0.50));';
 				}
 				$html_js .='
 							// Center the map to show all markers

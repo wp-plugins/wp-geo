@@ -246,3 +246,8 @@ msgstr ""
 msgid "Hide Polylines"
 msgstr ""
 
+# Admin - Polyline Colour
+msgid "Polyline Colour"
+msgstr ""
+
+

@@ -95,7 +95,7 @@ class WPGeoMap
 						$polyline_coords .= 'new GLatLng(' . $this->points[$i]['latitude'] . ', ' . $this->points[$i]['longitude'] . ')' . "\n";
 					}
 					$js_polyline = 'var polyOptions = {geodesic:true};' . "\n";
-					$js_polyline .= 'var polyline = new GPolyline([' . $polyline_coords . '], "#ffffff", 2, 0.5, polyOptions);' . "\n";
+					$js_polyline .= 'var polyline = new GPolyline([' . $polyline_coords . '], "' . $wp_geo_options['polyline_colour'] . '", 2, 0.5, polyOptions);' . "\n";
 					$js_polyline .= 'map_' . $map_id . '.addOverlay(polyline);' . "\n";
 				}
 			}
