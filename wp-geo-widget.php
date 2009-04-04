@@ -313,7 +313,10 @@ class WPGeoWidget
 							// Center the map to show all markers
 							var center = bounds.getCenter();
 							var zoom = map.getBoundsZoomLevel(bounds)
-							
+							if (zoom > ' . $zoom . ')
+							{
+								zoom = ' . $zoom . ';
+							}
 							map.setCenter(center, zoom);
 						}
 					}
