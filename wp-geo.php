@@ -1362,8 +1362,8 @@ class WPGeo
 		
 		global $post;
 		
-		$latitude = get_post_meta($post-ID, '_wp_geo_latitude', true);
-		$longitude = get_post_meta($post-ID, '_wp_geo_longitude', true);
+		$latitude = get_post_meta($post->ID, '_wp_geo_latitude', true);
+		$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
 		
 		// Use nonce for verification
 		echo '<input type="hidden" name="wpgeo_location_noncename" id="wpgeo_location_noncename" value="' . wp_create_nonce(plugin_basename(__FILE__)) . '" />';
