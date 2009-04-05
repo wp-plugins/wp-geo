@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Geo 1.1\n"
+"Project-Id-Version: WP Geo 1.2\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: Ivan Graf <contact@bildergallery.com>\n"
+"Last-Translator: Ben Huson <ben@thewhiteroom.net>\n"
 "Language-Team: Ivan Graf <contact@bildergallery.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -225,4 +225,28 @@ msgstr "Dieses Marker Bild wird zurzeit nicht genutzt aber es könnte sein, das 
 # Admin Section Title
 msgid "WP Geo Location"
 msgstr "WP Geo Standort"
+
+# Admin - Google API Key Notice
+msgid "WP Geo is not currently active as you have not entered a Google API Key"
+msgstr "WP Geo ist derzeit nicht aktiv, Sie haben keinen Google API Schlüssel eingegeben"
+
+# Admin - Please update your WP Geo settings
+msgid "Please update your WP Geo settings"
+msgstr "Bitte WP Geo Einstellungen aktualisieren"
+
+# Settings - Label for Default Map Zoom field
+msgid "Default"
+msgstr "Standard"
+
+# Admin - Show Polylines
+msgid "Show Polylines"
+msgstr "Polylines anzeigen"
+
+# Admin - Hide Polylines
+msgid "Hide Polylines"
+msgstr "Polylines verstecken"
+
+# Admin - Polyline Colour
+msgid "Polyline Colour"
+msgstr "Polyline Farbe"
 
