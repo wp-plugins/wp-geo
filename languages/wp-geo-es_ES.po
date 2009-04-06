@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Geo\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-02-11 21:54+0100\n"
+"PO-Revision-Date: 2009-04-06 20:55+0100\n"
 "Last-Translator: Ben Huson <ben@thewhiteroom.net>\n"
-"Language-Team: Spanish Translator <alberto@berriart.com>\n"
+"Language-Team: Alberto <alberto@berriart.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -226,4 +226,28 @@ msgstr "Este marcador no se usa actualmente pero será usado en un futuro por WP
 # Admin Section Title
 msgid "WP Geo Location"
 msgstr "Localización WP Geo"
+
+# Admin - Google API Key Notice
+msgid "WP Geo is not currently active as you have not entered a Google API Key"
+msgstr "WP Geo no se activará hasta que introduzcas una clave de API de Google"
+
+# Admin - Please update your WP Geo settings
+msgid "Please update your WP Geo settings"
+msgstr "Por favor actualiza la configuración de WP Geo"
+
+# Settings - Label for Default Map Zoom field
+msgid "Default"
+msgstr "Predeterminado"
+
+# Admin - Show Polylines
+msgid "Show Polylines"
+msgstr "Mostrar polilíneas"
+
+# Admin - Hide Polylines
+msgid "Hide Polylines"
+msgstr "Ocultar polilíneas"
+
+# Admin - Polyline Colour
+msgid "Polyline Colour"
+msgstr "Color de polilínea"
 
