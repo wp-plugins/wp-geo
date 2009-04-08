@@ -4,7 +4,7 @@ Donate link: http://www.wpgeo.com/
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
 Tested up to: 2.7.1
-Stable tag: 3.0.6.2
+Stable tag: 3.0.7
 
 Add location maps to your posts and pages.
 
@@ -68,6 +68,17 @@ If upgrading from a previous version of the plugin:
 3. Admin Settings
 
 == Release Notes ==
+
+= WP Geo 3.0.7 =
+
+* Added map button in rich text editor.
+* Added setting to turn on/off polylines.
+* Added setting to set colour of polylines.
+* Added setting to override polylines in Widget.
+* Using v2.118 of Google Maps to prevent Javascript errors.
+* Added WP Geo news feed widget on admin dashboard.
+* Admin panels re-implemented using WordPress API.
+* Widget map never zooms in more than default zoom setting.
 
 = WP Geo 3.0.6.2 =
 
