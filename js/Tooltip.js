@@ -68,16 +68,25 @@ jQuery(document).ready(function() {
 		Tooltip_mouse_x = e.pageX;
 		Tooltip_mouse_y = e.pageY;
 		
-		var left = e.pageX - (jQuery('#tooltip2').width() / 3);
-		var top = e.pageY - 25 - jQuery('#tooltip2').height();
+		var left = 5;
+		var top = 5;
 		
-		if (left < 5)
-			left = 5;
-		if (top < 5)
-			top = 5;
+		if (jQuery('#tooltip2').css('display') != 'none')
+		{
+		
+			var left = e.pageX - (jQuery('#tooltip2').width() / 3);
+			var top = e.pageY - 25 - jQuery('#tooltip2').height();
+			
+			if (left < 5)
+				left = 5;
+			if (top < 5)
+				top = 5;
+			
+		}
 		
 		jQuery('#tooltip2').css('left', left);
 		jQuery('#tooltip2').css('top', top);
+		
 	});
 	
 });
