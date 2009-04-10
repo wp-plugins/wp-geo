@@ -97,6 +97,34 @@ class WPGeo
 	
 	
 	/**
+	 * Shortcode: [wpgeo_latitude]
+	 */
+	function shortcode_wpgeo_latitude($atts, $content = null)
+	{
+	
+		global $post;
+		$lat = get_post_meta($post->ID, '_wp_geo_latitude', true);
+		return $lat;
+		
+	}
+	
+	
+	
+	/**
+	 * Shortcode: [wpgeo_longitude]
+	 */
+	function shortcode_wpgeo_longitude($atts, $content = null)
+	{
+	
+		global $post;
+		$long = get_post_meta($post->ID, '_wp_geo_longitude', true);
+		return $long;
+		
+	}
+	
+	
+	
+	/**
 	 * Shortcode: [wp_geo_map type="G_NORMAL_MAP"]
 	 */
 	function shortcode_wpgeo_map($atts, $content = null)
@@ -1535,6 +1563,8 @@ $wpgeo = new WPGeo();
 // Hooks
 register_activation_hook(__FILE__, array($wpgeo, 'register_activation'));
 add_shortcode('wp_geo_map', array($wpgeo, 'shortcode_wpgeo_map'));
+add_shortcode('wpgeo_longitude', array($wpgeo, 'shortcode_wpgeo_longitude'));
+add_shortcode('wpgeo_latitude', array($wpgeo, 'shortcode_wpgeo_latitude'));
 add_action('wp_print_scripts', array($wpgeo, 'includeGoogleMapsJavaScriptAPI'));
 
 // Frontend Hooks
