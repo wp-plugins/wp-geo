@@ -593,8 +593,39 @@ class WPGeo
 			//<![CDATA[
 			
 			var map = null;
-    		var geocoder = null;
-		    var marker = null;
+			var geocoder = null;
+			var marker = null;
+			
+			jQuery(document).ready(function() {
+			
+				// Admin - Latitude filed updated
+				jQuery("#wp_geo_latitude").keyup(function() {
+					updatedLatLngFields();
+				});
+				
+				// Admin - Longitude filed updated
+				jQuery("#wp_geo_longitude").keyup(function() {
+					updatedLatLngFields();
+				});
+			
+			});
+			
+			function updatedLatLngFields()
+			{
+				var latField = document.getElementById("wp_geo_latitude");
+				var lngField = document.getElementById("wp_geo_longitude");
+				if (latField.value == \'\' && lngField.value == \'\')
+				{
+					marker.hide();
+				}
+				else
+				{
+					var point = new GLatLng(latField.value, lngField.value);
+					map.setCenter(point);
+					marker.setPoint(point);
+					marker.show();
+				}
+			}
 			
 			function clearLatLngFields()
 			{
