@@ -1014,7 +1014,7 @@ class WPGeo
 					</tr>
 					<tr valign="top">
 						<th scope="row">' . __('Polylines', 'wp-geo') . '</th>
-						<td>' . $wpgeo->options_checkbox('show_polylines', 'Y', $wp_geo_options['show_polylines']) . ' ' . __('Show polyines (to connect multiple points on a single map)', 'wp-geo') . '</td>
+						<td>' . $wpgeo->options_checkbox('show_polylines', 'Y', $wp_geo_options['show_polylines']) . ' ' . __('Show polylines (to connect multiple points on a single map)', 'wp-geo') . '</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">' . __('Polyline Colour', 'wp-geo') . '</th>

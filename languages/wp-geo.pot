@@ -226,6 +226,10 @@ msgstr ""
 msgid "This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo."
 msgstr ""
 
+# Settings - Show polylines (to connect multiple points on a single map)
+msgid "Show polylines (to connect multiple points on a single map)"
+msgstr ""
+
 # Admin Section Title
 msgid "WP Geo Location"
 msgstr ""
