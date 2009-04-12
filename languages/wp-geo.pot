@@ -182,6 +182,10 @@ msgstr ""
 msgid "Posts in category archives"
 msgstr ""
 
+# Settings - Show Maps On - Search Results
+msgid "Search Results"
+msgstr ""
+
 # Settings - Label for Feeds fields
 msgid "Feeds"
 msgstr ""
