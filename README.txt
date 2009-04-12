@@ -4,7 +4,7 @@ Donate link: http://www.wpgeo.com/
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
 Tested up to: 2.7.1
-Stable tag: 3.0.7
+Stable tag: 3.0.7.1
 
 Add location maps to your posts and pages.
 
@@ -68,6 +68,13 @@ If upgrading from a previous version of the plugin:
 3. Admin Settings
 
 == Release Notes ==
+
+= WP Geo 3.0.7.1 =
+
+* Firefox scrolling buy fixed.
+* Added longitude and latitude shortcodes.
+* Maps in admin now update as you manually change logitude and latitude.
+* Added setting to show maps on search result page.
 
 = WP Geo 3.0.7 =
 
