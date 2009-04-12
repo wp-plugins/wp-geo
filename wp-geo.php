@@ -76,6 +76,7 @@ class WPGeo
 			'show_maps_on_posts' => 'Y',
 			'show_maps_in_datearchives' => 'Y',
 			'show_maps_in_categoryarchives' => 'Y',
+			'show_maps_in_searchresults' => 'N',
 			'add_geo_information_to_rss' => 'Y'
 		);
 		add_option('wp_geo_options', $options);
@@ -838,6 +839,7 @@ class WPGeo
 		if (is_page() && $wp_geo_options['show_maps_on_pages'] == 'Y')					return true;
 		if (is_date() && $wp_geo_options['show_maps_in_datearchives'] == 'Y')			return true;
 		if (is_category() && $wp_geo_options['show_maps_in_categoryarchives'] == 'Y')	return true;
+		if (is_search() && $wp_geo_options['show_maps_in_searchresults'] == 'Y')		return true;
 		if (is_feed() && $wp_geo_options['add_geo_information_to_rss'] == 'Y')			return true;
 
 		// Activate maps in admin...
@@ -941,6 +943,7 @@ class WPGeo
 			$wp_geo_options['show_maps_on_posts'] = $_POST['show_maps_on_posts'] == 'Y' ? 'Y' : 'N';
 			$wp_geo_options['show_maps_in_datearchives'] = $_POST['show_maps_in_datearchives'] == 'Y' ? 'Y' : 'N';
 			$wp_geo_options['show_maps_in_categoryarchives'] = $_POST['show_maps_in_categoryarchives'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_maps_in_searchresults'] = $_POST['show_maps_in_searchresults'] == 'Y' ? 'Y' : 'N';
 			
 			$wp_geo_options['add_geo_information_to_rss'] = $_POST['add_geo_information_to_rss'] == 'Y' ? 'Y' : 'N';
 			
@@ -1024,7 +1027,8 @@ class WPGeo
 							' . $wpgeo->options_checkbox('show_maps_on_posts', 'Y', $wp_geo_options['show_maps_on_posts']) . ' ' . __('Posts (single posts)', 'wp-geo') . '<br />
 							' . $wpgeo->options_checkbox('show_maps_on_home', 'Y', $wp_geo_options['show_maps_on_home']) . ' ' . __('Posts home page', 'wp-geo') . '<br />
 							' . $wpgeo->options_checkbox('show_maps_in_datearchives', 'Y', $wp_geo_options['show_maps_in_datearchives']) . ' ' . __('Posts in date archives', 'wp-geo') . '<br />
-							' . $wpgeo->options_checkbox('show_maps_in_categoryarchives', 'Y', $wp_geo_options['show_maps_in_categoryarchives']) . ' ' . __('Posts in category archives', 'wp-geo') . '
+							' . $wpgeo->options_checkbox('show_maps_in_categoryarchives', 'Y', $wp_geo_options['show_maps_in_categoryarchives']) . ' ' . __('Posts in category archives', 'wp-geo') . '<br />
+							' . $wpgeo->options_checkbox('show_maps_in_searchresults', 'Y', $wp_geo_options['show_maps_in_searchresults']) . ' ' . __('Search Results', 'wp-geo') . '
 						</td>
 					</tr>
 					<tr valign="top">
