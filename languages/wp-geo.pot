@@ -58,6 +58,10 @@ msgstr ""
 msgid "General Settings"
 msgstr ""
 
+# Settings - General Settings - Intro
+msgid "<p>For more information and documentation about this plugin please visit the <a href=\"http://www.benhuson.co.uk/wordpress-plugins/wp-geo/\">WP Geo Plugin</a> home page.<br />If you experience any problems/bugs with the plugin, please <a href=\"http://code.google.com/p/wp-geo/issues/list\">log it here</a>.</p>"
+msgstr ""
+
 # Settings - Label for Google API Key field
 msgid "Google API Key"
 msgstr ""
@@ -200,6 +204,12 @@ msgstr ""
 
 # Settings - <h2> Marker Settings Title
 msgid "Marker Settings"
+msgstr ""
+
+# Settings - Marker Settings - Text
+msgid ""
+"<p>Custom marker images are automatically created in your WordPress uploads folder and used by WP Geo.<br />A copy of these images will remain in the WP Geo folder in case you need to revert to them at any time.<br />You may edit these marker icons if you wish - they must be PNG files. Each marker consist of a marker image and a shadow image. If you do not wish to show a marker shadow you should use a transparent PNG for the shadow file.</p>"
+"<p>Currently you must update these images manually and the anchor point must be the same - looking to provide more control in future versions.</p>"
 msgstr ""
 
 # Settings - Large Marker Title

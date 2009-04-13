@@ -964,10 +964,8 @@ class WPGeo
 			<h2>' . __('WP Geo Settings', 'wp-geo') . '</h2>
 			<form method="post">
 				<img style="float:right; padding:0 20px 0 0; margin:0 0 20px 20px;" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/img/logo/wp-geo.png" />
-				<h3>' . __('General Settings', 'wp-geo') . '</h3>
-				<p>For more information and documentation about this plugin please visit the <a href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/">WP Geo Plugin</a> home page.<br />
-					If you experience any problems/bugs with the plugin, please <a href="http://code.google.com/p/wp-geo/issues/list">log it here</a>.
-				</p>';
+				<h3>' . __('General Settings', 'wp-geo') . '</h3>'
+				. __('<p>For more information and documentation about this plugin please visit the <a href=\"http://www.benhuson.co.uk/wordpress-plugins/wp-geo/\">WP Geo Plugin</a> home page.<br />If you experience any problems/bugs with the plugin, please <a href=\"http://code.google.com/p/wp-geo/issues/list\">log it here</a>.</p>', 'wp-geo');
 		if (!$this->checkGoogleAPIKey())
 		{
 			echo '<div class="error"><p>Before you can use Wp Geo you must acquire a <a href="http://code.google.com/apis/maps/signup.html">Google API Key</a> for your blog - the plugin will not function without it!</p></div>';
@@ -1041,9 +1039,8 @@ class WPGeo
 					<input type="hidden" name="action" value="update" />
 					<input type="hidden" name="option_fields" value="google_api_key,google_map_type,show_post_map" />
 				</p>
-				<h2 style="margin-top:30px;">' . __('Marker Settings', 'wp-geo') . '</h2>
-				<p>Custom marker images are automatically created in your WordPress uploads folder and used by WP Geo.<br />A copy of these images will remain in the WP Geo folder in case you need to revert to them at any time.<br />You may edit these marker icons if you wish - they must be PNG files. Each marker consist of a marker image and a shadow image. If you do not wish to show a marker shadow you should use a transparent PNG for the shadow file.</p>
-				<p>Currently you must update these images manually and the anchor point must be the same - looking to provide more control in future versions.</p>
+				<h2 style="margin-top:30px;">' . __('Marker Settings', 'wp-geo') . '</h2>'
+				. __('<p>Custom marker images are automatically created in your WordPress uploads folder and used by WP Geo.<br />A copy of these images will remain in the WP Geo folder in case you need to revert to them at any time.<br />You may edit these marker icons if you wish - they must be PNG files. Each marker consist of a marker image and a shadow image. If you do not wish to show a marker shadow you should use a transparent PNG for the shadow file.</p><p>Currently you must update these images manually and the anchor point must be the same - looking to provide more control in future versions.</p>', 'wp-geo') . '
 				<table class="form-table">
 					<tr valign="top">
 						<th scope="row">' . __('Large Marker', 'wp-geo') . '</th>
@@ -1084,7 +1081,7 @@ class WPGeo
 			<h2 style="margin-top:30px;">Documentation</h2>
 			<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a location has been set for the post). You can only include the Shortcode once within a post. If you select another Show Post Map option then the Shortcode will be ignored and the map will be positioned automatically.</p>
 			<h2 style="margin-top:30px;">Feedback</h2>
-			<p>If you experience any problems or bugs with the plugin, or want to suggest an improvement, please visit the <a href="http://code.google.com/p/wp-geo/issues/list">WP Geo Google Code page</a> to log your issue. If you would like to feedback or comment on the plugin please visit the <a href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/">WP Geo plugin</a> page.
+			<p>If you experience any problems or bugs with the plugin, or want to suggest an improvement, please visit the <a href="http://code.google.com/p/wp-geo/issues/list">WP Geo Google Code page</a> to log your issue. If you would like to feedback or comment on the plugin please visit the <a href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/">WP Geo plugin</a> page.</p>
 			<p>If you like WP Geo and would like to make a donation, please do so on the <a href="http://www.wpgeo.com/" target="_blank">WP Geo website</a>. Your contributions help to ensure that I can dedicate more time to the support and development of the plugin.</p>
 		</div>';
 		
