@@ -964,8 +964,11 @@ class WPGeo
 			<h2>' . __('WP Geo Settings', 'wp-geo') . '</h2>
 			<form method="post">
 				<img style="float:right; padding:0 20px 0 0; margin:0 0 20px 20px;" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/img/logo/wp-geo.png" />
-				<h3>' . __('General Settings', 'wp-geo') . '</h3>'
-				. __('<p>For more information and documentation about this plugin please visit the <a href=\"http://www.benhuson.co.uk/wordpress-plugins/wp-geo/\">WP Geo Plugin</a> home page.<br />If you experience any problems/bugs with the plugin, please <a href=\"http://code.google.com/p/wp-geo/issues/list\">log it here</a>.</p>', 'wp-geo');
+				<h3>' . __('General Settings', 'wp-geo') . '</h3>
+				<p>'
+				. sprintf(__("For more information and documentation about this plugin please visit the <a %s>WP Geo Plugin</a> home page.", 'wp-geo'), 'href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/"') . '<br />'
+				. sprintf(__("If you experience any problems/bugs with the plugin, please <a %s>log it here</a>.", 'wp-geo'), 'href="http://code.google.com/p/wp-geo/issues/list"') . 
+				'</p>';
 		if (!$this->checkGoogleAPIKey())
 		{
 			echo '<div class="error"><p>Before you can use Wp Geo you must acquire a <a href="http://code.google.com/apis/maps/signup.html">Google API Key</a> for your blog - the plugin will not function without it!</p></div>';
@@ -1078,11 +1081,11 @@ class WPGeo
 			settings_fields('wp-geo-options'); 
 		}	
 		echo '</form>
-			<h2 style="margin-top:30px;">Documentation</h2>
-			<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a location has been set for the post). You can only include the Shortcode once within a post. If you select another Show Post Map option then the Shortcode will be ignored and the map will be positioned automatically.</p>
-			<h2 style="margin-top:30px;">Feedback</h2>
-			<p>If you experience any problems or bugs with the plugin, or want to suggest an improvement, please visit the <a href="http://code.google.com/p/wp-geo/issues/list">WP Geo Google Code page</a> to log your issue. If you would like to feedback or comment on the plugin please visit the <a href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/">WP Geo plugin</a> page.</p>
-			<p>If you like WP Geo and would like to make a donation, please do so on the <a href="http://www.wpgeo.com/" target="_blank">WP Geo website</a>. Your contributions help to ensure that I can dedicate more time to the support and development of the plugin.</p>
+			<h2 style="margin-top:30px;">' . __('Documentation', 'wp-geo') . '</h2>'
+			. __('<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a location has been set for the post). You can only include the Shortcode once within a post. If you select another Show Post Map option then the Shortcode will be ignored and the map will be positioned automatically.</p>', 'wp-geo')
+			. '<h2 style="margin-top:30px;">' . __('Feedback', 'wp-geo') . '</h2>'
+			. __(sprintf("<p>If you experience any problems or bugs with the plugin, or want to suggest an improvement, please visit the <a %1\$s>WP Geo Google Code page</a> to log your issue. If you would like to feedback or comment on the plugin please visit the <a %2\$s>WP Geo plugin</a> page.</p>", 'href="http://code.google.com/p/wp-geo/issues/list"', 'href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/"'), 'wp-geo')
+			. __(sprintf("<p>If you like WP Geo and would like to make a donation, please do so on the <a %1\$s>WP Geo website</a>. Your contributions help to ensure that I can dedicate more time to the support and development of the plugin.</p>", 'href="http://www.wpgeo.com/" target="_blank"'), 'wp-geo') . '
 		</div>';
 		
 	}

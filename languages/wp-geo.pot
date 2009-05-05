@@ -58,8 +58,12 @@ msgstr ""
 msgid "General Settings"
 msgstr ""
 
-# Settings - General Settings - Intro
-msgid "<p>For more information and documentation about this plugin please visit the <a href=\"http://www.benhuson.co.uk/wordpress-plugins/wp-geo/\">WP Geo Plugin</a> home page.<br />If you experience any problems/bugs with the plugin, please <a href=\"http://code.google.com/p/wp-geo/issues/list\">log it here</a>.</p>"
+# Settings - General Settings - Intro Para 1
+msgid "For more information and documentation about this plugin please visit the <a %s>WP Geo Plugin</a> home page."
+msgstr ""
+
+# Settings - General Settings - Intro Para 2
+msgid "If you experience any problems/bugs with the plugin, please <a %s>log it here</a>."
 msgstr ""
 
 # Settings - Label for Google API Key field
@@ -238,6 +242,26 @@ msgstr ""
 
 # Settings - Show polylines (to connect multiple points on a single map)
 msgid "Show polylines (to connect multiple points on a single map)"
+msgstr ""
+
+# Settings - Documentation
+msgid "Documentation"
+msgstr ""
+
+# Settings - Documentation Text
+msgid "<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a location has been set for the post). You can only include the Shortcode once within a post. If you select another Show Post Map option then the Shortcode will be ignored and the map will be positioned automatically.</p>"
+msgstr ""
+
+# Settings - Feedback
+msgid "Feedback"
+msgstr ""
+
+# Settings - Feedback - Text 1
+msgid "<p>If you experience any problems or bugs with the plugin, or want to suggest an improvement, please visit the <a %1\$s>WP Geo Google Code page</a> to log your issue. If you would like to feedback or comment on the plugin please visit the <a %2\$s>WP Geo plugin</a> page.</p>"
+msgstr ""
+
+# Settings - Feedback - Text 2
+msgid ""<p>If you like WP Geo and would like to make a donation, please do so on the <a %1\$s>WP Geo website</a>. Your contributions help to ensure that I can dedicate more time to the support and development of the plugin.</p>"
 msgstr ""
 
 # Admin Section Title
