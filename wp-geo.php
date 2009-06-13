@@ -6,12 +6,24 @@
 Plugin Name: WP Geo
 Plugin URI: http://www.wpgeo.com/
 Description: Adds geocoding to WordPress.
-Version: 3.0.7.1
+Version: 3.0.8
 Author: Ben Huson
 Author URI: http://www.wpgeo.com/
 Minimum WordPress Version Required: 2.5
-Tested up to: 2.7.1
+Tested up to: 2.8
 */
+
+
+
+// Pre-2.6 compatibility
+if ( !defined( 'WP_CONTENT_URL' ) )
+	define( 'WP_CONTENT_URL', get_option( 'siteurl' ) . '/wp-content' );
+if ( !defined( 'WP_CONTENT_DIR' ) )
+	define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
+if ( !defined( 'WP_PLUGIN_URL' ) )
+	define( 'WP_PLUGIN_URL', WP_CONTENT_URL. '/plugins' );
+if ( !defined( 'WP_PLUGIN_DIR' ) )
+	define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
 
 
 
@@ -27,7 +39,7 @@ class WPGeo
 	 * Properties
 	 */
 	 
-	var $version = '3.0.7.1';
+	var $version = '3.0.8.beta';
 	var $markers;
 	var $show_maps_external = false;
 	var $plugin_message = '';
@@ -167,6 +179,79 @@ class WPGeo
 	
 	
 	/**
+	 * is_wpgeo_feed
+	 */
+	function is_wpgeo_feed()
+	{
+		
+		if ( is_feed() && $_GET['wpgeo'] == 'true' )
+		{
+			return true;
+		}
+		return false;
+		
+	}
+	
+	
+	
+	/**
+	 * post_limits
+	 */
+	function post_limits( $limit )
+	{
+	
+		global $wpgeo;
+		
+		if ( $wpgeo->is_wpgeo_feed() )
+		{
+			if ( isset($_GET['limit']) && is_numeric($_GET['limit']) )
+			{
+				return 'LIMIT 0, ' . $_GET['limit'];
+			}
+		}
+		return $limit;
+		
+	}
+	
+	
+	
+	/**
+	 * posts_join
+	 */
+	function posts_join( $join )
+	{
+	
+		global $wpdb, $wpgeo;
+		
+		if ( $wpgeo->is_wpgeo_feed() )
+		{
+			$join .= " LEFT JOIN wp_postmeta ON (" . $wpdb->posts . ".ID = wp_postmeta.post_id)";
+		}
+		return $join;
+		
+	}
+	
+	
+	
+	/**
+	 * posts_where
+	 */
+	function posts_where( $where )
+	{
+	
+		global $wpgeo;
+		
+		if ( $wpgeo->is_wpgeo_feed() )
+		{
+			$where .= " AND (wp_postmeta.meta_key = '_wp_geo_latitude' OR wp_postmeta.meta_key = '_wp_geo_longitude')";
+		}
+		return $where;
+	
+	}
+	
+	
+	
+	/**
 	 * Check Google API Key
 	 */
 	function checkGoogleAPIKey()
@@ -289,7 +374,7 @@ class WPGeo
 			';
 		
 		// CSS
-		echo '<link rel="stylesheet" href="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/wp-geo.css" type="text/css" />';
+		echo '<link rel="stylesheet" href="' . WP_CONTENT_URL . '/plugins/wp-geo/wp-geo.css" type="text/css" />';
 		
 		if ($wpgeo->show_maps() || $wpgeo->widget_is_active())
 		{
@@ -496,7 +581,7 @@ class WPGeo
 	
 		global $wpgeo, $post_ID;
 		
-		echo '<link rel="stylesheet" href="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/wp-geo.css" type="text/css" />';
+		echo '<link rel="stylesheet" href="' . WP_CONTENT_URL . '/plugins/wp-geo/wp-geo.css" type="text/css" />';
 		
 		// Only load if on a post or page
 		if ($wpgeo->show_maps())
@@ -544,9 +629,9 @@ class WPGeo
 		{
 			
 			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&v=2.118&key=' . $wp_geo_options['google_api_key'] . '&sensor=false', false);
-			wp_register_script('wpgeo', get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'));
-			wp_register_script('wpgeotooltip', get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/Tooltip.js', array('googlemaps', 'jquery'));
-			//wp_register_script('jquerywpgeo', get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'));
+			wp_register_script('wpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'));
+			wp_register_script('wpgeotooltip', WP_CONTENT_URL . '/plugins/wp-geo/js/Tooltip.js', array('googlemaps', 'jquery'));
+			//wp_register_script('jquerywpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'));
 			
 			wp_enqueue_script('jquery');
 			wp_enqueue_script('googlemaps');
@@ -963,7 +1048,7 @@ class WPGeo
 		<div class="wrap">
 			<h2>' . __('WP Geo Settings', 'wp-geo') . '</h2>
 			<form method="post">
-				<img style="float:right; padding:0 20px 0 0; margin:0 0 20px 20px;" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/img/logo/wp-geo.png" />
+				<img style="float:right; padding:0 20px 0 0; margin:0 0 20px 20px;" src="' . WP_CONTENT_URL . '/plugins/wp-geo/img/logo/wp-geo.png" />
 				<h3>' . __('General Settings', 'wp-geo') . '</h3>
 				<p>'
 				. sprintf(__("For more information and documentation about this plugin please visit the <a %s>WP Geo Plugin</a> home page.", 'wp-geo'), 'href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/"') . '<br />'
@@ -1084,8 +1169,8 @@ class WPGeo
 			<h2 style="margin-top:30px;">' . __('Documentation', 'wp-geo') . '</h2>'
 			. __('<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a location has been set for the post). You can only include the Shortcode once within a post. If you select another Show Post Map option then the Shortcode will be ignored and the map will be positioned automatically.</p>', 'wp-geo')
 			. '<h2 style="margin-top:30px;">' . __('Feedback', 'wp-geo') . '</h2>'
-			. __(sprintf("<p>If you experience any problems or bugs with the plugin, or want to suggest an improvement, please visit the <a %1\$s>WP Geo Google Code page</a> to log your issue. If you would like to feedback or comment on the plugin please visit the <a %2\$s>WP Geo plugin</a> page.</p>", 'href="http://code.google.com/p/wp-geo/issues/list"', 'href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/"'), 'wp-geo')
-			. __(sprintf("<p>If you like WP Geo and would like to make a donation, please do so on the <a %1\$s>WP Geo website</a>. Your contributions help to ensure that I can dedicate more time to the support and development of the plugin.</p>", 'href="http://www.wpgeo.com/" target="_blank"'), 'wp-geo') . '
+			. sprintf(__("<p>If you experience any problems or bugs with the plugin, or want to suggest an improvement, please visit the <a %s>WP Geo Google Code page</a> to log your issue. If you would like to feedback or comment on the plugin please visit the <a %s>WP Geo plugin</a> page.</p>", 'wp-geo'), 'href="http://code.google.com/p/wp-geo/issues/list"', 'href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/"')
+			. sprintf(__("<p>If you like WP Geo and would like to make a donation, please do so on the <a %s>WP Geo website</a>. Your contributions help to ensure that I can dedicate more time to the support and development of the plugin.</p>", 'wp-geo'), 'href="http://www.wpgeo.com/" target="_blank"') . '
 		</div>';
 		
 	}
@@ -1574,7 +1659,7 @@ class WPGeo
 	function editor_add_map_plugin($plugin_array)
 	{
 	
-		$plugin_array['wpgeomap'] = get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/js/tinymce/plugins/wpgeomap/editor_plugin.js';
+		$plugin_array['wpgeomap'] = WP_CONTENT_URL . '/plugins/wp-geo/js/tinymce/plugins/wpgeomap/editor_plugin.js';
 		return $plugin_array;
 	
 	}
@@ -1621,10 +1706,16 @@ add_action('rss_item', array($wpgeo, 'georss_item'));
 add_action('rss2_item', array($wpgeo, 'georss_item'));
 add_action('atom_entry', array($wpgeo, 'georss_item'));
 add_action('rdf_item', array($wpgeo, 'georss_item'));
+
+add_filter('post_limits', array($wpgeo, 'post_limits'));
+add_filter('posts_join', array($wpgeo, 'posts_join'));
+add_filter('posts_where', array($wpgeo, 'posts_where'));
+
 		
 // More Includes
 include('dashboard.php');
 include('wp-geo-widget.php');
+include('display.php');
 
 
 

@@ -14,8 +14,8 @@ class WPGeoMarkers
 	 * Properties
 	 */
 	 
-	var $version = '1.0';
-	var $marker_image_dir = '/wp-content/uploads/wp-geo/markers/';
+	var $version = '1.0';//WP_CONTENT_DIR
+	var $marker_image_dir = '/uploads/wp-geo/markers/';
 	
 	
 	
@@ -37,12 +37,12 @@ class WPGeoMarkers
 		// New Marker Folders
 		clearstatcache();
 		$old_umask = umask(0);
-		mkdir(ABSPATH . '/wp-content/uploads/wp-geo');
-		mkdir(ABSPATH . '/wp-content/uploads/wp-geo/markers');
+		mkdir(WP_CONTENT_DIR . '/uploads/wp-geo');
+		mkdir(WP_CONTENT_DIR . '/uploads/wp-geo/markers');
 		
 		// Marker Folders
-		$old_marker_image_dir = ABSPATH . '/wp-content/plugins/wp-geo/img/markers/';
-		$new_marker_image_dir = ABSPATH . $this->marker_image_dir;
+		$old_marker_image_dir = WP_CONTENT_DIR . '/plugins/wp-geo/img/markers/';
+		$new_marker_image_dir = WP_CONTENT_DIR . $this->marker_image_dir;
 		
 		// Marker Files
 		$this->moveFileOrDelete($old_marker_image_dir . 'dot-marker.png', $new_marker_image_dir . 'dot-marker.png');
@@ -121,8 +121,8 @@ class WPGeoMarkers
 			'height' => 34,
 			'anchorX' => 10,
 			'anchorY' => 34,
-			'image' => get_bloginfo('wpurl') . $this->marker_image_dir . 'large-marker.png',
-			'shadow' => get_bloginfo('wpurl') . $this->marker_image_dir . 'large-marker-shadow.png'
+			'image' => WP_CONTENT_URL . $this->marker_image_dir . 'large-marker.png',
+			'shadow' => WP_CONTENT_URL . $this->marker_image_dir . 'large-marker-shadow.png'
 		);
 		
 		// Small Marker
@@ -131,8 +131,8 @@ class WPGeoMarkers
 			'height' => 17,
 			'anchorX' => 5,
 			'anchorY' => 17,
-			'image' => get_bloginfo('wpurl') . $this->marker_image_dir . 'small-marker.png',
-			'shadow' => get_bloginfo('wpurl') . $this->marker_image_dir . 'small-marker-shadow.png'
+			'image' => WP_CONTENT_URL . $this->marker_image_dir . 'small-marker.png',
+			'shadow' => WP_CONTENT_URL . $this->marker_image_dir . 'small-marker-shadow.png'
 		);			
 		
 		// Dot Marker
@@ -141,8 +141,8 @@ class WPGeoMarkers
 			'height' => 8,
 			'anchorX' => 3,
 			'anchorY' => 6,
-			'image' => get_bloginfo('wpurl') . $this->marker_image_dir . 'dot-marker.png',
-			'shadow' => get_bloginfo('wpurl') . $this->marker_image_dir . 'dot-marker-shadow.png'
+			'image' => WP_CONTENT_URL . $this->marker_image_dir . 'dot-marker.png',
+			'shadow' => WP_CONTENT_URL . $this->marker_image_dir . 'dot-marker-shadow.png'
 		);
 		
 		// Default return

@@ -75,7 +75,7 @@ if (!class_exists('WPGeoDashboard'))
 				extract( $args, EXTR_SKIP );
 
 			echo $before_widget . $before_title . $widget_name . $after_title;
-			echo '<div style="background-image:url(' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-geo/img/logo/wp-geo.png); background-repeat:no-repeat; background-position:right top; padding-right:80px;">';
+			echo '<div style="background-image:url(' . WP_CONTENT_URL . '/plugins/wp-geo/img/logo/wp-geo.png); background-repeat:no-repeat; background-position:right top; padding-right:80px;">';
 			
 			// Include WordPress native RSS functions.
 			include_once(ABSPATH . WPINC . '/rss.php');
