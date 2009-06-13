@@ -255,12 +255,12 @@ msgid "Feedback"
 msgstr "Flux"
 
 # Settings - Feedback - Text 1
-msgid "<p>If you experience any problems or bugs with the plugin, or want to suggest an improvement, please visit the <a %1$s>WP Geo Google Code page</a> to log your issue. If you would like to feedback or comment on the plugin please visit the <a %2$s>WP Geo plugin</a> page.</p>"
-msgstr "<p>Si vous rencontrez quelques problèmes/défauts avec l'extension, ou pour suggérer une amélioration, merci de vous rendre sur <a %1$s>WP Geo Google Code page</a> pour noter votre remarque. Si vous souhaitez faire part d'un retour d'expérience ou d'un commentaire sur l'extension, merci de vous rendre sur la page <a %2$s>WP Geo plugin</a>.</p>"
+msgid "<p>If you experience any problems or bugs with the plugin, or want to suggest an improvement, please visit the <a %s>WP Geo Google Code page</a> to log your issue. If you would like to feedback or comment on the plugin please visit the <a %s>WP Geo plugin</a> page.</p>"
+msgstr "<p>Si vous rencontrez quelques problèmes/défauts avec l'extension, ou pour suggérer une amélioration, merci de vous rendre sur <a %s>WP Geo Google Code page</a> pour noter votre remarque. Si vous souhaitez faire part d'un retour d'expérience ou d'un commentaire sur l'extension, merci de vous rendre sur la page <a %s>WP Geo plugin</a>.</p>"
 
 # Settings - Feedback - Text 2
-msgid "<p>If you like WP Geo and would like to make a donation, please do so on the <a %1$s>WP Geo website</a>. Your contributions help to ensure that I can dedicate more time to the support and development of the plugin.</p>"
-msgstr "<p>If you like WP Geo and would like to make a donation, please do so on the <a %1$s>WP Geo website</a>. Your contributions help to ensure that I can dedicate more time to the support and development of the plugin.</p>"
+msgid "<p>If you like WP Geo and would like to make a donation, please do so on the <a %s>WP Geo website</a>. Your contributions help to ensure that I can dedicate more time to the support and development of the plugin.</p>"
+msgstr "<p>If you like WP Geo and would like to make a donation, please do so on the <a %s>WP Geo website</a>. Your contributions help to ensure that I can dedicate more time to the support and development of the plugin.</p>"
 
 # Admin Section Title
 msgid "WP Geo Location"
