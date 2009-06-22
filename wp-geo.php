@@ -630,7 +630,7 @@ class WPGeo
 			
 			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&v=2.118&key=' . $wp_geo_options['google_api_key'] . '&sensor=false', false, '2.118');
 			wp_register_script('wpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'), '1.0');
-			wp_register_script('wpgeotooltip', WP_CONTENT_URL . '/plugins/wp-geo/js/Tooltip.js', array('googlemaps', 'jquery'), '1.0');
+			wp_register_script('wpgeotooltip', WP_CONTENT_URL . '/plugins/wp-geo/js/tooltip.js', array('googlemaps', 'jquery'), '1.0');
 			//wp_register_script('jquerywpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'), '1.0');
 			
 			wp_enqueue_script('jquery');
