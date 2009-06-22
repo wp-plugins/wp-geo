@@ -105,9 +105,15 @@ class WPGeoDisplay
 	{
 	
 		$allowed_atts = array(
-			'rss' => null
+			'rss' => null,
+			'kml' => null
 		);
 		extract(shortcode_atts($allowed_atts, $atts));
+		
+		if ($kml != null)
+		{
+			$rss = $kml;
+		}
 		
 		if ($rss != null)
 		{
