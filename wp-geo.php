@@ -618,20 +618,20 @@ class WPGeo
 		$wp_geo_options = get_option('wp_geo_options');
 		
 		// Google AJAX API
-		// (always loads on all pages)
-		if ($wpgeo->checkGoogleAPIKey())
+		// Loads on all pages unless via proxy domain
+		if ($wpgeo->check_domain() && $wpgeo->checkGoogleAPIKey())
 		{
-			wp_register_script('google_jsapi', 'http://www.google.com/jsapi?key=' . $wp_geo_options['google_api_key'], false);
+			wp_register_script('google_jsapi', 'http://www.google.com/jsapi?key=' . $wp_geo_options['google_api_key'], false, '1.0');
 			wp_enqueue_script('google_jsapi');
 		}
 		
 		if (($wpgeo->show_maps() || $wpgeo->widget_is_active()) && $wpgeo->checkGoogleAPIKey())
 		{
 			
-			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&v=2.118&key=' . $wp_geo_options['google_api_key'] . '&sensor=false', false);
-			wp_register_script('wpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'));
-			wp_register_script('wpgeotooltip', WP_CONTENT_URL . '/plugins/wp-geo/js/Tooltip.js', array('googlemaps', 'jquery'));
-			//wp_register_script('jquerywpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'));
+			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&v=2.118&key=' . $wp_geo_options['google_api_key'] . '&sensor=false', false, '2.118');
+			wp_register_script('wpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'), '1.0');
+			wp_register_script('wpgeotooltip', WP_CONTENT_URL . '/plugins/wp-geo/js/Tooltip.js', array('googlemaps', 'jquery'), '1.0');
+			//wp_register_script('jquerywpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'), '1.0');
 			
 			wp_enqueue_script('jquery');
 			wp_enqueue_script('googlemaps');
