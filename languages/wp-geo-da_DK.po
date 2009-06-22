@@ -1,0 +1,306 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Geo 3.0.8 in Danish / på dansk\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-05-09 16:33+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Georg S. Adamsen  <wordpress@blogos.dk>\n"
+"Language-Team: Team Blogos <wordpress@blogos.dk>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2;plural=n != 1;\n"
+"X-Poedit-Language: Danish\n"
+"X-Poedit-Country: DENMARK\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_c;_e;__ngettext:1,2;__ngettext_noop:1,2\n"
+"X-Poedit-Basepath: F:\\FRA_D\\WordPress\\svn\\wp-geo\n"
+"X-Poedit-SearchPath-0: F:\\FRA_D\\WordPress\\svn\\wp-geo\n"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:951
+msgid "WP Geo settings updated"
+msgstr "WP Geo-indstillinger opdateret"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:964
+msgid "WP Geo Settings"
+msgstr "WP Geo-indstillinger"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:967
+msgid "General Settings"
+msgstr "Generelle indstillinger"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:969
+#, php-format
+msgid "For more information and documentation about this plugin please visit the <a %s>WP Geo Plugin</a> home page."
+msgstr "Du kan besøge <a %s>WP Geo-plugin</a>-hjemmesiden, hvis du ønsker mere information og dokumentation vedrørende dette plugin."
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:970
+#, php-format
+msgid "If you experience any problems/bugs with the plugin, please <a %s>log it here</a>."
+msgstr "Hvis du opdager problemer med eller finder bugs i dette plugin, må du meget gerne <a %s>logge det her</a>."
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:978
+msgid "Google API Key"
+msgstr "Google API-nøgle"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:982
+msgid "Map Type"
+msgstr "Kort-type"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:986
+msgid "Show Post Map"
+msgstr "Vis kort i indlæg"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:990
+msgid "Default Map Width"
+msgstr "Standard-bredde for kort"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:994
+msgid "Default Map Height"
+msgstr "Standard-højde for kort"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:998
+msgid "Default Map Zoom"
+msgstr "Standard-zoom for kort"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1002
+msgid "Default Map Controls"
+msgstr "Standard-kontrolknapper for kort"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1005
+msgid "Map Type Controls"
+msgstr "Kontrolknap-type for kort"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1006
+msgid "You must select at least 2 map types for the control to show."
+msgstr "Du skal vælge mindst to kort-typer for at få kontrolknapperne vist."
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1007
+msgid "Normal map"
+msgstr "Normalt kort"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1008
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1204
+msgid "Satellite (photographic map)"
+msgstr "Satellit-kort (fotografisk)"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1009
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1205
+msgid "Hybrid (photographic map with normal features)"
+msgstr "Hybrid (fotografisk kort med normale funktioner)"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1010
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1206
+msgid "Physical (terrain map)"
+msgstr "Fysisk (terræn-kort)"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1011
+msgid "Other Controls"
+msgstr "Andre kontrolknapper"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1012
+msgid "Show map scale"
+msgstr "Vis målestoksforhold på kort"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1013
+msgid "Show collapsible overview map (in the corner of the map)"
+msgstr "Vis sammenfoldeligt oversigtskort (i hjørnet af kortet)"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1017
+msgid "Polylines"
+msgstr "Polylinjer"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1018
+msgid "Show polylines (to connect multiple points on a single map)"
+msgstr "Vis polylinjer (til at forbinde flere punkter på et enkelt kort)"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1021
+msgid "Polyline Colour"
+msgstr "Farve på polylinjer"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1025
+msgid "Show Maps On"
+msgstr "Vis kort på"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1027
+msgid "Pages"
+msgstr "Sider"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1028
+msgid "Posts (single posts)"
+msgstr "Indlæg (enkelt-indlæg)"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1029
+msgid "Posts home page"
+msgstr "Indlæggenes hjemme-side"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1030
+msgid "Posts in date archives"
+msgstr "Indlæg i dato-arkiver"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1031
+msgid "Posts in category archives"
+msgstr "Indlæg i kategori-arkiver"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1032
+msgid "Search Results"
+msgstr "Søgeresultater"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1036
+msgid "Feeds"
+msgstr "Feeds"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1037
+msgid "Add geographic information"
+msgstr "Tilføj geografisk information"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1041
+msgid "Save Changes"
+msgstr "Gem ændringer"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1045
+msgid "Marker Settings"
+msgstr "Indstillinger for markører"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1046
+msgid "<p>Custom marker images are automatically created in your WordPress uploads folder and used by WP Geo.<br />A copy of these images will remain in the WP Geo folder in case you need to revert to them at any time.<br />You may edit these marker icons if you wish - they must be PNG files. Each marker consist of a marker image and a shadow image. If you do not wish to show a marker shadow you should use a transparent PNG for the shadow file.</p><p>Currently you must update these images manually and the anchor point must be the same - looking to provide more control in future versions.</p>"
+msgstr "<p>Brugerdefinerede markørbilleder oprettes automatisk i din upload-folder i WordPress og bruges af WP Geo.<br />En kopi af disse billeder opbevares i WP Geo-mappen, for det tilfældes skyld, at du skulle få brug for at vende tilbage til dem engang.<br />Du kan redigere disse markør-ikoner, hvis du ønsker det &ndash; det skal blot være PNG-filer. Hver markør består af et markørbillede og et skyggebillede. Hvis du ikke ønsker at vise en markørskygge, skal du bruge en transparent PNG som skyggefil.</p><p>For øjeblikket er du nødt til at opdatere disse billeder manuelt, og ankerpunktet skal være det samme &ndash; jeg håber at kunne give mulighed for større kontrol i fremtidige udgaver.</p>"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1049
+msgid "Large Marker"
+msgstr "Stor markør"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1053
+msgid "This is the default marker used to indicate a location on most maps."
+msgstr "Dette er markøren, der som standard bruges til at vise placering på de fleste kort."
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1059
+msgid "Small Marker"
+msgstr "Lille markør"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1063
+msgid "This is the default marker used for the WP Geo sidebar widget."
+msgstr "Dette er markøren, der som standard bruges i WP Geo's sidepanels-widget."
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1069
+msgid "Dot Marker"
+msgstr "Punkt-markør"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1073
+msgid "This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo."
+msgstr "Dette markørbillede bruges ikke i øjeblikket, men det forventes, at den vil blive brugt til at vise mindre vigtige placeringer i senere udgaver af WP Geo."
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1084
+msgid "Documentation"
+msgstr "Dokumentation"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1085
+msgid "<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a location has been set for the post). You can only include the Shortcode once within a post. If you select another Show Post Map option then the Shortcode will be ignored and the map will be positioned automatically.</p>"
+msgstr "<p>Hvis du sætter Vis kort i indlæg-indstillingen til &quot;Manuelt&quote;, kan du bruge kortkoden <code>[wp_geo_map]</code>, hvis du vil vise et kort i et indlæg (forudsat at en placering er blevet angivet for indlægget). Du kan kun bruge kortkoden én gang i hvert indlæg. Hvis du vælger en anden indstilling for Vis kort i indlæg, vil kortkoden blive ignoreret og kortet placeret automatisk.</p>"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1086
+msgid "Feedback"
+msgstr "Feedback"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1119
+msgid "Large pan/zoom control"
+msgstr "Store pan-/zoom-kontrolknapper"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1120
+msgid "Smaller pan/zoom control"
+msgstr "Mindre pan-/zoom-kontrolknapper"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1121
+msgid "Small zoom control (no panning controls)"
+msgstr "Små zoom-kontrolknapper (ingen kontrolknapper til panorering)"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1122
+msgid "No pan/zoom controls"
+msgstr "Ingen pan-/zoom-kontrolknapper"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1153
+msgid "Zoomed Out"
+msgstr "Zoomet ud"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1172
+msgid "Zoomed In"
+msgstr "Zoomet ind"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1203
+msgid "Normal"
+msgstr "Normal"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1237
+msgid "At top of post"
+msgstr "I toppen af indlæg"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1238
+msgid "At bottom of post"
+msgstr "I bunden af indlæg"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1239
+msgid "Manually"
+msgstr "Manuelt"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1406
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1407
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1466
+msgid "WP Geo Location"
+msgstr "WP Geo-stedvisning"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1437
+msgid "Search for location"
+msgstr "Søg efter sted"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1437
+msgid "town, postcode or address"
+msgstr "by, postnummer eller adresse"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1438
+msgid "Search"
+msgstr "Søg"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1448
+msgid "Latitude"
+msgstr "Breddegrad"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1448
+msgid "Longitude"
+msgstr "Længdegrad"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo.php:1448
+msgid "clear location"
+msgstr "ryd stedvisning"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo-widget.php:130
+msgid "WP Geo is not currently active as you have not entered a Google API Key"
+msgstr "WP Geo er ikke aktiv i øjeblikket, fordi du ikke har indtastet en Google API-nøgle"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo-widget.php:130
+msgid "Please update your WP Geo settings"
+msgstr "Opdatér venligst dine WP Geo-indstillinger"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo-widget.php:133
+msgid "Title"
+msgstr "Titel"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo-widget.php:134
+msgid "Width"
+msgstr "Bredde"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo-widget.php:135
+msgid "Height"
+msgstr "Højde"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo-widget.php:152
+msgid "Default"
+msgstr "Standard"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo-widget.php:153
+msgid "Show Polylines"
+msgstr "Vis polylinjer"
+
+#: F:\FRA_D\WordPress\svn\wp-geo/wp-geo-widget.php:154
+msgid "Hide Polylines"
+msgstr "Skjul polylinjer"
+
