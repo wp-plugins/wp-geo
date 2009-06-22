@@ -69,7 +69,13 @@ If upgrading from a previous version of the plugin:
 2. Admin panel shown when editing a post or page.
 3. Admin Settings
 
-== Release Notes ==
+== Changelog ==
+
+= 3.0.8.1 =
+
+* Fixed Google Javascript API loading via proxy issue.
+* Tooltip.js filename now all lowercase.
+* Added Changelog tab to read me file.
 
 = 3.0.8 =
 
