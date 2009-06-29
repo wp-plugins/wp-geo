@@ -1437,7 +1437,10 @@ class WPGeo
 		
 		if ($wpgeo->show_maps())
 		{			
-			echo 'xmlns:georss="http://www.georss.org/georss"';
+			echo 'xmlns:georss="http://www.georss.org/georss" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:ymaps="http://api.maps.yahoo.com/Maps/V2/AnnotatedMaps.xsd"';
+ 		}
+ 		
+ 		
 		}
 	
 	}
@@ -1467,6 +1470,8 @@ class WPGeo
 			if (is_numeric($latitude) && is_numeric($longitude))
 			{
 				echo '<georss:point>' . $latitude . ' ' . $longitude . '</georss:point>';
+				echo '<geo:lat>' . $latitude . '</geo:lat>';
+				echo '<geo:long>' . $longitude . '</geo:long>';
 			}
 		}
 		
