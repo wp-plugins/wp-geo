@@ -1,6 +1,6 @@
 === WP Geo  ===
 Contributors: Ben Huson
-Donate link: http://www.wpgeo.com/
+Donate link: http://www.wpgeo.com/donate
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
 Tested up to: 2.8
