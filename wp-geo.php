@@ -152,6 +152,8 @@ class WPGeo
 		if ($wpgeo->show_maps() && $wp_geo_options['show_post_map'] == 'HIDE' && $this->checkGoogleAPIKey())
 		{
 			$map_atts = array(
+				'width' => null,
+				'height' => null,
 				'lat' => null,
 				'long' => null,
 				'type' => 'G_NORMAL_MAP',
@@ -164,10 +166,26 @@ class WPGeo
 			{
 				return '[wp_geo_map]';
 			}
+		
+			$map_width = $wp_geo_options['default_map_width'];
+			$map_height = $wp_geo_options['default_map_height'];
 			
+			if ( $atts['width'] != null) {
+				$map_width = $atts['width'];
+				if ( is_numeric($map_width) ) {
+					$map_width = $map_width . 'px';
+				}
+			}
+			if ( $atts['height'] != null) {
+				$map_height = $atts['height'];
+				if ( is_numeric($map_height) ) {
+					$map_height = $map_height . 'px';
+				}
+			}
+		
 			// To Do: Add in lon/lat check and output map if needed
 			
-			return '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';">' . $content . '</div>';
+			return '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="width:' . $map_width . '; height:' . $map_height . ';">' . $content . '</div>';
 		}
 		else
 		{
