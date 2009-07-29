@@ -3,8 +3,8 @@ Contributors: Ben Huson
 Donate link: http://www.wpgeo.com/donate
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
-Tested up to: 2.8
-Stable tag: 3.0.8.1
+Tested up to: 2.8.2
+Stable tag: 3.0.9
 
 Add location maps to your posts and pages.
 
@@ -21,6 +21,7 @@ More information can be found at http://www.wpgeo.com/.
 
 = Features =
 
+* NEW - Set width and height in shortcode and category map.
 * NEW - Additional Geo Feed control.
 * NEW - Load maps from GeoRSS or KML data.
 * NEW - Geo Meta Tags
@@ -70,6 +71,12 @@ If upgrading from a previous version of the plugin:
 3. Admin Settings
 
 == Changelog ==
+
+= 3.0.9 =
+
+* Added width and height attributes to shortcode.
+* Added width and height attributes to category map.
+* Danish language updated.
 
 = 3.0.8.1 =
 
