@@ -71,7 +71,7 @@ If upgrading from a previous version of the plugin:
 
 == Release Notes ==
 
-= 3.0.8 =
+= WP Geo 3.0.8 =
 
 * Additional Geo Feed control.
 * Load maps from GeoRSS or KML data.
