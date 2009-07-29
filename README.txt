@@ -71,13 +71,13 @@ If upgrading from a previous version of the plugin:
 
 == Changelog ==
 
-= 3.0.8.1 =
+= WP Geo 3.0.8.1 =
 
 * Fixed Google Javascript API loading via proxy issue.
 * Tooltip.js filename now all lowercase.
 * Added Changelog tab to read me file.
 
-= 3.0.8 =
+= WP Geo 3.0.8 =
 
 * Additional Geo Feed control.
 * Load maps from GeoRSS or KML data.
