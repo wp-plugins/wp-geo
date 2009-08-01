@@ -44,6 +44,7 @@ class WPGeo
 	var $show_maps_external = false;
 	var $plugin_message = '';
 	var $maps;
+	var $editor;
 	
 	
 	/**
@@ -605,9 +606,12 @@ class WPGeo
 		}
 		
 		// Only show editor if Google API Key valid
-		if ($this->checkGoogleAPIKey())
+		if ( $this->checkGoogleAPIKey() )
 		{
-			$this->editor_add_buttons();
+			if ( class_exists( 'WPGeo_Editor' ) ) {
+				$this->editor = new WPGeo_Editor();
+				$this->editor->add_buttons();
+			}
 		}
 		
 	}
@@ -1655,60 +1659,6 @@ class WPGeo
 	
 	
 	
-	/* =============== Editor =============== */
-	
-	
-	
-	/**
-	 * ---------- Editor: Add Buttons ----------
-	 * This function add buttons to the Rich Editor.
-	 */
-	function editor_add_buttons()
-	{
-	
-		// Don't bother doing this stuff if the current user lacks permissions
-		if (!current_user_can('edit_posts') && !current_user_can('edit_pages'))
-			return;
-		
-		// Add only in Rich Editor mode
-		if (get_user_option('rich_editing') == 'true')
-		{
-			add_filter("mce_external_plugins", array($this, 'editor_add_map_plugin'));
-			add_filter('mce_buttons', array($this, 'editor_register_map_button'));
-		}
-	
-	}
-	
-	
-	
-	/**
-	 * ---------- Editor: Register Map Button ----------
-	 * This function add the WP Geo map button to the editor.
-	 */
-	function editor_register_map_button($buttons)
-	{
-	
-		array_push($buttons, "separator", "wpgeomap");
-		return $buttons;
-	
-	}
-	
-	
-	
-	/**
-	 * ---------- Editor: Load TinyMCE WP Geo Plugin ----------
-	 * This function add the WP Geo map button to the editor.
-	 */
-	function editor_add_map_plugin($plugin_array)
-	{
-	
-		$plugin_array['wpgeomap'] = WP_CONTENT_URL . '/plugins/wp-geo/js/tinymce/plugins/wpgeomap/editor_plugin.js';
-		return $plugin_array;
-	
-	}
-	
-	
-
 }
 
 
@@ -1719,6 +1669,12 @@ load_plugin_textdomain('wp-geo', PLUGINDIR . '/wp-geo/languages');
 // Includes
 include('wp-geo-markers.php');
 include('wp-geo-map.php');
+
+// Admin Includes
+if ( is_admin() )
+{
+	include_once( 'admin/class.editor.php' );
+}
 
 // Init.
 $wpgeo = new WPGeo();
