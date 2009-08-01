@@ -1474,55 +1474,6 @@ class WPGeo
 	
 	
 	
-	/**
-	 * GeoRSS Namespace
-	 */
-	function georss_namespace() 
-	{
-	
-		global $wpgeo;
-		
-		if ($wpgeo->show_maps())
-		{			
-			echo 'xmlns:georss="http://www.georss.org/georss" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:ymaps="http://api.maps.yahoo.com/Maps/V2/AnnotatedMaps.xsd"';
- 		}
-	
-	}
-
-
-
-	/**
-	 * GeoRSS Tag
-	 */
-	function georss_item() 
-	{
-	
-		global $wpgeo;
-		
-		if ($wpgeo->show_maps())
-		{
-			global $post;
-			
-			// Get the post
-			$id = $post->ID;		
-		
-			// Get latitude and longitude
-			$latitude = get_post_meta($post->ID, '_wp_geo_latitude', true);
-			$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
-			
-			// Need a map?
-			if (is_numeric($latitude) && is_numeric($longitude))
-			{
-				echo '<georss:point>' . $latitude . ' ' . $longitude . '</georss:point>';
-				echo '<geo:lat>' . $latitude . '</geo:lat>';
-				echo '<geo:long>' . $longitude . '</geo:long>';
-			}
-		}
-		
-	}
-	
-	
-	
 	/* =============== Admin Edit Pages =============== */
 	
 	
