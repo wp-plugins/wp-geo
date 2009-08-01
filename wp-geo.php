@@ -45,6 +45,7 @@ class WPGeo
 	var $plugin_message = '';
 	var $maps;
 	var $editor;
+	var $feeds;
 	
 	
 	/**
@@ -55,6 +56,7 @@ class WPGeo
 		
 		$this->maps = array();
 		$this->markers = new WPGeoMarkers();
+		$this->feeds = new WPGeo_Feeds();
 		
 	}
 	
@@ -1669,6 +1671,7 @@ load_plugin_textdomain('wp-geo', PLUGINDIR . '/wp-geo/languages');
 // Includes
 include('wp-geo-markers.php');
 include('wp-geo-map.php');
+include( 'includes/class.feeds.php' );
 
 // Admin Includes
 if ( is_admin() )
@@ -1696,15 +1699,6 @@ add_action('admin_init', array($wpgeo, 'admin_init'));
 add_action('admin_menu', array($wpgeo, 'admin_menu'));
 add_action('admin_head', array($wpgeo, 'admin_head'));
 add_action('after_plugin_row', array($wpgeo, 'after_plugin_row'));
-
-// Feed Hooks
-add_action('rss2_ns', array($wpgeo, 'georss_namespace'));
-add_action('atom_ns', array($wpgeo, 'georss_namespace'));
-add_action('rdf_ns', array($wpgeo, 'georss_namespace'));
-add_action('rss_item', array($wpgeo, 'georss_item'));
-add_action('rss2_item', array($wpgeo, 'georss_item'));
-add_action('atom_entry', array($wpgeo, 'georss_item'));
-add_action('rdf_item', array($wpgeo, 'georss_item'));
 
 add_filter('post_limits', array($wpgeo, 'post_limits'));
 add_filter('posts_join', array($wpgeo, 'posts_join'));
