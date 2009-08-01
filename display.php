@@ -62,37 +62,41 @@ class WPGeoDisplay
 	function render()
 	{
 		
-		echo '
-			<script type="text/javascript">
-			
-			function renderWPGeo() {
-				if (GBrowserIsCompatible()) {
-				';
-		foreach ( $this->maps as $map )
-		{
-			echo '
-				map = new GMap2(document.getElementById("wpgeo-' . $map['id'] . '"));
-				map.setCenter(new GLatLng(41.875696,-87.624207), 3);
-				geoXml = new GGeoXml("' . $map['rss'] . '");
-				GEvent.addListener(geoXml, "load", function() {
-					geoXml.gotoDefaultViewport(map);
-				});
-				map.addOverlay(geoXml);
-				';
-		}
-		echo '}
-			}
+		if ( count( $this->maps ) > 0 ) {
 		
-			if (document.all&&window.attachEvent) { // IE-Win
-				window.attachEvent("onload", function () { renderWPGeo(); });
-				window.attachEvent("onunload", GUnload);
-			} else if (window.addEventListener) { // Others
-				window.addEventListener("load", function () { renderWPGeo(); }, false);
-				window.addEventListener("unload", GUnload, false);
+			echo '
+				<script type="text/javascript">
+				
+				function renderWPGeo() {
+					if (GBrowserIsCompatible()) {
+					';
+			foreach ( $this->maps as $map )
+			{
+				echo '
+					map = new GMap2(document.getElementById("wpgeo-' . $map['id'] . '"));
+					map.setCenter(new GLatLng(41.875696,-87.624207), 3);
+					geoXml = new GGeoXml("' . $map['rss'] . '");
+					GEvent.addListener(geoXml, "load", function() {
+						geoXml.gotoDefaultViewport(map);
+					});
+					map.addOverlay(geoXml);
+					';
 			}
+			echo '}
+				}
 			
-			</script>
-			';
+				if (document.all&&window.attachEvent) { // IE-Win
+					window.attachEvent("onload", function () { renderWPGeo(); });
+					window.attachEvent("onunload", GUnload);
+				} else if (window.addEventListener) { // Others
+					window.addEventListener("load", function () { renderWPGeo(); }, false);
+					window.addEventListener("unload", GUnload, false);
+				}
+				
+				</script>
+				';
+		
+		}
 		
 	}
 	
