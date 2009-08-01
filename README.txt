@@ -4,7 +4,7 @@ Donate link: http://www.wpgeo.com/donate
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
 Tested up to: 2.8.2
-Stable tag: 3.0.9
+Stable tag: 3.0.9.1
 
 Add location maps to your posts and pages.
 
@@ -71,6 +71,11 @@ If upgrading from a previous version of the plugin:
 3. Admin Settings
 
 == Changelog ==
+
+= WP Geo 3.0.9.1 =
+
+* Fix for GUnload() and GBrowserIsCompatible() being called when not available/required.
+* Russian language added.
 
 = WP Geo 3.0.9 =
 
