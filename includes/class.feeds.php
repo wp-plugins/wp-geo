@@ -68,7 +68,7 @@ class WPGeo_Feeds
 	
 
 	/**
-	 * @method  GeoRSS Item
+	 * @method       GeoRSS Item
 	 * @description  Adds geo RSS nodes to the feed item.
 	 */
 	
