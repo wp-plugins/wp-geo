@@ -666,7 +666,7 @@ class WPGeo
 		
 		// Google AJAX API
 		// Loads on all pages unless via proxy domain
-		if ($wpgeo->check_domain() && $wpgeo->checkGoogleAPIKey())
+		if ( wpgeo_check_domain() && $wpgeo->checkGoogleAPIKey() )
 		{
 			wp_register_script('google_jsapi', 'http://www.google.com/jsapi?key=' . $wp_geo_options['google_api_key'], false, '1.0');
 			wp_enqueue_script('google_jsapi');
@@ -957,7 +957,7 @@ class WPGeo
 		$wp_geo_options = get_option('wp_geo_options');
 		
 		// Check if domain is correct
-		if (!$this->check_domain())
+		if ( !wpgeo_check_domain() )
 		{
 			return false;
 		}
@@ -1000,26 +1000,6 @@ class WPGeo
 	}
 	
 	
-	
-	/**
-	 * ---------- Check Domain ----------
-	 * This function checks that the domainname of the page matches the blog site url.
-	 * If it doesn't match we can prevent maps from showing as the Google API Key will not be valid.
-	 * This prevent warnings if the site is accessed through Google cache.
-	 */
-	function check_domain()
-	{
-	
-		$host = 'http://' . rtrim($_SERVER["HTTP_HOST"], "/");
-		$blog = preg_replace("/(http:\/\/[^\/]*).*/", "$1", get_bloginfo('siteurl')); // Blog might not be in site root so strip to domain
-		
-		$match = $host == $blog ? true : false;
-		
-		return $match;
-		
-	}
-
-
 
 	/**
 	 * Options Checkbox
@@ -1055,8 +1035,8 @@ class WPGeo
 			$wp_geo_options['google_api_key'] = $_POST['google_api_key'];
 			$wp_geo_options['google_map_type'] = $_POST['google_map_type'];
 			$wp_geo_options['show_post_map'] = $_POST['show_post_map'];
-			$wp_geo_options['default_map_width'] = $wpgeo->numberPercentOrPx($_POST['default_map_width']);
-			$wp_geo_options['default_map_height'] = $wpgeo->numberPercentOrPx($_POST['default_map_height']);
+			$wp_geo_options['default_map_width'] = wpgeo_css_dimension( $_POST['default_map_width'] );
+			$wp_geo_options['default_map_height'] = wpgeo_css_dimension( $_POST['default_map_height'] );
 			$wp_geo_options['default_map_zoom'] = $_POST['default_map_zoom'];
 			
 			$wp_geo_options['default_map_control'] = $_POST['default_map_control'];
@@ -1223,22 +1203,6 @@ class WPGeo
 	}
 	
 	
-	
-	/**
-	 * Number Percent Or Px
-	 */
-	function numberPercentOrPx($str = false)
-	{
-	
-		if (is_numeric($str))
-		{
-			$str .= 'px';
-		}
-		return $str;
-	
-	}
-
-
 
 	/**
 	 * Select Map Control
@@ -1622,6 +1586,7 @@ load_plugin_textdomain('wp-geo', PLUGINDIR . '/wp-geo/languages');
 // Includes
 include('wp-geo-markers.php');
 include('wp-geo-map.php');
+include( 'includes/functions.php' );
 include( 'includes/class.feeds.php' );
 
 // Admin Includes
