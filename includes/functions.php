@@ -13,6 +13,7 @@
 /**
  * @method       CSS Dimension
  * @description  If numeric assumes pixels and adds 'px', otherwise treated as string.
+ * @return       $str Dimension as string
  */
 
 function wpgeo_css_dimension( $str = false )
@@ -33,6 +34,7 @@ function wpgeo_css_dimension( $str = false )
  * @description  This function checks that the domainname of the page matches the blog site url.
  *               If it doesn't match we can prevent maps from showing as the Google API Key will not be valid.
  *               This prevent warnings if the site is accessed through Google cache.
+ * @return       $match Boolean
  */
 
 function wpgeo_check_domain()

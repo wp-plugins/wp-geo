@@ -52,6 +52,7 @@ class WPGeo_Editor
 	 * @method       Register Map Button
 	 * @description  This function add the WP Geo map button to the editor.
 	 * @parameter    $buttons = Array of editor buttons
+	 * @return       $buttons array
 	 */
 	
 	function register_map_button( $buttons )
@@ -68,6 +69,7 @@ class WPGeo_Editor
 	 * @method       Load TinyMCE WP Geo Plugin
 	 * @description  This function add the WP Geo map button to the editor.
 	 * @parameter    $plugin_array = Array of TinyMCE plugins
+	 * @return       $plugin_array array
 	 */
 	
 	function add_map_plugin( $plugin_array )
