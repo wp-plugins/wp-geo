@@ -1596,6 +1596,7 @@ if ( is_admin() )
 }
 
 // Init.
+global $wpgeo;
 $wpgeo = new WPGeo();
 
 // Hooks
