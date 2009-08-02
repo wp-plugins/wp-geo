@@ -196,17 +196,14 @@ If upgrading from a previous version of the plugin:
 * Added option to set map type.
 * Added option to set wether maps appear at the top or bottom of posts.
 
-== License ==
-Copyright (C) 2008 Ben Huson
+== Languages ==
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+WP Geo is currently available in the following languages:
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
-
-http://www.gnu.org/licenses/gpl.html
+* English (default)
+* Danish (by <a href="http://wordpress.blogos.dk/s¿g-efter-downloads/?did=91">Georg</a>)
+* French
+* German
+* Italian
+* Russian (by <a href="http://www.fatcow.com/">Fat Cower</a>)
+* Spanish
