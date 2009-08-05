@@ -22,8 +22,78 @@ class WPGeo_Feeds
 	function WPGeo_Feeds()
 	{
 	
+		add_action( 'init', array( $this, 'init' ) );
+		
+	}
+	
+	
+	
+	/**
+	 * @method       Init.
+	 * @description  Initialise WP Geo feeds.
+	 */
+	
+	function init() 
+	{
+	
+		// Add GeoRSS Feed Type
+		add_feed( 'georss', array( 'WPGeo_Feeds', 'add_feed_georss' ) );
+		add_filter( 'feed_content_type', array( $this, 'feed_content_type' ),Ê100Ê);
+		add_filter( 'post_limits', array( $this, 'post_limits' ) );
+		
 		$this->add_feed_hooks();
 		
+	}
+	
+	
+	
+	/**
+	 * @method       Post Limits
+	 * @description  Adjusts the post limits on feeds.
+	 */
+	
+	function post_limits( $limits ) 
+	{
+	
+		global $wp_query;
+		
+		// If GeoRSS feed, return all...
+		if ( is_feed() && $wp_query->get('feed') == 'georss' ) {
+			return '';
+		}
+		
+		return $limits;
+		
+	}
+	
+	
+	
+	/**
+	 * @method       Feed content type
+	 * @description  Initialise WP Geo feeds.
+	 */
+	
+	function feed_content_type( $type ) 
+	{
+		
+		if ( $type == 'georss' ) {
+			$type = 'application/rss+xml';
+		}
+		
+		return $type;
+		
+	}
+	
+	
+	
+	/**
+	 * @method       Add GeoRSS Feed
+	 * @description  Adds permalink rewrite GeoRSS feed.
+	 */
+	
+	function add_feed_georss() 
+	{
+		load_template( ABSPATH . 'wp-includes/feed-rss2.php' );
 	}
 	
 	
@@ -35,7 +105,7 @@ class WPGeo_Feeds
 	
 	function add_feed_hooks() 
 	{
-	
+		
 		add_action( 'rss2_ns', array( $this, 'georss_namespace' ) );
 		add_action( 'atom_ns', array( $this, 'georss_namespace' ) );
 		add_action( 'rdf_ns', array( $this, 'georss_namespace' ) );
