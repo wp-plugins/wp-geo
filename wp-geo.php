@@ -758,6 +758,8 @@ class WPGeo
 						lngField.value = coords.lng();
 					});
 					
+					' . apply_filters( 'wpgeo_map_js_preoverlays', 'map' ) . '
+					
 					map.addOverlay(marker);
 					
 					' . $panel_open . '

@@ -143,6 +143,8 @@ class WPGeoMap
 		$js .= '
 				var center_' . $map_id .' = new GLatLng(' . $this->points[0]['latitude'] . ', ' . $this->points[0]['longitude'] . ');
 				
+				' . apply_filters( 'wpgeo_map_js_preoverlays',  'map_' . $map_id ) . '
+				
 				' . $js_markers . '
 				' . $js_polyline . '
     			' . $js_zoom . '
