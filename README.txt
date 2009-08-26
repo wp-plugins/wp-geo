@@ -3,8 +3,8 @@ Contributors: Ben Huson
 Donate link: http://www.wpgeo.com/donate
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
-Tested up to: 2.8.2
-Stable tag: 3.0.9.1
+Tested up to: 2.8.4
+Stable tag: 3.0.9.2
 
 Add location maps to your posts and pages.
 
@@ -71,6 +71,11 @@ If upgrading from a previous version of the plugin:
 3. Admin Settings
 
 == Changelog ==
+
+= WP Geo 3.0.9.2 =
+
+* Belorussian language added.
+* Added 'wpgeo_map_js_preoverlays' hook for developers to add javascript to maps.
 
 = WP Geo 3.0.9.1 =
 
