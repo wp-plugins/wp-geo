@@ -74,6 +74,8 @@ class WPGeo
 			'google_api_key' => '', 
 			'google_map_type' => 'G_NORMAL_MAP', 
 			'show_post_map' => 'TOP', 
+			'default_map_latitude' => '51.492526418807465',
+			'default_map_longitude' => '-0.15754222869873047',
 			'default_map_width' => '100%', 
 			'default_map_height' => '300px',
 			'default_map_zoom' => '5',
@@ -620,8 +622,8 @@ class WPGeo
 		if (!is_numeric($latitude) || !is_numeric($longitude))
 		{
 			// Centre on London
-			$latitude = 51.492526418807465;
-			$longitude = -0.15754222869873047;
+			$latitude = $wp_geo_options['default_map_latitude'];
+			$longitude = $wp_geo_options['default_map_longitude'];
 			$zoom = $wp_geo_options['default_map_zoom']; // Default 5;
 			$panel_open = true;
 			$hide_marker = true;
@@ -950,6 +952,8 @@ class WPGeo
 			$wp_geo_options['google_api_key'] = $_POST['google_api_key'];
 			$wp_geo_options['google_map_type'] = $_POST['google_map_type'];
 			$wp_geo_options['show_post_map'] = $_POST['show_post_map'];
+			$wp_geo_options['default_map_latitude'] = $_POST['default_map_latitude'];
+			$wp_geo_options['default_map_longitude'] = $_POST['default_map_longitude'];
 			$wp_geo_options['default_map_width'] = wpgeo_css_dimension( $_POST['default_map_width'] );
 			$wp_geo_options['default_map_height'] = wpgeo_css_dimension( $_POST['default_map_height'] );
 			$wp_geo_options['default_map_zoom'] = $_POST['default_map_zoom'];
@@ -1013,6 +1017,13 @@ class WPGeo
 					<tr valign="top">
 						<th scope="row">' . __('Show Post Map', 'wp-geo') . '</th>
 						<td>' . $wpgeo->post_map_menu('menu', $wp_geo_options['show_post_map']) . '</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">' . __('Default Map Location', 'wp-geo') . '</th>
+						<td>
+							<label for="default_map_latitude" style="width:70px; display:inline-block;">Latitude</label> <input name="default_map_latitude" type="text" id="default_map_latitude" value="' . $wp_geo_options['default_map_latitude'] . '" size="25" /><br />
+							<label for="default_map_longitude" style="width:70px; display:inline-block;">Longitude</label> <input name="default_map_longitude" type="text" id="default_map_longitude" value="' . $wp_geo_options['default_map_longitude'] . '" size="25" />
+						</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">' . __('Default Map Width', 'wp-geo') . '</th>
