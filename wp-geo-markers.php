@@ -27,6 +27,21 @@ class WPGeoMarkers
 	}
 	
 	
+	
+	/**
+	 * Marker Folder Exists
+	 */
+	function marker_folder_exists()
+	{
+		
+		if ( is_dir(WP_CONTENT_DIR . '/uploads/wp-geo/markers') ) {
+			return true;
+		}
+		return false;
+		
+	}
+	
+	
 
 	/**
 	 * Register Activation

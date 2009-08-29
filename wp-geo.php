@@ -1005,6 +1005,10 @@ class WPGeo
 		{
 			echo '<div class="error"><p>Before you can use Wp Geo you must acquire a <a href="http://code.google.com/apis/maps/signup.html">Google API Key</a> for your blog - the plugin will not function without it!</p></div>';
 		}
+		if ( !$wpgeo->markers->marker_folder_exists() )
+		{
+			echo '<div class="error"><p>Unable to create the markers folder /wp-content/uploads/wp-geo/markers.<br />Please create it and copy the marker images to it from /wp-content/plugins/wp-geo/img/markers</p></div>';
+		}
 		echo '<table class="form-table">
 					<tr valign="top">
 						<th scope="row">' . __('Google API Key', 'wp-geo') . '</th>
