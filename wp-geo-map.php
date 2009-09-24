@@ -150,6 +150,10 @@ class WPGeoMap
     			' . $js_zoom . '
     			' . $js_controls . '
 				
+				//map_' . $map_id . '.addOverlay(new GLayer("org.wikipedia.en"));
+				//map_' . $map_id . '.addOverlay(new GLayer("com.panoramio.all"));
+				//map_' . $map_id . '.addControl(new google.maps.LocalSearch()); // http://googleajaxsearchapi.blogspot.com/2007/06/local-search-control-for-maps-api.html
+				
 			}';
 		
 		return $js;
