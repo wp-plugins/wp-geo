@@ -252,7 +252,7 @@ class WPGeoWidget
 		
 				for ($i = 0; $i < count($coords); $i++)
 				{
-					$markers_js .= 'marker' . $i . ' = wpgeo_createMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), wpgeo_icon_small, "' . addslashes($coords[$i]['title']) . '", "' . get_permalink($coords[$i]['id']) . '");' . "\n";
+					$markers_js .= 'marker' . $i . ' = wpgeo_createMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), wpgeo_icon_small, "' . addslashes(__($coords[$i]['title'])) . '", "' . get_permalink($coords[$i]['id']) . '");' . "\n";
 				}
 							
 				// Html JS
