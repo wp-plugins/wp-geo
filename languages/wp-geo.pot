@@ -295,3 +295,19 @@ msgstr ""
 # Admin - Marker Title
 msgid "Marker Title"
 msgstr ""
+
+# Admin - Donate Links - Support this plugin
+msgid "Support this plugin"
+msgstr ""
+
+# Admin - Donate Links - Make a Donation
+msgid "Make a Donation"
+msgstr ""
+
+# Admin - Donate Links - Buy me something
+msgid "Buy me something"
+msgstr ""
+
+# Admin - Donate Links - Follow me on Twitter
+msgid "Follow me on Twitter"
+msgstr ""
