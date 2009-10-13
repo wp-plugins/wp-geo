@@ -292,4 +292,6 @@ msgstr ""
 msgid "Polyline Colour"
 msgstr ""
 
-
+# Admin - Marker Title
+msgid "Marker Title"
+msgstr ""

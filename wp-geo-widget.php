@@ -210,7 +210,10 @@ class WPGeoWidget
 				$latitude 	= get_post_meta($post->ID, '_wp_geo_latitude', true);
 				$longitude 	= get_post_meta($post->ID, '_wp_geo_longitude', true);
 				$post_id 	= get_post($post->ID);
-				$title 		= $post_id->post_title;
+				$title 	    = get_post_meta($post->ID, '_wp_geo_title', true);
+				if ( empty($title) ) {
+					$title = $post_id->post_title;
+				}
 				
 				if (is_numeric($latitude) && is_numeric($longitude))
 				{

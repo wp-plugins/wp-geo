@@ -273,14 +273,17 @@ class WPGeo
 			
 			$lat =  get_post_meta($post->ID, '_wp_geo_latitude', true);
 			$long =  get_post_meta($post->ID, '_wp_geo_longitude', true);
+			$title =  get_post_meta($post->ID, '_wp_geo_title', true);
 			$nl = "\n";
 			
 			if (is_numeric($lat) && is_numeric($long))
 			{
 				echo '<meta name="geo.position" content="' . $lat . ';' . $long . '" />' . $nl; // Geo-Tag: Latitude and longitude
-				//echo '<meta name="geo.region" content="DE-BY" />' . $nl;               // Geo-Tag: Country code (ISO 3166-1) and regional code (ISO 3166-2)
-				//echo '<meta name="geo.placename" content="MŸnchen" />' . $nl;          // Geo-Tag: City or the nearest town
-				//echo '<meta name="DC.title" content="Geo Tag Validator" />' . $nl;     // Dublin Core Meta Tag Title (used by some geo databases)
+				//echo '<meta name="geo.region" content="DE-BY" />' . $nl;                      // Geo-Tag: Country code (ISO 3166-1) and regional code (ISO 3166-2)
+				//echo '<meta name="geo.placename" content="MŸnchen" />' . $nl;                 // Geo-Tag: City or the nearest town
+				if ( !empty($title) ) {
+					echo '<meta name="DC.title" content="' . $title . '" />' . $nl;             // Dublin Core Meta Tag Title (used by some geo databases)
+				}
 				echo '<meta name="ICBM" content="' . $lat . ', ' . $long . '" />' . $nl;        // ICBM Tag (prior existing equivalent to the geo.position)
 			}
 		}
@@ -352,6 +355,10 @@ class WPGeo
 				$post = $posts[$i];
 				$latitude = get_post_meta($post->ID, '_wp_geo_latitude', true);
 				$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
+				$title = get_post_meta($post->ID, '_wp_geo_title', true);
+				if ( empty($title) ) {
+					$title = $post->post_title;
+				}
 				
 				if (is_numeric($latitude) && is_numeric($longitude))
 				{
@@ -359,7 +366,7 @@ class WPGeo
 						'id' => $post->ID,
 						'latitude' => $latitude,
 						'longitude' => $longitude,
-						'title' => $post->post_title,
+						'title' => $title,
 						'link' => $post->guid
 					);
 					array_push($coords, $push);
@@ -370,7 +377,7 @@ class WPGeo
 					$map = new WPGeoMap($post->ID);										// Create map
 					
 					// Add point
-					$map->addPoint($latitude, $longitude, 'wpgeo_icon_large', $post->post_title, $post->guid);
+					$map->addPoint($latitude, $longitude, 'wpgeo_icon_large', $title, $post->guid);
 					
 					$map->setMapZoom($wp_geo_options['default_map_zoom']);				// Set zoom
 					$map->setMapType($maptype);											// Set map type
@@ -1407,6 +1414,7 @@ class WPGeo
 		
 		$latitude = get_post_meta($post->ID, '_wp_geo_latitude', true);
 		$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
+		$title = get_post_meta($post->ID, '_wp_geo_title', true);
 		
 		// Use nonce for verification
 		echo '<input type="hidden" name="wpgeo_location_noncename" id="wpgeo_location_noncename" value="' . wp_create_nonce(plugin_basename(__FILE__)) . '" />';
@@ -1427,6 +1435,10 @@ class WPGeo
 			<tr>
 				<th scope="row">' . __('Latitude', 'wp-geo') . ', ' . __('Longitude', 'wp-geo') . '<br /><a href="#" onclick="clearLatLngFields(); return false;">' . __('clear location', 'wp-geo') . '</a></th>
 				<td><input name="wp_geo_latitude" type="text" size="25" id="wp_geo_latitude" value="' . $latitude . '" /> <input name="wp_geo_longitude" type="text" size="25" id="wp_geo_longitude" value="' . $longitude . '" /></td>
+			</tr>
+			<tr>
+				<th scope="row">' . __('Marker Title', 'wp-geo') . '</th>
+				<td><input name="wp_geo_title" type="text" size="25" style="width:100%;" id="wp_geo_title" value="' . $title . '" /></td>
 			</tr>
 		</table>';
 		
@@ -1481,7 +1493,9 @@ class WPGeo
 				return $post_id;
 		}
 		
-		// Find and save the data
+		$mydata = array();
+		
+		// Find and save the location data
 		if (isset($_POST['wp_geo_latitude']) && isset($_POST['wp_geo_longitude']))
 		{
 			
@@ -1494,14 +1508,26 @@ class WPGeo
 				add_post_meta($post_id, '_wp_geo_latitude', $_POST['wp_geo_latitude']);
 				add_post_meta($post_id, '_wp_geo_longitude', $_POST['wp_geo_longitude']);
 				
-				$mydata = array('_wp_geo_latitude' => $_POST['wp_geo_latitude'], '_wp_geo_longitude' => $_POST['wp_geo_longitude']);
-				return $mydata;
-		
+				$mydata['_wp_geo_latitude']  = $_POST['wp_geo_latitude'];
+				$mydata['_wp_geo_longitude'] = $_POST['wp_geo_longitude'];
+				
 			}
 			
 		}
 		
-		return false;
+		// Find and save the settings data
+		if ( isset($_POST['wp_geo_title']) ) {
+			
+			delete_post_meta($post_id, '_wp_geo_title');
+			
+			if ( !empty($_POST['wp_geo_title']) ) {
+				add_post_meta($post_id, '_wp_geo_title', $_POST['wp_geo_title']);
+				$mydata['_wp_geo_title']  = $_POST['wp_geo_title'];
+			}
+			
+		}
+		
+		return $mydata;
 	
 	}
 	
