@@ -347,6 +347,7 @@ class WPGeo
 			
 			$wp_geo_options = get_option('wp_geo_options');
 			$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];
+			$mapzoom = $wp_geo_options['default_map_zoom'];
 			
 			// Coords to show on map?
 			$coords = array();
@@ -356,8 +357,20 @@ class WPGeo
 				$latitude = get_post_meta($post->ID, '_wp_geo_latitude', true);
 				$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
 				$title = get_post_meta($post->ID, '_wp_geo_title', true);
+				$settings = get_post_meta($post->ID, '_wp_geo_map_settings', true);
+				
 				if ( empty($title) ) {
 					$title = $post->post_title;
+				}
+				
+				$mymaptype = $maptype;
+				if ( isset($settings['type']) && !empty($settings['type']) ) {
+					$mymaptype = $settings['type'];
+				}
+				
+				$mymapzoom = $mapzoom;
+				if ( isset($settings['zoom']) && !empty($settings['zoom']) ) {
+					$mymapzoom = $settings['zoom'];
 				}
 				
 				if (is_numeric($latitude) && is_numeric($longitude))
@@ -379,8 +392,8 @@ class WPGeo
 					// Add point
 					$map->addPoint($latitude, $longitude, 'wpgeo_icon_large', $title, $post->guid);
 					
-					$map->setMapZoom($wp_geo_options['default_map_zoom']);				// Set zoom
-					$map->setMapType($maptype);											// Set map type
+					$map->setMapZoom($mymapzoom);										// Set zoom
+					$map->setMapType($mymaptype);										// Set map type
 					
 					if ($wp_geo_options['show_map_type_physical'] == 'Y')
 						$map->addMapType('G_PHYSICAL_MAP');								// Show PHYSICAL map?
@@ -422,7 +435,7 @@ class WPGeo
 					$map->addPoint($coords[$j]['latitude'], $coords[$j]['longitude'], 'wpgeo_icon_small', $coords[$j]['title'], $coords[$j]['link']);
 				}
 				
-				$map->setMapZoom($wp_geo_options['default_map_zoom']);			// Set zoom
+				$map->setMapZoom($mapzoom);										// Set zoom
 				$map->setMapType($maptype);										// Set map type
 				
 				if ($wp_geo_options['show_map_type_physical'] == 'Y')			// Show PHYSICAL map?
@@ -621,7 +634,7 @@ class WPGeo
 	function mapScriptsInit($latitude, $longitude, $zoom = 5, $panel_open = false, $hide_marker = false)
 	{
 		
-		global $wpgeo;
+		global $wpgeo, $post;
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];	
@@ -634,6 +647,16 @@ class WPGeo
 			$zoom = $wp_geo_options['default_map_zoom']; // Default 5;
 			$panel_open = true;
 			$hide_marker = true;
+		}
+		
+		if ( is_numeric($post->ID) && $post->ID > 0 ) {
+			$settings = get_post_meta($post->ID, '_wp_geo_map_settings', true);
+			if ( is_numeric($settings['zoom']) ) {
+				$zoom = $settings['zoom'];
+			}
+			if ( !empty($settings['type']) ) {
+				$maptype = $settings['type'];
+			}
 		}
 		
 		// Vars
@@ -722,6 +745,47 @@ class WPGeo
 				}
 			}
 			
+			function getMapTypeContentFromUrlArg( arg ) {
+				if (arg == G_NORMAL_MAP.getUrlArg()) {
+					return "G_NORMAL_MAP";
+				} else if (arg == G_SATELLITE_MAP.getUrlArg()) {
+					return "G_SATELLITE_MAP";
+				} else if (arg == G_HYBRID_MAP.getUrlArg()) {
+					return "G_HYBRID_MAP";
+				} else if (arg == G_PHYSICAL_MAP.getUrlArg()) {
+					return "G_PHYSICAL_MAP";
+				} else if (arg == G_MAPMAKER_NORMAL_MAP.getUrlArg()) {
+					return "G_MAPMAKER_NORMAL_MAP";
+				} else if (arg == G_MAPMAKER_HYBRID_MAP.getUrlArg()) {
+					return "G_MAPMAKER_HYBRID_MAP";
+				} else if (arg == G_MOON_ELEVATION_MAP.getUrlArg()) {
+					return "G_MOON_ELEVATION_MAP";
+				} else if (arg == G_MOON_VISIBLE_MAP.getUrlArg()) {
+					return "G_MOON_VISIBLE_MAP";
+				} else if (arg == G_MARS_ELEVATION_MAP.getUrlArg()) {
+					return "G_MARS_ELEVATION_MAP";
+				} else if (arg == G_MARS_VISIBLE_MAP.getUrlArg()) {
+					return "G_MARS_VISIBLE_MAP";
+				} else if (arg == G_MARS_INFRARED_MAP.getUrlArg()) {
+					return "G_MARS_INFRARED_MAP";
+				} else if (arg == G_SKY_VISIBLE_MAP.getUrlArg()) {
+					return "G_SKY_VISIBLE_MAP";
+				} else if (arg == G_SATELLITE_3D_MAP.getUrlArg()) {
+					return "G_SATELLITE_3D_MAP";
+				} else if (arg == G_DEFAULT_MAP_TYPES.getUrlArg()) {
+					return "G_DEFAULT_MAP_TYPES";
+				} else if (arg == G_MAPMAKER_MAP_TYPES.getUrlArg()) {
+					return "G_MAPMAKER_MAP_TYPES";
+				} else if (arg == G_MOON_MAP_TYPES.getUrlArg()) {
+					return "G_MOON_MAP_TYPES";
+				} else if (arg == G_MARS_MAP_TYPES.getUrlArg()) {
+					return "G_MARS_MAP_TYPES";
+				} else if (arg == G_SKY_MAP_TYPES.getUrlArg()) {
+					return "G_SKY_MAP_TYPES";
+				}
+				return "";
+			}
+			
 			function init_wp_geo_map_admin()
 			{
 				if (GBrowserIsCompatible() && document.getElementById("wp_geo_map"))
@@ -731,12 +795,17 @@ class WPGeo
 					map.setCenter(center, ' . $zoom . ');
 					map.addMapType(G_PHYSICAL_MAP);
 					
+					var zoom_setting = document.getElementById("wpgeo_map_settings_zoom");
+					zoom_setting.value = ' . $zoom . ';
+					
 					// Map Controls
 					var mapTypeControl = new GMapTypeControl();
 					map.addControl(new GLargeMapControl());
 					map.addControl(mapTypeControl);
 					
 					map.setMapType(' . $maptype . ');
+					var type_setting = document.getElementById("wpgeo_map_settings_type");
+					type_setting.value = getMapTypeContentFromUrlArg(map.getCurrentMapType().getUrlArg());
 					
 					geocoder = new GClientGeocoder();
 					 
@@ -749,7 +818,14 @@ class WPGeo
 						marker.show();
 					});
 					
+					GEvent.addListener(map, "maptypechanged", function() {
+						var type_setting = document.getElementById("wpgeo_map_settings_type");
+						type_setting.value = getMapTypeContentFromUrlArg(map.getCurrentMapType().getUrlArg());
+					});
+					
 					GEvent.addListener(map, "zoomend", function(oldLevel, newLevel) {
+						var zoom_setting = document.getElementById("wpgeo_map_settings_zoom");
+						zoom_setting.value = newLevel;
 						map.setCenter(marker.getLatLng());
 					});
 					
@@ -1415,6 +1491,21 @@ class WPGeo
 		$latitude = get_post_meta($post->ID, '_wp_geo_latitude', true);
 		$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
 		$title = get_post_meta($post->ID, '_wp_geo_title', true);
+		$settings = get_post_meta($post->ID, '_wp_geo_map_settings', true);
+		
+		$wpgeo_map_settings_zoom = '';
+		$wpgeo_map_settings_type = '';
+		$wpgeo_map_settings_zoom_checked = '';
+		$wpgeo_map_settings_type_checked = '';
+		
+		if ( isset($settings['zoom']) && !empty($settings['zoom']) ) {
+			$wpgeo_map_settings_zoom = $settings['zoom'];
+			$wpgeo_map_settings_zoom_checked = ' checked="checked"';
+		}
+		if ( isset($settings['type']) && !empty($settings['type']) ) {
+			$wpgeo_map_settings_type = $settings['type'];
+			$wpgeo_map_settings_type_checked = ' checked="checked"';
+		}
 		
 		// Use nonce for verification
 		echo '<input type="hidden" name="wpgeo_location_noncename" id="wpgeo_location_noncename" value="' . wp_create_nonce(plugin_basename(__FILE__)) . '" />';
@@ -1439,6 +1530,13 @@ class WPGeo
 			<tr>
 				<th scope="row">' . __('Marker Title', 'wp-geo') . '</th>
 				<td><input name="wp_geo_title" type="text" size="25" style="width:100%;" id="wp_geo_title" value="' . $title . '" /></td>
+			</tr>
+			<tr>
+				<th scope="row">' . __('Map Settings', 'wp-geo') . '</th>
+				<td>
+					<label for="wpgeo_map_settings_zoom"><input type="checkbox" name="wpgeo_map_settings_zoom" id="wpgeo_map_settings_zoom" value="' . $wpgeo_map_settings_zoom . '"' . $wpgeo_map_settings_zoom_checked . ' /> ' . __('Save custom map zoom for this post', 'wp-geo') . '</label><br />
+					<label for="wpgeo_map_settings_type"><input type="checkbox" name="wpgeo_map_settings_type" id="wpgeo_map_settings_type" value="' . $wpgeo_map_settings_type . '"' . $wpgeo_map_settings_type_checked . ' /> ' . __('Save custom map type for this post', 'wp-geo') . '</label>
+				</td>
 			</tr>
 		</table>';
 		
@@ -1515,7 +1613,7 @@ class WPGeo
 			
 		}
 		
-		// Find and save the settings data
+		// Find and save the title data
 		if ( isset($_POST['wp_geo_title']) ) {
 			
 			delete_post_meta($post_id, '_wp_geo_title');
@@ -1526,6 +1624,21 @@ class WPGeo
 			}
 			
 		}
+		
+		// Find and save the settings data
+		
+		delete_post_meta($post_id, '_wp_geo_map_settings');
+		
+		$settings = array();
+		if ( isset($_POST['wpgeo_map_settings_zoom']) && !empty($_POST['wpgeo_map_settings_zoom']) ) {
+			$settings['zoom'] = $_POST['wpgeo_map_settings_zoom'];
+		}
+		if ( isset($_POST['wpgeo_map_settings_type']) && !empty($_POST['wpgeo_map_settings_type']) ) {
+			$settings['type'] = $_POST['wpgeo_map_settings_type'];
+		}
+		
+		add_post_meta($post_id, '_wp_geo_map_settings', $settings);
+		$mydata['_wp_geo_map_settings'] = $settings;
 		
 		return $mydata;
 	
