@@ -5,7 +5,7 @@
 /**
 * WP Geo Widget
 * @author Marco Alionso Ramirez, marco@onemarco.com, updated by Ben Huson, ben@thewhiteroom.net
-* @version 1.2
+* @version 1.3
 * Adds a geocoding widget to WordPress (requires WP Geo plugin)
 */
 
@@ -24,7 +24,7 @@ class WPGeoWidget
 	 * Properties
 	 */
 	 
-	var $version = '1.2';
+	var $version = '1.3';
 	
 	
 
@@ -67,6 +67,8 @@ class WPGeoWidget
 			$height 		= empty( $options['height'] ) ? '' : $options['height'];
 			$maptype 		= empty( $options['maptype'] ) ? '' : $options['maptype'];
 			$showpolylines 	= $wp_geo_options['show_polylines'] == 'Y' ? true : false;
+			$zoom 	 	    = is_numeric( $options['zoom'] ) ? $options['zoom'] : $wp_geo_options['default_map_zoom'];
+			
 			if ($options['show_polylines'] == 'Y' || $options['show_polylines'] == 'N')
 			{
 				$showpolylines = $options['show_polylines'] == 'Y' ? true : false;
@@ -74,11 +76,11 @@ class WPGeoWidget
 			
 			// Start write widget
 			$html_content = '';
-			$map_content = WPGeoWidget::add_map($width, $height, $maptype, $showpolylines);
+			$map_content = WPGeoWidget::add_map($width, $height, $maptype, $showpolylines, $zoom);
 			
 			if (!empty($map_content))
 			{
-				$html_content = $before_widget . $before_title . $title . $after_title . WPGeoWidget::add_map($width, $height, $maptype, $showpolylines);
+				$html_content = $before_widget . $before_title . $title . $after_title . WPGeoWidget::add_map($width, $height, $maptype, $showpolylines, $zoom);
 				$html_content .= $after_widget;
 			}
 			
@@ -97,6 +99,8 @@ class WPGeoWidget
 	{
 		
 		global $wpgeo;
+		
+		$wp_geo_options = get_option('wp_geo_options');
 		$options = $newoptions = get_option('map_widget');
 		
 		// Get the options
@@ -107,6 +111,7 @@ class WPGeoWidget
 			$newoptions['height'] 	= strip_tags(stripslashes($_POST['wpgeo-height']));
 			$newoptions['maptype'] 	= strip_tags(stripslashes($_POST['google_map_type']));
 			$newoptions['show_polylines'] 	= strip_tags(stripslashes($_POST['show_polylines']));
+			$newoptions['zoom'] 	= strip_tags(stripslashes($_POST['default_map_zoom']));
 		}
 		
 		// Set the options when they differ
@@ -122,6 +127,11 @@ class WPGeoWidget
 		$height 		= attribute_escape($options['height']);
 		$maptype 		= attribute_escape($options['maptype']);
 		$show_polylines	= attribute_escape($options['show_polylines']);
+		$zoom	        = attribute_escape($options['zoom']);
+		
+		if ( !is_numeric($zoom) ) {
+			$zoom = $wp_geo_options['default_map_zoom'];
+		}
 		
 		// Write the widget controls
 		if (!$wpgeo->checkGoogleAPIKey())
@@ -133,6 +143,8 @@ class WPGeoWidget
 			<p><label for="wpgeo-title">' . __('Title', 'wp-geo') . ': <input class="widefat" id="wpgeo-title" name="wpgeo-title" type="text" value="' . $title . '" /></label></p>
 			<p><label for="wpgeo-width">' . __('Width', 'wp-geo') . ': <input class="widefat" id="wpgeo-width" name="wpgeo-width" type="text" value="' . $width . '" /></label></p>
 			<p><label for="wpgeo-height">' . __('Height', 'wp-geo') . ': <input class="widefat" id="wpgeo-height" name="wpgeo-height" type="text" value="' . $height . '" /></label></p>';
+		echo '<p><strong>' . __('Zoom', 'wp-geo') . ':</strong> ' . $wpgeo->selectMapZoom('menu', $zoom) . '<br /><small>If not all markers fit, the map will automatically be zoomed so they do.</small></p>';
+		echo '<p><strong>' . __('Settings', 'wp-geo') . ':</strong></p>';
 		echo '<p>' . $wpgeo->google_map_types('menu', $maptype) . '</p>';
 		echo '<p>' . WPGeoWidget::show_polylines_options('menu', $show_polylines) . '</p>';
 		echo '<input type="hidden" id="wpgeo-submit" name="wpgeo-submit" value="1" />';
@@ -178,7 +190,7 @@ class WPGeoWidget
 	 * Add the map to the widget
 	 * TODO: integrate the code better into the existing one
 	 */
-	function add_map($width = '100%', $height = 150, $maptype = '', $showpolylines = false) 
+	function add_map($width = '100%', $height = 150, $maptype = '', $showpolylines = false, $zoom = null) 
 	{
 	
 		global $posts, $wpgeo;
@@ -199,7 +211,6 @@ class WPGeoWidget
 			
 			// Get the basic settings of wp geo
 			$wp_geo_options = get_option('wp_geo_options');
-			
 			
 			// Find the coordinates for the posts
 			$coords = array();
@@ -236,7 +247,9 @@ class WPGeoWidget
 			{
 			
 				$google_maps_api_key = $wp_geo_options['google_api_key'];
-				$zoom = $wp_geo_options['default_map_zoom'];
+				if ( !is_numeric($zoom) ) {
+					$zoom = $wp_geo_options['default_map_zoom'];
+				}
 				
 				if (empty($maptype))
 				{
@@ -312,6 +325,7 @@ class WPGeoWidget
 				{
 					$html_js .= 'map.addOverlay(wpgeo_createPolyline(' . $polyline_coords_js . ', "' . $wp_geo_options['polyline_colour'] . '", 2, 0.50));';
 				}
+				
 				$html_js .='
 							// Center the map to show all markers
 							var center = bounds.getCenter();
