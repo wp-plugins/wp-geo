@@ -380,7 +380,7 @@ class WPGeo
 						'latitude' => $latitude,
 						'longitude' => $longitude,
 						'title' => $title,
-						'link' => $post->guid
+						'link' => get_permalink($post->ID)
 					);
 					array_push($coords, $push);
 					
@@ -390,7 +390,7 @@ class WPGeo
 					$map = new WPGeoMap($post->ID);										// Create map
 					
 					// Add point
-					$map->addPoint($latitude, $longitude, 'wpgeo_icon_large', $title, $post->guid);
+					$map->addPoint($latitude, $longitude, 'wpgeo_icon_large', $title, get_permalink($post->ID));
 					
 					$map->setMapZoom($mymapzoom);										// Set zoom
 					$map->setMapType($mymaptype);										// Set map type
