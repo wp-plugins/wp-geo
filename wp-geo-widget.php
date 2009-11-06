@@ -246,7 +246,7 @@ class WPGeoWidget
 			if (count($coords) > 0)
 			{
 			
-				$google_maps_api_key = $wp_geo_options['google_api_key'];
+				$google_maps_api_key = $wpgeo->get_google_api_key();
 				if ( !is_numeric($zoom) ) {
 					$zoom = $wp_geo_options['default_map_zoom'];
 				}

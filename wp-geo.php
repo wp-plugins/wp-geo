@@ -193,12 +193,27 @@ class WPGeo
 	function checkGoogleAPIKey()
 	{
 		
+		global $wpgeo;
+		
 		$wp_geo_options = get_option('wp_geo_options');
-		if (empty($wp_geo_options['google_api_key']) || !isset($wp_geo_options['google_api_key']))
+		if (empty($wpgeo->get_google_api_key()) || !isset($wpgeo->get_google_api_key()))
 		{
 			return false;
 		}
 		return true;
+		
+	}
+	
+	
+	
+	/**
+	 * Get Google API Key
+	 */
+	function get_google_api_key()
+	{
+		
+		$wp_geo_options = get_option('wp_geo_options');
+		return apply_filters( 'wpgeo_google_api_key', $wp_geo_options['google_api_key'] );
 		
 	}
 	
@@ -458,7 +473,7 @@ class WPGeo
 				// ----------- End - Create map for visible posts and pages -----------
 				
 					
-				$google_maps_api_key = $wp_geo_options['google_api_key'];
+				$google_maps_api_key = $wpgeo->get_google_api_key();
 				$zoom = $wp_geo_options['default_map_zoom'];
 				
 				// Loop through maps to get Javascript
@@ -603,14 +618,14 @@ class WPGeo
 		// Loads on all pages unless via proxy domain
 		if ( wpgeo_check_domain() && $wpgeo->checkGoogleAPIKey() )
 		{
-			wp_register_script('google_jsapi', 'http://www.google.com/jsapi?key=' . $wp_geo_options['google_api_key'], false, '1.0');
+			wp_register_script('google_jsapi', 'http://www.google.com/jsapi?key=' . $wpgeo->get_google_api_key(), false, '1.0');
 			wp_enqueue_script('google_jsapi');
 		}
 		
 		if (($wpgeo->show_maps() || $wpgeo->widget_is_active()) && $wpgeo->checkGoogleAPIKey())
 		{
 			
-			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&v=2.118&key=' . $wp_geo_options['google_api_key'] . '&sensor=false', false, '2.118');
+			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&v=2.118&key=' . $wpgeo->get_google_api_key() . '&sensor=false', false, '2.118');
 			wp_register_script('wpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'), '1.0');
 			wp_register_script('wpgeotooltip', WP_CONTENT_URL . '/plugins/wp-geo/js/tooltip.js', array('googlemaps', 'jquery'), '1.0');
 			//wp_register_script('jquerywpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'), '1.0');
@@ -660,7 +675,7 @@ class WPGeo
 		}
 		
 		// Vars
-		$google_maps_api_key = $wp_geo_options['google_api_key'];
+		$google_maps_api_key = $wpgeo->get_google_api_key();
 		$panel_open ? $panel_open = 'jQuery(\'#wpgeolocationdiv.postbox h3\').click();' : $panel_open = '';
 		$hide_marker ? $hide_marker = 'marker.hide();' : $hide_marker = '';
 		
