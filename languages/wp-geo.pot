@@ -311,3 +311,16 @@ msgstr ""
 # Admin - Donate Links - Follow me on Twitter
 msgid "Follow me on Twitter"
 msgstr ""
+
+# Widget - Settings
+msgid "Settings"
+msgstr ""
+
+# Widget - Zoom
+msgid "Zoom"
+msgstr ""
+
+#Widget
+msgid "If all options are unchecked the default settings will be used."
+msgstr ""
+
