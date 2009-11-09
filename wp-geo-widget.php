@@ -106,12 +106,18 @@ class WPGeoWidget
 		// Get the options
 		if ($_POST['wpgeo-submit']) 
 		{
-			$newoptions['title'] 	= strip_tags(stripslashes($_POST['wpgeo-title']));
-			$newoptions['width'] 	= strip_tags(stripslashes($_POST['wpgeo-width']));
-			$newoptions['height'] 	= strip_tags(stripslashes($_POST['wpgeo-height']));
-			$newoptions['maptype'] 	= strip_tags(stripslashes($_POST['google_map_type']));
-			$newoptions['show_polylines'] 	= strip_tags(stripslashes($_POST['show_polylines']));
-			$newoptions['zoom'] 	= strip_tags(stripslashes($_POST['default_map_zoom']));
+			$newoptions['title']          = strip_tags(stripslashes($_POST['wpgeo-title']));
+			$newoptions['width']          = strip_tags(stripslashes($_POST['wpgeo-width']));
+			$newoptions['height'] 	      = strip_tags(stripslashes($_POST['wpgeo-height']));
+			$newoptions['maptype'] 	      = strip_tags(stripslashes($_POST['google_map_type']));
+			$newoptions['show_polylines'] = strip_tags(stripslashes($_POST['show_polylines']));
+			$newoptions['zoom']           = strip_tags(stripslashes($_POST['default_map_zoom']));
+			$newoptions['show_maps_on_pages']            = strip_tags(stripslashes($_POST['show_maps_on_pages']));
+			$newoptions['show_maps_on_posts']            = strip_tags(stripslashes($_POST['show_maps_on_posts']));
+			$newoptions['show_maps_on_home']             = strip_tags(stripslashes($_POST['show_maps_on_home']));
+			$newoptions['show_maps_in_datearchives']     = strip_tags(stripslashes($_POST['show_maps_in_datearchives']));
+			$newoptions['show_maps_in_categoryarchives'] = strip_tags(stripslashes($_POST['show_maps_in_categoryarchives']));
+			$newoptions['show_maps_in_searchresults']    = strip_tags(stripslashes($_POST['show_maps_in_searchresults']));
 		}
 		
 		// Set the options when they differ
@@ -128,6 +134,12 @@ class WPGeoWidget
 		$maptype 		= attribute_escape($options['maptype']);
 		$show_polylines	= attribute_escape($options['show_polylines']);
 		$zoom	        = attribute_escape($options['zoom']);
+		$show_maps_on_pages	           = attribute_escape($options['show_maps_on_pages']);
+		$show_maps_on_posts	           = attribute_escape($options['show_maps_on_posts']);
+		$show_maps_on_home	           = attribute_escape($options['show_maps_on_home']);
+		$show_maps_in_datearchives     = attribute_escape($options['show_maps_in_datearchives']);
+		$show_maps_in_categoryarchives = attribute_escape($options['show_maps_in_categoryarchives']);
+		$show_maps_in_searchresults	   = attribute_escape($options['show_maps_in_searchresults']);
 		
 		if ( !is_numeric($zoom) ) {
 			$zoom = $wp_geo_options['default_map_zoom'];
@@ -147,6 +159,17 @@ class WPGeoWidget
 		echo '<p><strong>' . __('Settings', 'wp-geo') . ':</strong></p>';
 		echo '<p>' . $wpgeo->google_map_types('menu', $maptype) . '</p>';
 		echo '<p>' . WPGeoWidget::show_polylines_options('menu', $show_polylines) . '</p>';
+		
+		/*
+		echo '<p><strong>' . __('Show Maps On', 'wp-geo') . ':</strong><br /><small>' . __('If all options are unchecked the default settings will be used.', 'wp-geo') . '</small></p>';
+		echo '<p>' . $wpgeo->options_checkbox('show_maps_on_pages', 'Y', $show_maps_on_pages) . ' ' . __('Pages', 'wp-geo') . '<br />
+			' . $wpgeo->options_checkbox('show_maps_on_posts', 'Y', $show_maps_on_posts) . ' ' . __('Posts (single posts)', 'wp-geo') . '<br />
+			' . $wpgeo->options_checkbox('show_maps_on_home', 'Y', $show_maps_on_home) . ' ' . __('Posts home page', 'wp-geo') . '<br />
+			' . $wpgeo->options_checkbox('show_maps_in_datearchives', 'Y', $show_maps_in_datearchives) . ' ' . __('Posts in date archives', 'wp-geo') . '<br />
+			' . $wpgeo->options_checkbox('show_maps_in_categoryarchives', 'Y', $show_maps_in_categoryarchives) . ' ' . __('Posts in category archives', 'wp-geo') . '<br />
+			' . $wpgeo->options_checkbox('show_maps_in_searchresults', 'Y', $show_maps_in_searchresults) . ' ' . __('Search Results', 'wp-geo') . '</p>';
+		*/
+		
 		echo '<input type="hidden" id="wpgeo-submit" name="wpgeo-submit" value="1" />';
 	
 	}
