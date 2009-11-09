@@ -196,7 +196,9 @@ class WPGeo
 		global $wpgeo;
 		
 		$wp_geo_options = get_option('wp_geo_options');
-		if (empty($wpgeo->get_google_api_key()) || !isset($wpgeo->get_google_api_key()))
+		$api_key = $wpgeo->get_google_api_key();
+		
+		if (empty($api_key ) || !isset($api_key))
 		{
 			return false;
 		}
