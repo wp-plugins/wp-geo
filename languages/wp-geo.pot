@@ -1,326 +1,411 @@
+# WP Geo WordPress Plugin.
+# Copyright (C) 2009 Ben Huson
+# This file is distributed under the same license as WordPress.
+# Ben Huson <ben@thewhiteroom.net>, 2009.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Geo 1.0\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Project-Id-Version: 3.1\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-geo\n"
+"POT-Creation-Date: 2009-11-28 12:53+0000\n"
+"PO-Revision-Date: 2009-11-28 12:53+0000\n"
+"Last-Translator: Ben Huson <ben@thewhiteroom.net>\n"
+"Language-Team: be_BY antsar.info <iliamrv@ya.ru>\n"
+"Language-Team: bg_BG \n"
+"Language-Team: da_DK Team Blogos <wordpress@blogos.dk>\n"
+"Language-Team: de_DE Ivan Graf <contact@bildergallery.com>\n"
+"Language-Team: en_EN Ben Huson <ben@thewhiteroom.net>\n"
+"Language-Team: es_ES Alberto <alberto@berriart.com>\n"
+"Language-Team: fr_FR Alain Messin <temp@alm.ouvaton.org>\n"
+"Language-Team: hr_HR Andrija Papec <info.adriaindex@gmail.com>\n"
+"Language-Team: it_IT Diego Pierotto <ita.translations@tiscali.it>\n"
+"Language-Team: ru_RU Fat Cow <zhr@tut.by>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-SourceCharset: utf-8\n"
 
-# Latitude
-msgid "Latitude"
-msgstr ""
-
-# Longitude
-msgid "Longitude"
-msgstr ""
-
-# Label for location search field in admin
-msgid "Search for location"
-msgstr ""
-
-# Label for location search field in admin (in brackets)
-msgid "town, postcode or address"
-msgstr ""
-
-# Admin search button
-msgid "Search"
-msgstr ""
-
-# Clear location link in admin
-msgid "clear location"
-msgstr ""
-
-# Widget options - Title
-msgid "Title"
-msgstr ""
-
-# Widget options - Width
-msgid "Width"
-msgstr ""
-
-# Widget options - Height
-msgid "Height"
-msgstr ""
-
-# Settings - Updated Message
-msgid "WP Geo settings updated"
-msgstr ""
-
-# Settings - <h2> Page Title
-msgid "WP Geo Settings"
-msgstr ""
-
-# Settings - <h3> General Settings Title
-msgid "General Settings"
-msgstr ""
-
-# Settings - General Settings - Intro Para 1
-msgid "For more information and documentation about this plugin please visit the <a %s>WP Geo Plugin</a> home page."
-msgstr ""
-
-# Settings - General Settings - Intro Para 2
-msgid "If you experience any problems/bugs with the plugin, please <a %s>log it here</a>."
-msgstr ""
-
-# Settings - Label for Google API Key field
-msgid "Google API Key"
-msgstr ""
-
-# Settings - Label for Map Type field
-msgid "Map Type"
-msgstr ""
-
-# Settings - Label for Show Post Map field
-msgid "Show Post Map"
-msgstr ""
-
-# Settings - Show Post Map - At top of post
-msgid "At top of post"
-msgstr ""
-
-# Settings - Show Post Map - At bottom of post
-msgid "At bottom of post"
-msgstr ""
-
-# Settings - Show Post Map - Manually
-msgid "Manually"
-msgstr ""
-
-# Settings - Label for Default Map Width field
-msgid "Default Map Width"
-msgstr ""
-
-# Settings - Label for Default Map Height field
-msgid "Default Map Height"
-msgstr ""
-
-# Settings - Label for Default Map Zoom field
-msgid "Default Map Zoom"
-msgstr ""
-
-# Settings - Default Map Zoom - Zoomed In
-msgid "Zoomed In"
-msgstr ""
-
-# Settings - Default Map Zoom - Zoomed Out
-msgid "Zoomed Out"
-msgstr ""
-
-# Settings - Label for Default Map Controls fields
-msgid "Default Map Controls"
-msgstr "
-
-# Settings - Default Map Controls - Large pan/zoom control
-msgid "Large pan/zoom control"
-msgstr "
-
-# Settings - Default Map Controls - Smaller pan/zoom control
-msgid "Smaller pan/zoom control"
-msgstr "
-
-# Settings - Default Map Controls - Small zoom control (no panning controls)
-msgid "Small zoom control (no panning controls)"
-msgstr "
-
-# Settings - Default Map Controls - No pan/zoom controls
-msgid "No pan/zoom controls"
-msgstr "
-
-# Settings - Default Map Controls - Map Type
-msgid "Map Type Controls"
-msgstr ""
-
-# Settings - Default Map Controls - Map Type - Message
-msgid "You must select at least 2 map types for the control to show."
-msgstr ""
-
-# Settings - Default Map Controls - Map Type - Normal
-msgid "Normal"
-msgstr ""
-
-# Settings - Default Map Controls - Map Type - Satellite
-msgid "Satellite (photographic map)"
-msgstr ""
-
-# Settings - Default Map Controls - Map Type - Hybrid
-msgid "Hybrid (photographic map with normal features)"
-msgstr ""
-
-# Settings - Default Map Controls - Map Type - Physical
-msgid "Physical (terrain map)"
-msgstr ""
-
-# Settings - Default Map Controls - Other
-msgid "Other Controls"
-msgstr ""
-
-# Settings - Default Map Controls - Other - Show map scale
-msgid "Show map scale"
-msgstr ""
-
-# Settings - Default Map Controls - Other - Show collapsible overview map (in the corner of the map)
-msgid "Show collapsible overview map (in the corner of the map)"
-msgstr ""
-
-# Settings - Label for Show Maps On fields
-msgid "Show Maps On"
-msgstr ""
-
-# Settings - Show Maps On - Pages
-msgid "Pages"
-msgstr ""
-
-# Settings - Show Maps On - Posts (single posts)
-msgid "Posts (single posts)"
-msgstr ""
-
-# Settings - Show Maps On - Posts home page
-msgid "Posts home page"
-msgstr ""
-
-# Settings - Show Maps On - Posts in date archives
-msgid "Posts in date archives"
-msgstr ""
-
-# Settings - Show Maps On - Posts in category archives
-msgid "Posts in category archives"
-msgstr ""
-
-# Settings - Show Maps On - Search Results
-msgid "Search Results"
-msgstr ""
-
-# Settings - Label for Feeds fields
-msgid "Feeds"
-msgstr ""
-
-# Settings - Feeds - Checkbox
-msgid "Add geographic information"
-msgstr ""
-
-# Settings - Save Changes Button Text
-msgid "Save Changes"
-msgstr ""
-
-# Settings - <h2> Marker Settings Title
-msgid "Marker Settings"
-msgstr ""
-
-# Settings - Marker Settings - Text
-msgid ""
-"<p>Custom marker images are automatically created in your WordPress uploads folder and used by WP Geo.<br />A copy of these images will remain in the WP Geo folder in case you need to revert to them at any time.<br />You may edit these marker icons if you wish - they must be PNG files. Each marker consist of a marker image and a shadow image. If you do not wish to show a marker shadow you should use a transparent PNG for the shadow file.</p>"
-"<p>Currently you must update these images manually and the anchor point must be the same - looking to provide more control in future versions.</p>"
-msgstr ""
-
-# Settings - Large Marker Title
-msgid "Large Marker"
-msgstr ""
-
-# Settings - Large Marker Description
-msgid "This is the default marker used to indicate a location on most maps."
-msgstr ""
-
-# Settings - Small Marker Title
-msgid "Small Marker"
-msgstr ""
-
-# Settings - Small Marker Description
-msgid "This is the default marker used for the WP Geo sidebar widget."
-msgstr ""
-
-# Settings - Dot Marker Title
-msgid "Dot Marker"
-msgstr ""
-
-# Settings - Dot Marker Description
-msgid "This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo."
-msgstr ""
-
-# Settings - Show polylines (to connect multiple points on a single map)
-msgid "Show polylines (to connect multiple points on a single map)"
-msgstr ""
-
-# Settings - Documentation
-msgid "Documentation"
-msgstr ""
-
-# Settings - Documentation Text
-msgid "<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a location has been set for the post). You can only include the Shortcode once within a post. If you select another Show Post Map option then the Shortcode will be ignored and the map will be positioned automatically.</p>"
-msgstr ""
-
-# Settings - Feedback
-msgid "Feedback"
-msgstr ""
-
-# Settings - Feedback - Text 1
-msgid "<p>If you experience any problems or bugs with the plugin, or want to suggest an improvement, please visit the <a %s>WP Geo Google Code page</a> to log your issue. If you would like to feedback or comment on the plugin please visit the <a %s>WP Geo plugin</a> page.</p>"
-msgstr ""
-
-# Settings - Feedback - Text 2
-msgid "<p>If you like WP Geo and would like to make a donation, please do so on the <a %s>WP Geo website</a>. Your contributions help to ensure that I can dedicate more time to the support and development of the plugin.</p>"
-msgstr ""
-
-# Admin Section Title
-msgid "WP Geo Location"
-msgstr ""
-
-# Admin - Google API Key Notice
-msgid "WP Geo is not currently active as you have not entered a Google API Key"
-msgstr ""
-
-# Admin - Please update your WP Geo settings
-msgid "Please update your WP Geo settings"
-msgstr ""
-
-# Admin - Default (general)
-msgid "Default"
-msgstr ""
-
-# Admin - Show Polylines
-msgid "Show Polylines"
-msgstr ""
-
-# Admin - Hide Polylines
-msgid "Hide Polylines"
-msgstr ""
-
-# Admin - Polyline Colour
-msgid "Polyline Colour"
-msgstr ""
-
-# Admin - Marker Title
-msgid "Marker Title"
-msgstr ""
-
-# Admin - Donate Links - Support this plugin
+#: admin/donate-links.php:16
 msgid "Support this plugin"
 msgstr ""
 
-# Admin - Donate Links - Make a Donation
+#: admin/donate-links.php:17
 msgid "Make a Donation"
 msgstr ""
 
-# Admin - Donate Links - Buy me something
+#: admin/donate-links.php:18
 msgid "Buy me something"
 msgstr ""
 
-# Admin - Donate Links - Follow me on Twitter
+#: admin/donate-links.php:19
 msgid "Follow me on Twitter"
 msgstr ""
 
-# Widget - Settings
-msgid "Settings"
+#: wp-geo-map.php:75 wp-geo-widget.php:65 wp-geo-widget.php:294
+msgid "title"
 msgstr ""
 
-# Widget - Zoom
+#: wp-geo-widget.php:152
+msgid "WP Geo is not currently active as you have not entered a Google API Key"
+msgstr ""
+
+#: wp-geo-widget.php:152
+msgid "Please update your WP Geo settings"
+msgstr ""
+
+#: wp-geo-widget.php:155
+msgid "Title"
+msgstr ""
+
+#: wp-geo-widget.php:156
+msgid "Width"
+msgstr ""
+
+#: wp-geo-widget.php:157
+msgid "Height"
+msgstr ""
+
+#: wp-geo-widget.php:158
 msgid "Zoom"
 msgstr ""
 
-#Widget
-msgid "If all options are unchecked the default settings will be used."
+#: wp-geo-widget.php:159
+msgid "Settings"
 msgstr ""
 
+#: wp-geo-widget.php:187
+msgid "Default"
+msgstr ""
+
+#: wp-geo-widget.php:188
+msgid "Show Polylines"
+msgstr ""
+
+#: wp-geo-widget.php:189
+msgid "Hide Polylines"
+msgstr ""
+
+#: wp-geo.php:1082
+msgid "WP Geo settings updated"
+msgstr ""
+
+#: wp-geo.php:1095
+msgid "WP Geo Settings"
+msgstr ""
+
+#: wp-geo.php:1099
+msgid "General Settings"
+msgstr ""
+
+#: wp-geo.php:1101
+#, php-format
+msgid ""
+"For more information and documentation about this plugin please visit the <a "
+"%s>WP Geo Plugin</a> home page."
+msgstr ""
+
+#: wp-geo.php:1102
+#, php-format
+msgid ""
+"If you experience any problems/bugs with the plugin, please <a %s>log it "
+"here</a>."
+msgstr ""
+
+#: wp-geo.php:1114
+msgid "Google API Key"
+msgstr ""
+
+#: wp-geo.php:1118
+msgid "Map Type"
+msgstr ""
+
+#: wp-geo.php:1122
+msgid "Show Post Map"
+msgstr ""
+
+#: wp-geo.php:1126
+msgid "Default Map Location"
+msgstr ""
+
+#: wp-geo.php:1133
+msgid "Default Map Width"
+msgstr ""
+
+#: wp-geo.php:1137
+msgid "Default Map Height"
+msgstr ""
+
+#: wp-geo.php:1141
+msgid "Default Map Zoom"
+msgstr ""
+
+#: wp-geo.php:1145
+msgid "Default Map Controls"
+msgstr ""
+
+#: wp-geo.php:1148
+msgid "Map Type Controls"
+msgstr ""
+
+#: wp-geo.php:1149
+msgid "You must select at least 2 map types for the control to show."
+msgstr ""
+
+#: wp-geo.php:1150
+msgid "Normal map"
+msgstr ""
+
+#: wp-geo.php:1151 wp-geo.php:1331
+msgid "Satellite (photographic map)"
+msgstr ""
+
+#: wp-geo.php:1152 wp-geo.php:1332
+msgid "Hybrid (photographic map with normal features)"
+msgstr ""
+
+#: wp-geo.php:1153 wp-geo.php:1333
+msgid "Physical (terrain map)"
+msgstr ""
+
+#: wp-geo.php:1154
+msgid "Other Controls"
+msgstr ""
+
+#: wp-geo.php:1155
+msgid "Show map scale"
+msgstr ""
+
+#: wp-geo.php:1156
+msgid "Show collapsible overview map (in the corner of the map)"
+msgstr ""
+
+#: wp-geo.php:1160
+msgid "Polylines"
+msgstr ""
+
+#: wp-geo.php:1161
+msgid "Show polylines (to connect multiple points on a single map)"
+msgstr ""
+
+#: wp-geo.php:1164
+msgid "Polyline Colour"
+msgstr ""
+
+#: wp-geo.php:1168
+msgid "Show Maps On"
+msgstr ""
+
+#: wp-geo.php:1170
+msgid "Pages"
+msgstr ""
+
+#: wp-geo.php:1171
+msgid "Posts (single posts)"
+msgstr ""
+
+#: wp-geo.php:1172
+msgid "Posts home page"
+msgstr ""
+
+#: wp-geo.php:1173
+msgid "Posts in date archives"
+msgstr ""
+
+#: wp-geo.php:1174
+msgid "Posts in category archives"
+msgstr ""
+
+#: wp-geo.php:1175
+msgid "Search Results"
+msgstr ""
+
+#: wp-geo.php:1179
+msgid "Feeds"
+msgstr ""
+
+#: wp-geo.php:1180
+msgid "Add geographic information"
+msgstr ""
+
+#: wp-geo.php:1184
+msgid "Save Changes"
+msgstr ""
+
+#: wp-geo.php:1188
+msgid "Marker Settings"
+msgstr ""
+
+#: wp-geo.php:1189
+msgid ""
+"<p>Custom marker images are automatically created in your WordPress uploads "
+"folder and used by WP Geo.<br />A copy of these images will remain in the WP "
+"Geo folder in case you need to revert to them at any time.<br />You may edit "
+"these marker icons if you wish - they must be PNG files. Each marker consist "
+"of a marker image and a shadow image. If you do not wish to show a marker "
+"shadow you should use a transparent PNG for the shadow file.</p><p>Currently "
+"you must update these images manually and the anchor point must be the same "
+"- looking to provide more control in future versions.</p>"
+msgstr ""
+
+#: wp-geo.php:1192
+msgid "Large Marker"
+msgstr ""
+
+#: wp-geo.php:1196
+msgid "This is the default marker used to indicate a location on most maps."
+msgstr ""
+
+#: wp-geo.php:1202
+msgid "Small Marker"
+msgstr ""
+
+#: wp-geo.php:1206
+msgid "This is the default marker used for the WP Geo sidebar widget."
+msgstr ""
+
+#: wp-geo.php:1212
+msgid "Dot Marker"
+msgstr ""
+
+#: wp-geo.php:1216
+msgid ""
+"This marker image is not currently used but it is anticipated that it will "
+"be used to indicate less important locations in a future versions of WP Geo."
+msgstr ""
+
+#: wp-geo.php:1227
+msgid "Documentation"
+msgstr ""
+
+#: wp-geo.php:1228
+msgid ""
+"<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use "
+"the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a "
+"location has been set for the post). You can only include the Shortcode once "
+"within a post. If you select another Show Post Map option then the Shortcode "
+"will be ignored and the map will be positioned automatically.</p>"
+msgstr ""
+
+#: wp-geo.php:1229
+msgid "Feedback"
+msgstr ""
+
+#: wp-geo.php:1230
+#, php-format
+msgid ""
+"<p>If you experience any problems or bugs with the plugin, or want to "
+"suggest an improvement, please visit the <a %s>WP Geo Google Code page</a> "
+"to log your issue. If you would like to feedback or comment on the plugin "
+"please visit the <a %s>WP Geo plugin</a> page.</p>"
+msgstr ""
+
+#: wp-geo.php:1231
+#, php-format
+msgid ""
+"<p>If you like WP Geo and would like to make a donation, please do so on the "
+"<a %s>WP Geo website</a>. Your contributions help to ensure that I can "
+"dedicate more time to the support and development of the plugin.</p>"
+msgstr ""
+
+#: wp-geo.php:1246
+msgid "Large pan/zoom control"
+msgstr ""
+
+#: wp-geo.php:1247
+msgid "Smaller pan/zoom control"
+msgstr ""
+
+#: wp-geo.php:1248
+msgid "Small zoom control (no panning controls)"
+msgstr ""
+
+#: wp-geo.php:1249
+msgid "No pan/zoom controls"
+msgstr ""
+
+#: wp-geo.php:1280
+msgid "Zoomed Out"
+msgstr ""
+
+#: wp-geo.php:1299
+msgid "Zoomed In"
+msgstr ""
+
+#: wp-geo.php:1330
+msgid "Normal"
+msgstr ""
+
+#: wp-geo.php:1364
+msgid "At top of post"
+msgstr ""
+
+#: wp-geo.php:1365
+msgid "At bottom of post"
+msgstr ""
+
+#: wp-geo.php:1366
+msgid "Manually"
+msgstr ""
+
+#: wp-geo.php:1486 wp-geo.php:1487 wp-geo.php:1573
+msgid "WP Geo Location"
+msgstr ""
+
+#: wp-geo.php:1533
+msgid "Search for location"
+msgstr ""
+
+#: wp-geo.php:1533
+msgid "town, postcode or address"
+msgstr ""
+
+#: wp-geo.php:1534
+msgid "Search"
+msgstr ""
+
+#: wp-geo.php:1544
+msgid "Latitude"
+msgstr ""
+
+#: wp-geo.php:1544
+msgid "Longitude"
+msgstr ""
+
+#: wp-geo.php:1544
+msgid "clear location"
+msgstr ""
+
+#: wp-geo.php:1548
+msgid "Marker Title"
+msgstr ""
+
+#: wp-geo.php:1552
+msgid "Map Settings"
+msgstr ""
+
+#: wp-geo.php:1554
+msgid "Save custom map zoom for this post"
+msgstr ""
+
+#: wp-geo.php:1555
+msgid "Save custom map type for this post"
+msgstr ""
+
+#. Plugin Name of an extension
+msgid "WP Geo"
+msgstr ""
+
+#. #-#-#-#-#  plugin.pot (PACKAGE VERSION)  #-#-#-#-#
+#. Plugin URI of an extension
+#. #-#-#-#-#  plugin.pot (PACKAGE VERSION)  #-#-#-#-#
+#. Author URI of an extension
+msgid "http://www.wpgeo.com/"
+msgstr ""
+
+#. Description of an extension
+msgid "Adds geocoding to WordPress."
+msgstr ""
+
+#. Author of an extension
+msgid "Ben Huson"
+msgstr ""
