@@ -627,7 +627,10 @@ class WPGeo
 		if (($wpgeo->show_maps() || $wpgeo->widget_is_active()) && $wpgeo->checkGoogleAPIKey())
 		{
 			
-			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&v=2.118&key=' . $wpgeo->get_google_api_key() . '&sensor=false', false, '2.118');
+			// Set Locale
+			$locale = $wpgeo->get_googlemaps_locale('&hl=');
+			
+			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&v=2.118' . $locale . '&key=' . $wpgeo->get_google_api_key() . '&sensor=false', false, '2.118');
 			wp_register_script('wpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'), '1.0');
 			wp_register_script('wpgeotooltip', WP_CONTENT_URL . '/plugins/wp-geo/js/tooltip.js', array('googlemaps', 'jquery'), '1.0');
 			//wp_register_script('jquerywpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'), '1.0');
@@ -640,6 +643,50 @@ class WPGeo
 			
 			return '';
 		}
+		
+	}
+	
+	
+	
+	/**
+	 * Get Google Maps Locale - by Alain Messin, tweaked by Ben :)
+	 * See http://code.google.com/apis/maps/faq.html#languagesupport
+	 * for link to updated languages codes
+	 */
+	function get_googlemaps_locale( $before = '', $after = '' ) {
+		
+		$l = get_locale();
+		
+		if ( !empty($l) ) {
+
+			// WordPress locale is xx_XX, some codes are known by google with - in place of _ , so replace
+			$l = str_replace('_', '-', $l);
+			
+			// Known Google codes known
+			$codes = array(
+				'en-AU',
+				'en-GB',
+				'pt-BR',
+				'pt-PT',
+				'zh-CN',
+				'zh-TW'
+			);
+			
+			// Other codes known by googlemaps are 2 characters codes
+			if ( !in_array($l, $codes) ) {
+				$l = substr($l, 0, 2);
+			}
+		
+		}
+		
+		// Apply filter - why not ;)
+		$l = apply_filters('wp_geo_locale', $l);
+		
+		if ( !empty($l) ) {
+			$l = $before . $l . $after;
+		}
+		
+		return $l;
 		
 	}
 	
