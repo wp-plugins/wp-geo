@@ -19,15 +19,13 @@ add_shortcode( 'wpgeo_latitude', 'shortcode_wpgeo_latitude' );
 /**
  * @method       Shortcode: [wpgeo_latitude]
  * @description  Outputs the post latitude.
- * @return       $lat Latitude
+ * @return       (Float) Latitude
  */
 
-function shortcode_wpgeo_latitude( $atts, $content = null )
-{
+function shortcode_wpgeo_latitude( $atts, $content = null ) {
 
 	global $post;
-	$lat = get_post_meta( $post->ID, '_wp_geo_latitude', true );
-	return $lat;
+	return get_wpgeo_longitude($post->ID);
 	
 }
 
@@ -36,15 +34,13 @@ function shortcode_wpgeo_latitude( $atts, $content = null )
 /**
  * @method       Shortcode: [wpgeo_longitude]
  * @description  Outputs the post longitude.
- * @return       $long Longitude
+ * @return       (Float) Longitude
  */
 
-function shortcode_wpgeo_longitude( $atts, $content = null )
-{
+function shortcode_wpgeo_longitude( $atts, $content = null ) {
 
 	global $post;
-	$long = get_post_meta( $post->ID, '_wp_geo_longitude', true );
-	return $long;
+	return get_wpgeo_latitude($post->ID);
 	
 }
 
@@ -56,16 +52,15 @@ function shortcode_wpgeo_longitude( $atts, $content = null )
  * @return       HTML required to display map
  */
 
-function shortcode_wpgeo_map( $atts, $content = null )
-{
+function shortcode_wpgeo_map( $atts, $content = null ) {
 
 	global $post, $wpgeo;
 	
 	$id = $post->ID;
 	$wp_geo_options = get_option( 'wp_geo_options' );
 	
-	if ( $wpgeo->show_maps() && $wp_geo_options['show_post_map'] == 'HIDE' && $wpgeo->checkGoogleAPIKey() )
-	{
+	if ( $wpgeo->show_maps() && $wp_geo_options['show_post_map'] == 'HIDE' && $wpgeo->checkGoogleAPIKey() ) {
+		
 		$map_atts = array(
 			'width' => null,
 			'height' => null,
@@ -77,27 +72,22 @@ function shortcode_wpgeo_map( $atts, $content = null )
 		extract( shortcode_atts( $map_atts, $atts ) );
 		
 		// Escape?
-		if ( $escape == 'true' )
-		{
+		if ( $escape == 'true' ) {
 			return '[wp_geo_map]';
 		}
 		
 		$map_width = $wp_geo_options['default_map_width'];
 		$map_height = $wp_geo_options['default_map_height'];
 		
-		if ( $atts['width'] != null )
-		{
+		if ( $atts['width'] != null ) {
 			$map_width = $atts['width'];
-			if ( is_numeric( $map_width ) )
-			{
+			if ( is_numeric( $map_width ) ) {
 				$map_width = $map_width . 'px';
 			}
 		}
-		if ( $atts['height'] != null )
-		{
+		if ( $atts['height'] != null ) {
 			$map_height = $atts['height'];
-			if ( is_numeric( $map_height ) )
-			{
+			if ( is_numeric( $map_height ) ) {
 				$map_height = $map_height . 'px';
 			}
 		}
@@ -105,10 +95,11 @@ function shortcode_wpgeo_map( $atts, $content = null )
 		// To Do: Add in lon/lat check and output map if needed
 		
 		return '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="width:' . $map_width . '; height:' . $map_height . ';">' . $content . '</div>';
-	}
-	else
-	{
+	
+	} else {
+	
 		return '';
+	
 	}
 	
 }
