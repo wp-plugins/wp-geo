@@ -4,7 +4,7 @@ Donate link: http://www.wpgeo.com/donate
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
 Tested up to: 2.8.6
-Stable tag: 3.1.1
+Stable tag: 3.1.2
 
 Add location maps to your posts and pages.
 
@@ -74,6 +74,10 @@ If upgrading from a previous version of the plugin:
 4. Widget Settings
 
 == Changelog ==
+
+= WP Geo 3.1.2 =
+
+* Fixed strange activation bug caused by includes/template.php (renaming the file seem to fix it).
 
 = WP Geo 3.1.1 =
 
