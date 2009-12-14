@@ -1721,7 +1721,7 @@ load_plugin_textdomain('wp-geo', PLUGINDIR . '/wp-geo/languages');
 include('wp-geo-markers.php');
 include('wp-geo-map.php');
 include( 'includes/functions.php' );
-include( 'includes/template.php' );
+include( 'includes/templates.php' );
 include( 'includes/shortcodes.php' );
 include( 'includes/class.feeds.php' );
 
