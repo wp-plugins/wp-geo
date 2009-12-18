@@ -365,7 +365,7 @@ class WPGeo {
 			';
 		
 		// CSS
-		echo '<link rel="stylesheet" href="' . WP_CONTENT_URL . '/plugins/wp-geo/wp-geo.css" type="text/css" />';
+		echo '<link rel="stylesheet" href="' . WP_CONTENT_URL . '/plugins/wp-geo/css/wp-geo.css" type="text/css" />';
 		
 		if ( $wpgeo->show_maps() || $wpgeo->widget_is_active() ) {
 		
@@ -582,7 +582,7 @@ class WPGeo {
 	
 		global $wpgeo, $post_ID;
 		
-		echo '<link rel="stylesheet" href="' . WP_CONTENT_URL . '/plugins/wp-geo/wp-geo.css" type="text/css" />';
+		echo '<link rel="stylesheet" href="' . WP_CONTENT_URL . '/plugins/wp-geo/css/wp-geo.css" type="text/css" />';
 		
 		// Only load if on a post or page
 		if ( $wpgeo->show_maps() ) {
@@ -1733,16 +1733,19 @@ class WPGeo {
 load_plugin_textdomain('wp-geo', PLUGINDIR . '/wp-geo/languages');
 
 // Includes
-include('wp-geo-markers.php');
-include('wp-geo-map.php');
+include( 'includes/markers.php' );
+include( 'includes/maps.php' );
 include( 'includes/functions.php' );
 include( 'includes/templates.php' );
 include( 'includes/shortcodes.php' );
-include( 'includes/class.feeds.php' );
+include( 'includes/feeds.php' );
+include( 'includes/display.php' );
+include( 'includes/widgets.php' );
 
 // Admin Includes
 if ( is_admin() ) {
-	include_once( 'admin/class.editor.php' );
+	include_once( 'admin/editor.php' );
+	include_once( 'admin/dashboard.php' );
 }
 
 // Init.
@@ -1767,12 +1770,6 @@ add_action('after_plugin_row', array($wpgeo, 'after_plugin_row'));
 add_filter('post_limits', array($wpgeo, 'post_limits'));
 add_filter('posts_join', array($wpgeo, 'posts_join'));
 add_filter('posts_where', array($wpgeo, 'posts_where'));
-
-		
-// More Includes
-include('dashboard.php');
-include('wp-geo-widget.php');
-include('display.php');
 
 
 
