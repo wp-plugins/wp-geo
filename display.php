@@ -3,10 +3,14 @@
 
 
 /**
- * The WP Geo Display class
+ * @package     WP Geo
+ * @subpackage  Display Class
+ * @author      Ben Huson <ben@thewhiteroom.net>
  */
-class WPGeoDisplay
-{
+
+
+
+class WPGeo_Display {
 	
 	
 	
@@ -20,10 +24,11 @@ class WPGeoDisplay
 	
 	
 	/**
-	 * Constructor
+	 * @method       Constructor
+	 * @description  Initialise the class.
 	 */
-	function WPGeoDisplay()
-	{
+	
+	function WPGeo_Display() {
 		
 		$this->maps = array();
 		
@@ -32,10 +37,11 @@ class WPGeoDisplay
 	
 	
 	/**
-	 * Get ID
+	 * @method       Get ID
+	 * @description  Gets the ID of this display instance.
 	 */
-	function getID()
-	{
+	
+	function getID() {
 		
 		$this->n++;
 		return $this->n;
@@ -45,10 +51,12 @@ class WPGeoDisplay
 	
 	
 	/**
-	 * Add Map
+	 * @method       Add Map
+	 * @description  Add map to maps array.
+	 * @parameter    $args = Map configuration
 	 */
-	function addMap($args)
-	{
+	
+	function addMap( $args ) {
 		
 		$this->maps[] = $args;
 		
@@ -57,10 +65,11 @@ class WPGeoDisplay
 	
 	
 	/**
-	 * Render
+	 * @method       Render
+	 * @description  Outputs the javascript to display the maps.
 	 */
-	function render()
-	{
+	
+	function render() {
 		
 		if ( count( $this->maps ) > 0 ) {
 		
@@ -70,8 +79,7 @@ class WPGeoDisplay
 				function renderWPGeo() {
 					if (GBrowserIsCompatible()) {
 					';
-			foreach ( $this->maps as $map )
-			{
+			foreach ( $this->maps as $map ) {
 				echo '
 					map = new GMap2(document.getElementById("wpgeo-' . $map['id'] . '"));
 					map.setCenter(new GLatLng(41.875696,-87.624207), 3);
@@ -103,10 +111,14 @@ class WPGeoDisplay
 	
 	
 	/**
-	 * [wpgeo] Shortcode
+	 * @method       Shortcode [wpgeo]
+	 * @description  Used to manually display a map in a post.
+	 * @parameter    $atts = Array of attributes
+	 * @parameter    $content = Content between tags
+	 * @return       (string) HTML Output
 	 */
-	function shortcode_wpgeo($atts, $content = null)
-	{
+	
+	function shortcode_wpgeo( $atts, $content = null ) {
 	
 		$allowed_atts = array(
 			'rss' => null,
@@ -114,13 +126,11 @@ class WPGeoDisplay
 		);
 		extract(shortcode_atts($allowed_atts, $atts));
 		
-		if ($kml != null)
-		{
+		if ( $kml != null ) {
 			$rss = $kml;
 		}
 		
-		if ($rss != null)
-		{
+		if ( $rss != null ) {
 			$id = $this->getID();
 			$map = array(
 				'id' => $id,
@@ -141,13 +151,14 @@ class WPGeoDisplay
 
 
 
-$WPGeoDisplay = new WPGeoDisplay();
+// Create the display instance
+$wpgeo_display = new WPGeo_Display();
 
 
 
 // Hooks
-add_action('wp_footer', array($WPGeoDisplay, 'render'));
-add_shortcode('wpgeo', array($WPGeoDisplay, 'shortcode_wpgeo'));
+add_action( 'wp_footer', array( $wpgeo_display, 'render' ) );
+add_shortcode( 'wpgeo', array( $wpgeo_display, 'shortcode_wpgeo' ) );
 
 
 

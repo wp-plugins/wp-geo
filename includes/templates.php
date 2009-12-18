@@ -3,14 +3,15 @@
 
 
 /**
-* @package WP Geo
-* @subpackage Includes > Template
-*/
+ * @package    WP Geo
+ * @subpackage Includes > Template
+ * @author     Ben Huson <ben@thewhiteroom.net>
+ */
 
 
 
 /**
- * @method       wpgeo_latitude
+ * @method       WP Geo Latitude
  * @description  Outputs the post latitude.
  * @param        $post_id = Post ID (optional)
  */
@@ -24,7 +25,7 @@ function wpgeo_latitude( $post_id = null ) {
 
 
 /**
- * @method       wpgeo_longitude
+ * @method       WP Geo Longitude
  * @description  Outputs the post longitude.
  * @param        $post_id = Post ID (optional)
  */
@@ -38,10 +39,10 @@ function wpgeo_longitude( $post_id = null ) {
 
 
 /**
- * @method       get_wpgeo_latitude
+ * @method       Get WP Geo Latitude
  * @description  Gets the post latitude.
  * @param        $post_id = Post ID (optional)
- * @return       (Float) Latitude
+ * @return       (float) Latitude
  */
 
 function get_wpgeo_latitude( $post_id = null ) {
@@ -61,10 +62,10 @@ function get_wpgeo_latitude( $post_id = null ) {
 
 
 /**
- * @method       get_wpgeo_longitude
+ * @method       Get WP Geo Longitude
  * @description  Gets the post longitude.
  * @param        $post_id = Post ID (optional)
- * @return       (Float) Longitude
+ * @return       (float) Longitude
  */
 
 function get_wpgeo_longitude( $post_id = null ) {

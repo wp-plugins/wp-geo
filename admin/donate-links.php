@@ -3,8 +3,9 @@
 
 
 /**
- * @package WP Geo
- * @subpackage Admin > Donate Links
+ * @package     WP Geo
+ * @subpackage  Admin > Donate Links
+ * @author      Ben Huson <ben@thewhiteroom.net>
  */
 
 

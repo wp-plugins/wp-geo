@@ -3,10 +3,14 @@
 
 
 /**
- * The WP Geo Markers class
+ * @package    WP Geo
+ * @subpackage Markers Class
+ * @author     Ben Huson <ben@thewhiteroom.net>
  */
-class WPGeoMarkers
-{
+
+
+
+class WPGeoMarkers {
 	
 	
 	
@@ -14,25 +18,28 @@ class WPGeoMarkers
 	 * Properties
 	 */
 	 
-	var $version = '1.0';//WP_CONTENT_DIR
+	var $version = '1.0';
 	var $marker_image_dir = '/uploads/wp-geo/markers/';
 	
 	
 	
 	/**
-	 * Constructor
+	 * @method       Constructor
+	 * @description  Initialise the class.
 	 */
-	function WPGeoMarkers()
-	{
+	
+	function WPGeoMarkers() {
 	}
 	
 	
 	
 	/**
-	 * Marker Folder Exists
+	 * @method       Marker Folder Exists
+	 * @description  Checks that the marker images folder has been created.
+	 * @return       (boolean)
 	 */
-	function marker_folder_exists()
-	{
+	
+	function marker_folder_exists() {
 		
 		if ( is_dir(WP_CONTENT_DIR . '/uploads/wp-geo/markers') ) {
 			return true;
@@ -42,12 +49,14 @@ class WPGeoMarkers
 	}
 	
 	
-
+	
 	/**
-	 * Register Activation
+	 * @method       Register Activation
+	 * @description  When the plugin is activated, created all the required folder
+	 *               and move the marker images there.
 	 */
-	function register_activation()
-	{
+	
+	function register_activation() {
 		
 		// New Marker Folders
 		clearstatcache();
@@ -75,16 +84,15 @@ class WPGeoMarkers
 	
 	
 	/**
-	 * Move File or Delete (if already exists)
+	 * @method       Move File or Delete
+	 * @description  Move a file, or replace it if one already exists.
 	 */
-	function moveFileOrDelete($old_file, $new_file)
-	{
+	
+	function moveFileOrDelete( $old_file, $new_file ) {
 		
-		if (!file_exists($new_file))
-		{
+		if ( !file_exists($new_file) ) {
 			$ok = copy($old_file, $new_file);
-			if ($ok)
-			{
+			if ( $ok ) {
 				// Moved OK...
 			}
 		}
@@ -94,10 +102,11 @@ class WPGeoMarkers
 	
 	
 	/**
-	 * wp_head
+	 * @method       WP Head
+	 * @description  Output HTML header.
 	 */
-	function wp_head()
-	{
+	
+	function wp_head() {
 	
 		$marker_dot = $this->get_marker_meta('dot');
 		$marker_small = $this->get_marker_meta('small');
@@ -120,12 +129,15 @@ class WPGeoMarkers
 	}
 	
 	
-
+	
 	/**
-	 * Get Marker Meta
+	 * @method       Get Marker Meta
+	 * @description  Output HTML header.
+	 * @param        $type = Type of marker meta
+	 * @return       (string) Marker type
 	 */
-	function get_marker_meta($type = 'large')
-	{
+	
+	function get_marker_meta( $type = 'large' ) {
 		
 		// Array
 		$marker_types = array();

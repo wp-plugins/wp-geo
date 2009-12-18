@@ -3,9 +3,10 @@
 
 
 /**
-* @package WP Geo
-* @subpackage Includes > Shortcodes
-*/
+ * @package    WP Geo
+ * @subpackage Includes > Shortcodes
+ * @author     Ben Huson <ben@thewhiteroom.net>
+ */
 
 
 
@@ -17,9 +18,11 @@ add_shortcode( 'wpgeo_latitude', 'shortcode_wpgeo_latitude' );
 
 
 /**
- * @method       Shortcode: [wpgeo_latitude]
+ * @method       Shortcode [wpgeo_latitude]
  * @description  Outputs the post latitude.
- * @return       (Float) Latitude
+ * @param        $atts = Shortcode attributes
+ * @param        $content = Content between shortcode tags
+ * @return       (float) Latitude
  */
 
 function shortcode_wpgeo_latitude( $atts, $content = null ) {
@@ -32,9 +35,11 @@ function shortcode_wpgeo_latitude( $atts, $content = null ) {
 
 
 /**
- * @method       Shortcode: [wpgeo_longitude]
+ * @method       Shortcode [wpgeo_longitude]
  * @description  Outputs the post longitude.
- * @return       (Float) Longitude
+ * @param        $atts = Shortcode attributes
+ * @param        $content = Content between shortcode tags
+ * @return       (float) Longitude
  */
 
 function shortcode_wpgeo_longitude( $atts, $content = null ) {
@@ -47,8 +52,10 @@ function shortcode_wpgeo_longitude( $atts, $content = null ) {
 
 
 /**
- * @method       Shortcode: [wp_geo_map type="G_NORMAL_MAP"]
+ * @method       Shortcode [wp_geo_map type="G_NORMAL_MAP"]
  * @description  Outputs the post map.
+ * @param        $atts = Shortcode attributes
+ * @param        $content = Content between shortcode tags
  * @return       HTML required to display map
  */
 

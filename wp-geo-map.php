@@ -3,10 +3,14 @@
 
 
 /**
- * The WP Geo Map class
+ * @package    WP Geo
+ * @subpackage Map Class
+ * @author     Ben Huson <ben@thewhiteroom.net>
  */
-class WPGeoMap
-{
+
+
+
+class WPGeoMap {
 	
 	
 	
@@ -27,10 +31,11 @@ class WPGeoMap
 	
 	
 	/**
-	 * Constructor
+	 * @method       Constructor
+	 * @description  Initialise the class.
 	 */
-	function WPGeoMap($id)
-	{
+	
+	function WPGeoMap( $id ) {
 		
 		$this->id = $id;
 		$this->maptypes = array();
@@ -41,10 +46,13 @@ class WPGeoMap
 	
 	
 	/**
-	 * Render Map Javascript
+	 * @method       Render Map JavaScript
+	 * @description  Outputs the javascript to display maps.
+	 * @param        $map_id = The map ID.
+	 * @return       (string) JavaScript
 	 */
-	function renderMapJS($map_id = false)
-	{
+	
+	function renderMapJS( $map_id = false ) {
 	
 		$wp_geo_options = get_option('wp_geo_options');
 		
@@ -57,21 +65,19 @@ class WPGeoMap
 		$maptypes[] = $this->maptype;
 		$maptypes = array_unique($maptypes);
 		$js_maptypes = '';
-		if (in_array('G_PHYSICAL_MAP', $maptypes))
+		if ( in_array('G_PHYSICAL_MAP', $maptypes) )
 			$js_maptypes .= 'map_' . $map_id . '.addMapType(G_PHYSICAL_MAP);';
-		if (!in_array('G_NORMAL_MAP', $maptypes))
+		if ( !in_array('G_NORMAL_MAP', $maptypes) )
 			$js_maptypes .= 'map_' . $map_id . '.removeMapType(G_NORMAL_MAP);';
-		if (!in_array('G_SATELLITE_MAP', $maptypes))
+		if ( !in_array('G_SATELLITE_MAP', $maptypes) )
 			$js_maptypes .= 'map_' . $map_id . '.removeMapType(G_SATELLITE_MAP);';
-		if (!in_array('G_HYBRID_MAP', $maptypes))
+		if ( !in_array('G_HYBRID_MAP', $maptypes) )
 			$js_maptypes .= 'map_' . $map_id . '.removeMapType(G_HYBRID_MAP);';
 		
 		// Markers
 		$js_markers = '';
-		if (count($this->points) > 0)
-		{
-			for ($i = 0; $i < count($this->points); $i++)
-			{
+		if ( count($this->points) > 0 ) {
+			for ( $i = 0; $i < count($this->points); $i++ ) {
 				$js_markers .= 'var marker_' . $map_id .'_' . $i . ' = new wpgeo_createMarker2(map_' . $map_id . ', new GLatLng(' . $this->points[$i]['latitude'] . ', ' . $this->points[$i]['longitude'] . '), ' . $this->points[$i]['icon'] . ', \'' . addslashes(__($this->points[$i]['title'])) . '\', \'' . $this->points[$i]['link'] . '\');' . "\n";
 				$js_markers .= 'bounds.extend(new GLatLng(' . $this->points[$i]['latitude'] . ', ' . $this->points[$i]['longitude'] . '));';
 			}
@@ -79,17 +85,12 @@ class WPGeoMap
 		
 		// Show Polyline
 		$js_polyline = '';
-		if ($wp_geo_options['show_polylines'] == 'Y')
-		{
-			if ($this->show_polyline)
-			{
-				if (count($this->points) > 1)
-				{
+		if ( $wp_geo_options['show_polylines'] == 'Y' ) {
+			if ( $this->show_polyline ) {
+				if ( count($this->points) > 1 ) {
 					$polyline_coords = '';
-					for ($i = 0; $i < count($this->points); $i++)
-					{
-						if ($i > 0)
-						{
+					for ( $i = 0; $i < count($this->points); $i++ ) {
+						if ( $i > 0 ) {
 							$polyline_coords .= ',';
 						}
 						$polyline_coords .= 'new GLatLng(' . $this->points[$i]['latitude'] . ', ' . $this->points[$i]['longitude'] . ')' . "\n";
@@ -101,24 +102,20 @@ class WPGeoMap
 			}
 		}
 		
-		
-		
 		// Zoom
 		$js_zoom = '';
-		if (count($this->points) > 1)
-		{
+		if ( count($this->points) > 1 ) {
 			$js_zoom .= 'map_' . $map_id . '.setCenter(bounds.getCenter(), map_' . $map_id . '.getBoundsZoomLevel(bounds));';
 		}
-		if (count($this->points) == 1)
-		{
+		if ( count($this->points) == 1 ) {
 			$js_zoom .= 'map_' . $map_id . '.setCenter(marker_' . $map_id . '_0.getLatLng());';
 		}
 		
 		// Controls
 		$js_controls = '';
-		if ($this->show_map_scale)
+		if ( $this->show_map_scale )
 			$js_controls .= 'map_' . $map_id . '.addControl(new GScaleControl());';
-		if ($this->show_map_overview)
+		if ( $this->show_map_overview )
 			$js_controls .= 'map_' . $map_id . '.addControl(new GOverviewMapControl());';
 		
 		// Map Javascript
@@ -136,8 +133,7 @@ class WPGeoMap
 				
 				var mapTypeControl = new GMapTypeControl();
 				map_' . $map_id . '.addControl(mapTypeControl);';
-		if ($this->mapcontrol != "")
-		{
+		if ( $this->mapcontrol != "" ) {
 			$js .= 'map_' . $map_id . '.addControl(new ' . $this->mapcontrol . '());';
 		}
 		$js .= '
@@ -163,10 +159,16 @@ class WPGeoMap
 	
 	
 	/**
-	 * Add Point
+	 * @method       Add Point
+	 * @description  Adds a point (marker) to this map.
+	 * @param        $lat = Latitude
+	 * @param        $long = Longitude
+	 * @param        $icon = Icon type
+	 * @param        $title = Display title
+	 * @param        $link = URL to link to when point is clicked
 	 */
-	function addPoint($lat, $long, $icon = 'wpgeo_icon_large', $title = '', $link = '')
-	{
+	
+	function addPoint( $lat, $long, $icon = 'wpgeo_icon_large', $title = '', $link = '' ) {
 	
 		// Save point data
 		$this->points[] = array(
@@ -182,10 +184,12 @@ class WPGeoMap
 	
 	
 	/**
-	 * Show Polyline
+	 * @method       Show Polyline
+	 * @description  Show polylines on this map?
+	 * @param        $bool = Boolean
 	 */
-	function showPolyline($bool = true)
-	{
+	
+	function showPolyline( $bool = true ) {
 	
 		$this->show_polyline = $bool;
 		
@@ -194,10 +198,12 @@ class WPGeoMap
 	
 	
 	/**
-	 * Set Map Control
+	 * @method       Set Map Control
+	 * @description  Set the type of map control that should be used for this map.
+	 * @param        $mapcontrol = Type of map control
 	 */
-	function setMapControl($mapcontrol = 'GLargeMapControl')
-	{
+	
+	function setMapControl( $mapcontrol = 'GLargeMapControl' ) {
 	
 		$this->mapcontrol = $mapcontrol;
 		
@@ -206,10 +212,12 @@ class WPGeoMap
 	
 	
 	/**
-	 * Set Map Type
+	 * @method       Set Map Type
+	 * @description  Set the type of map.
+	 * @param        $maptype = Type of map
 	 */
-	function setMapType($maptype = 'G_NORMAL_MAP')
-	{
+	
+	function setMapType( $maptype = 'G_NORMAL_MAP' ) {
 	
 		$this->maptype = $maptype;
 		
@@ -218,10 +226,12 @@ class WPGeoMap
 	
 	
 	/**
-	 * Add Map Type
+	 * @method       Add Map Type
+	 * @description  Adds a type of map.
+	 * @param        $maptype = Type of map
 	 */
-	function addMapType($maptype)
-	{
+	
+	function addMapType( $maptype ) {
 	
 		$this->maptypes[] = $maptype;
 		$this->maptypes = array_unique($this->maptypes);
@@ -231,10 +241,12 @@ class WPGeoMap
 	
 	
 	/**
-	 * Set Map Zoom
+	 * @method       Set Map Zoom
+	 * @description  Sets the default zoom of this map.
+	 * @param        $zoom = Zoom
 	 */
-	function setMapZoom($zoom = 5)
-	{
+	
+	function setMapZoom( $zoom = 5 ) {
 	
 		$this->zoom = $zoom;
 		
@@ -243,10 +255,12 @@ class WPGeoMap
 	
 	
 	/**
-	 * Show Map Scale
+	 * @method       Show Map Scale
+	 * @description  Show the scale at the bottom of the map?
+	 * @param        $bool = Boolean
 	 */
-	function showMapScale($bool = true)
-	{
+	
+	function showMapScale( $bool = true ) {
 	
 		$this->show_map_scale = $bool;
 		
@@ -255,10 +269,12 @@ class WPGeoMap
 	
 	
 	/**
-	 * Show Map Overview
+	 * @method       Show Map Overview
+	 * @description  Show the mini overview map?
+	 * @param        $bool = Boolean
 	 */
-	function showMapOverview($bool = true)
-	{
+	
+	function showMapOverview( $bool = true ) {
 	
 		$this->show_map_overview = $bool;
 		

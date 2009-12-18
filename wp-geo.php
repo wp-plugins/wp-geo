@@ -28,10 +28,12 @@ if ( !defined( 'WP_PLUGIN_DIR' ) )
 
 
 /**
- * The WP Geo class
+ * @class        WP Geo class
+ * @description  The main WP Geo class - this is where it all happens.
+ * @author       Ben Huson <ben@thewhiteroom.net>
  */
-class WPGeo
-{
+
+class WPGeo {
 	
 	
 	
@@ -48,11 +50,13 @@ class WPGeo
 	var $feeds;
 	
 	
+	
 	/**
-	 * Constructor
+	 * @method       Constructor
+	 * @description  Initialise the class.
 	 */
-	function WPGeo()
-	{
+	
+	function WPGeo() {
 		
 		$this->maps = array();
 		$this->markers = new WPGeoMarkers();
@@ -61,12 +65,13 @@ class WPGeo
 	}
 	
 	
-
+	
 	/**
-	 * Register Activation
+	 * @method       Register Activation
+	 * @description  Runs when the plugin is activated - creates options etc.
 	 */
-	function register_activation()
-	{
+	
+	function register_activation() {
 		
 		global $wpgeo;
 		
@@ -98,10 +103,8 @@ class WPGeo
 		);
 		add_option('wp_geo_options', $options);
 		$wp_geo_options = get_option('wp_geo_options');
-		foreach ($options as $key => $val)
-		{
-			if (!isset($wp_geo_options[$key]))
-			{
+		foreach ( $options as $key => $val ) {
+			if ( !isset($wp_geo_options[$key]) ) {
 				$wp_geo_options[$key] = $options[$key];
 			}
 		}
@@ -115,13 +118,14 @@ class WPGeo
 	
 	
 	/**
-	 * is_wpgeo_feed
+	 * @method       Is WP Geo Feed?
+	 * @description  Detects whether this is a WP Geo feed.
+	 * @return        (boolean)
 	 */
-	function is_wpgeo_feed()
-	{
+	
+	function is_wpgeo_feed() {
 		
-		if ( is_feed() && $_GET['wpgeo'] == 'true' )
-		{
+		if ( is_feed() && $_GET['wpgeo'] == 'true' ) {
 			return true;
 		}
 		return false;
@@ -131,17 +135,18 @@ class WPGeo
 	
 	
 	/**
-	 * post_limits
+	 * @method       Post Limits
+	 * @description  Removes limit on WP Geo feed to show all posts.
+	 * @param        $limit = Current limit
+	 * @return       (int) Limit
 	 */
-	function post_limits( $limit )
-	{
+	
+	function post_limits( $limit ) {
 	
 		global $wpgeo;
 		
-		if ( $wpgeo->is_wpgeo_feed() )
-		{
-			if ( isset($_GET['limit']) && is_numeric($_GET['limit']) )
-			{
+		if ( $wpgeo->is_wpgeo_feed() ) {
+			if ( isset($_GET['limit']) && is_numeric($_GET['limit']) ) {
 				return 'LIMIT 0, ' . $_GET['limit'];
 			}
 		}
@@ -152,15 +157,17 @@ class WPGeo
 	
 	
 	/**
-	 * posts_join
+	 * @method       Posts Join
+	 * @description  Joins the post meta tables onto the results of the posts table.
+	 * @param        $join = Current JOIN statement
+	 * @return       (string) JOIN string
 	 */
-	function posts_join( $join )
-	{
+	
+	function posts_join( $join ) {
 	
 		global $wpdb, $wpgeo;
 		
-		if ( $wpgeo->is_wpgeo_feed() )
-		{
+		if ( $wpgeo->is_wpgeo_feed() ) {
 			$join .= " LEFT JOIN wp_postmeta ON (" . $wpdb->posts . ".ID = wp_postmeta.post_id)";
 		}
 		return $join;
@@ -170,15 +177,17 @@ class WPGeo
 	
 	
 	/**
-	 * posts_where
+	 * @method       Posts Where
+	 * @description  Adds extra WHERE clause to the posts results to only include posts with longitude and latitude.
+	 * @param        $where = Current WHERE statement
+	 * @return       (string) WHERE string
 	 */
-	function posts_where( $where )
-	{
+	
+	function posts_where( $where ) {
 	
 		global $wpgeo;
 		
-		if ( $wpgeo->is_wpgeo_feed() )
-		{
+		if ( $wpgeo->is_wpgeo_feed() ) {
 			$where .= " AND (wp_postmeta.meta_key = '_wp_geo_latitude' OR wp_postmeta.meta_key = '_wp_geo_longitude')";
 		}
 		return $where;
@@ -188,18 +197,19 @@ class WPGeo
 	
 	
 	/**
-	 * Check Google API Key
+	 * @method       Check Google API Key
+	 * @description  Check that a Google API Key has been entered.
+	 * @return       (boolean)
 	 */
-	function checkGoogleAPIKey()
-	{
+	
+	function checkGoogleAPIKey() {
 		
 		global $wpgeo;
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		$api_key = $wpgeo->get_google_api_key();
 		
-		if (empty($api_key ) || !isset($api_key))
-		{
+		if ( empty($api_key ) || !isset($api_key) ) {
 			return false;
 		}
 		return true;
@@ -209,23 +219,27 @@ class WPGeo
 	
 	
 	/**
-	 * Get Google API Key
+	 * @method       Get Google API Key
+	 * @description  Gets the Google API Key. Passes it through a filter so it can be overriden by another plugin.
+	 * @return       (string) API Key
 	 */
-	function get_google_api_key()
-	{
+	
+	function get_google_api_key() {
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		return apply_filters( 'wpgeo_google_api_key', $wp_geo_options['google_api_key'] );
 		
 	}
 	
-
-
+	
+	
 	/**
-	 * Category Map
+	 * @method       Category Map
+	 * @description  Outputs the HTML for a category map.
+	 * @param        $args = Arguments
 	 */
-	function categoryMap($args = '')
-	{
+	
+	function categoryMap( $args = '' ) {
 		
 		global $posts;
 		
@@ -240,14 +254,12 @@ class WPGeo
 		);
 		$args = wp_parse_args($args, $allowed_args);
 		
-		for ($i = 0; $i < count($posts); $i++)
-		{
+		for ( $i = 0; $i < count($posts); $i++ ) {
 			$post = $posts[$i];
 			$latitude = get_post_meta($post->ID, '_wp_geo_latitude', true);
 			$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
 			
-			if (is_numeric($latitude) && is_numeric($longitude))
-			{
+			if ( is_numeric($latitude) && is_numeric($longitude) ) {
 				$showmap = true;
 			}
 			
@@ -269,22 +281,22 @@ class WPGeo
 			}
 		}
 		
-		if ($showmap && $this->checkGoogleAPIKey())
-		{
+		if ( $showmap && $this->checkGoogleAPIKey() ) {
 			echo '<div class="wp_geo_map" id="wp_geo_map_visible" style="width:' . $map_width . '; height:' . $map_height . ';"></div>';
 		}
 		
 	}
 	
 	
+	
 	/**
-	 * meta_tags
+	 * @method       Meta Tags
+	 * @description  Outputs geo-related meta tags.
 	 */
-	function meta_tags()
-	{
+	
+	function meta_tags() {
 		
-		if (is_single())
-		{
+		if ( is_single() ) {
 			
 			global $post;
 			
@@ -293,8 +305,7 @@ class WPGeo
 			$title =  get_post_meta($post->ID, '_wp_geo_title', true);
 			$nl = "\n";
 			
-			if (is_numeric($lat) && is_numeric($long))
-			{
+			if ( is_numeric($lat) && is_numeric($long) ) {
 				echo '<meta name="geo.position" content="' . $lat . ';' . $long . '" />' . $nl; // Geo-Tag: Latitude and longitude
 				//echo '<meta name="geo.region" content="DE-BY" />' . $nl;                      // Geo-Tag: Country code (ISO 3166-1) and regional code (ISO 3166-2)
 				//echo '<meta name="geo.placename" content="MŸnchen" />' . $nl;                 // Geo-Tag: City or the nearest town
@@ -307,13 +318,14 @@ class WPGeo
 		
 	}
 	
-
-
+	
+	
 	/**
-	 * Hook: wp_head
+	 * @method       WP Head
+	 * @description  Outputs HTML and JavaScript to the header.
 	 */
-	function wp_head()
-	{
+	
+	function wp_head() {
 		
 		global $wpgeo;
 		
@@ -323,13 +335,13 @@ class WPGeo
 		$wp_geo_options = get_option('wp_geo_options');
 		
 		$controltypes = array();
-		if ($wp_geo_options['show_map_type_normal'] == 'Y')
+		if ( $wp_geo_options['show_map_type_normal'] == 'Y' )
 			$controltypes[] = 'G_NORMAL_MAP';
-		if ($wp_geo_options['show_map_type_satellite'] == 'Y')
+		if ( $wp_geo_options['show_map_type_satellite'] == 'Y' )
 			$controltypes[] = 'G_SATELLITE_MAP';
-		if ($wp_geo_options['show_map_type_hybrid'] == 'Y')
+		if ( $wp_geo_options['show_map_type_hybrid'] == 'Y' )
 			$controltypes[] = 'G_HYBRID_MAP';
-		if ($wp_geo_options['show_map_type_physical'] == 'Y')
+		if ( $wp_geo_options['show_map_type_physical'] == 'Y' )
 			$controltypes[] = 'G_PHYSICAL_MAP';
 		
 		echo '
@@ -355,8 +367,7 @@ class WPGeo
 		// CSS
 		echo '<link rel="stylesheet" href="' . WP_CONTENT_URL . '/plugins/wp-geo/wp-geo.css" type="text/css" />';
 		
-		if ($wpgeo->show_maps() || $wpgeo->widget_is_active())
-		{
+		if ( $wpgeo->show_maps() || $wpgeo->widget_is_active() ) {
 		
 			global $posts;
 			
@@ -368,8 +379,7 @@ class WPGeo
 			
 			// Coords to show on map?
 			$coords = array();
-			for ($i = 0; $i < count($posts); $i++)
-			{
+			for ( $i = 0; $i < count($posts); $i++ ) {
 				$post = $posts[$i];
 				$latitude = get_post_meta($post->ID, '_wp_geo_latitude', true);
 				$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
@@ -390,8 +400,7 @@ class WPGeo
 					$mymapzoom = $settings['zoom'];
 				}
 				
-				if (is_numeric($latitude) && is_numeric($longitude))
-				{
+				if ( is_numeric($latitude) && is_numeric($longitude) ) {
 					$push = array(
 						'id' => $post->ID,
 						'latitude' => $latitude,
@@ -400,7 +409,6 @@ class WPGeo
 						'link' => get_permalink($post->ID)
 					);
 					array_push($coords, $push);
-					
 					
 					// ----------- Start - Create maps for visible posts and pages -----------
 					
@@ -412,18 +420,18 @@ class WPGeo
 					$map->setMapZoom($mymapzoom);										// Set zoom
 					$map->setMapType($mymaptype);										// Set map type
 					
-					if ($wp_geo_options['show_map_type_physical'] == 'Y')
+					if ( $wp_geo_options['show_map_type_physical'] == 'Y' )
 						$map->addMapType('G_PHYSICAL_MAP');								// Show PHYSICAL map?
-					if ($wp_geo_options['show_map_type_normal'] == 'Y')
+					if ( $wp_geo_options['show_map_type_normal'] == 'Y' )
 						$map->addMapType('G_NORMAL_MAP');								// Show NORMAL map?
-					if ($wp_geo_options['show_map_type_satellite'] == 'Y')
+					if ( $wp_geo_options['show_map_type_satellite'] == 'Y' )
 						$map->addMapType('G_SATELLITE_MAP');							// Show SATELLITE map?
-					if ($wp_geo_options['show_map_type_hybrid'] == 'Y')
+					if ( $wp_geo_options['show_map_type_hybrid'] == 'Y' )
 						$map->addMapType('G_HYBRID_MAP');								// Show HYBRID map?
 					
-					if ($wp_geo_options['show_map_scale'] == 'Y')
+					if ( $wp_geo_options['show_map_scale'] == 'Y' )
 						$map->showMapScale(true);										// Show map scale
-					if ($wp_geo_options['show_map_overview'] == 'Y')
+					if ( $wp_geo_options['show_map_overview'] == 'Y' )
 						$map->showMapOverview(true);									// Show map overview
 					
 					$map->setMapControl($wp_geo_options['default_map_control']);		// Set map control
@@ -431,15 +439,12 @@ class WPGeo
 					
 					// ----------- End - Create maps for visible posts and pages -----------
 					
-					
 				}
 				
 			}
 			
 			// Need a map?
-			if (count($coords) > 0)
-			{
-			
+			if ( count($coords) > 0 ) {
 			
 				// ----------- Start - Create map for visible posts and pages -----------
 				
@@ -447,26 +452,25 @@ class WPGeo
 				$map->show_polyline = true;
 				
 				// Add points
-				for ($j = 0; $j < count($coords); $j++)
-				{
+				for ( $j = 0; $j < count($coords); $j++ ) {
 					$map->addPoint($coords[$j]['latitude'], $coords[$j]['longitude'], 'wpgeo_icon_small', $coords[$j]['title'], $coords[$j]['link']);
 				}
 				
 				$map->setMapZoom($mapzoom);										// Set zoom
 				$map->setMapType($maptype);										// Set map type
 				
-				if ($wp_geo_options['show_map_type_physical'] == 'Y')			// Show PHYSICAL map?
+				if ( $wp_geo_options['show_map_type_physical'] == 'Y' )			// Show PHYSICAL map?
 					$map->addMapType('G_PHYSICAL_MAP');
-				if ($wp_geo_options['show_map_type_normal'] == 'Y')				// Show NORMAL map?
+				if ( $wp_geo_options['show_map_type_normal'] == 'Y' )			// Show NORMAL map?
 					$map->addMapType('G_NORMAL_MAP');
-				if ($wp_geo_options['show_map_type_satellite'] == 'Y')			// Show SATELLITE map?
+				if ( $wp_geo_options['show_map_type_satellite'] == 'Y' )			// Show SATELLITE map?
 					$map->addMapType('G_SATELLITE_MAP');
-				if ($wp_geo_options['show_map_type_hybrid'] == 'Y')				// Show HYBRID map?
+				if ( $wp_geo_options['show_map_type_hybrid'] == 'Y' )			// Show HYBRID map?
 					$map->addMapType('G_HYBRID_MAP');
 				
-				if ($wp_geo_options['show_map_scale'] == 'Y')
+				if ( $wp_geo_options['show_map_scale'] == 'Y' )
 					$map->showMapScale(true);									// Show map scale
-				if ($wp_geo_options['show_map_overview'] == 'Y')
+				if ( $wp_geo_options['show_map_overview'] == 'Y' )
 					$map->showMapOverview(true);								// Show map overview
 					
 				$map->setMapControl($wp_geo_options['default_map_control']);	// Set map control
@@ -474,14 +478,12 @@ class WPGeo
 				
 				// ----------- End - Create map for visible posts and pages -----------
 				
-					
 				$google_maps_api_key = $wpgeo->get_google_api_key();
 				$zoom = $wp_geo_options['default_map_zoom'];
 				
 				// Loop through maps to get Javascript
 				$js_map_writes = '';
-				foreach ($this->maps as $map)
-				{
+				foreach ( $this->maps as $map ) {
 					$js_map_writes .= $map->renderMapJS();
 				}
 						
@@ -522,18 +524,18 @@ class WPGeo
 		}
 		
 	}
-
-
-
+	
+	
+	
 	/**
-	 * Hook: Init
+	 * @method       Init
+	 * @description  Runs actions on init if Google API Key exists.
 	 */
-	function init()
-	{
+	
+	function init() {
 	
 		// Only show admin things if Google API Key valid
-		if ($this->checkGoogleAPIKey())
-		{
+		if ( $this->checkGoogleAPIKey() ) {
 		
 			// Use the admin_menu action to define the custom boxes
 			add_action('admin_menu', array($this, 'add_custom_boxes'));
@@ -546,22 +548,21 @@ class WPGeo
 	}
 	
 	
-
+	
 	/**
-	 * Hook: admin_init
+	 * @method       Admin Init
+	 * @description  Runs actions required in the admin.
 	 */
-	function admin_init()
-	{
+	
+	function admin_init() {
 		
 		// Register Settings
-		if (function_exists('register_setting'))
-		{
+		if ( function_exists('register_setting') ) {
 			register_setting('wp-geo-options', 'wp_geo_options', '');
 		}
 		
 		// Only show editor if Google API Key valid
-		if ( $this->checkGoogleAPIKey() )
-		{
+		if ( $this->checkGoogleAPIKey() ) {
 			if ( class_exists( 'WPGeo_Editor' ) ) {
 				$this->editor = new WPGeo_Editor();
 				$this->editor->add_buttons();
@@ -569,22 +570,22 @@ class WPGeo
 		}
 		
 	}
-
-
-
+	
+	
+	
 	/**
-	 * Hook: admin_head
+	 * @method       Admin Head
+	 * @description  Outputs HTML to the header in the admin.
 	 */
-	function admin_head()
-	{
+	
+	function admin_head() {
 	
 		global $wpgeo, $post_ID;
 		
 		echo '<link rel="stylesheet" href="' . WP_CONTENT_URL . '/plugins/wp-geo/wp-geo.css" type="text/css" />';
 		
 		// Only load if on a post or page
-		if ($wpgeo->show_maps())
-		{
+		if ( $wpgeo->show_maps() ) {
 			
 			// Get post location
 			$latitude = get_post_meta($post_ID, '_wp_geo_latitude', true);
@@ -596,8 +597,7 @@ class WPGeo
 			$panel_open = false;
 			$hide_marker = false;
 			
-			if (!$wpgeo->show_maps_external)
-			{
+			if ( !$wpgeo->show_maps_external ) {
 				echo $wpgeo->mapScriptsInit($default_latitude, $default_longitude, $default_zoom, $panel_open, $hide_marker);
 			}
 		
@@ -608,24 +608,23 @@ class WPGeo
 	
 	
 	/**
-	 * Include Google Maps JavaScript API
+	 * @method       Include Google Maps JavaScript API
+	 * @description  Queue JavaScripts required by WP Geo.
 	 */
-	function includeGoogleMapsJavaScriptAPI()
-	{
+	
+	function includeGoogleMapsJavaScriptAPI() {
 		
 		global $wpgeo;
 		$wp_geo_options = get_option('wp_geo_options');
 		
 		// Google AJAX API
 		// Loads on all pages unless via proxy domain
-		if ( wpgeo_check_domain() && $wpgeo->checkGoogleAPIKey() )
-		{
+		if ( wpgeo_check_domain() && $wpgeo->checkGoogleAPIKey() ) {
 			wp_register_script('google_jsapi', 'http://www.google.com/jsapi?key=' . $wpgeo->get_google_api_key(), false, '1.0');
 			wp_enqueue_script('google_jsapi');
 		}
 		
-		if (($wpgeo->show_maps() || $wpgeo->widget_is_active()) && $wpgeo->checkGoogleAPIKey())
-		{
+		if ( ($wpgeo->show_maps() || $wpgeo->widget_is_active()) && $wpgeo->checkGoogleAPIKey() ) {
 			
 			// Set Locale
 			$locale = $wpgeo->get_googlemaps_locale('&hl=');
@@ -649,10 +648,14 @@ class WPGeo
 	
 	
 	/**
-	 * Get Google Maps Locale - by Alain Messin, tweaked by Ben :)
-	 * See http://code.google.com/apis/maps/faq.html#languagesupport
-	 * for link to updated languages codes
+	 * @method       Get Google Maps Locale
+	 * @description  See http://code.google.com/apis/maps/faq.html#languagesupport for link to updated languages codes.
+	 * @author       Alain Messin, tweaked by Ben :)
+	 * @param        $before = Before output
+	 * @param        $after = After output
+	 * @return       (string) Google locale
 	 */
+	
 	function get_googlemaps_locale( $before = '', $after = '' ) {
 		
 		$l = get_locale();
@@ -693,19 +696,25 @@ class WPGeo
 	
 	
 	/**
-	 * Map Scripts Init
+	 * @method       Map Scripts Init
+	 * @description  Output Javascripts to display maps.
+	 * @param        $latitude = Latitude
+	 * @param        $longitude = Longitude
+	 * @param        $zoom = Zoom
+	 * @param        $panel_open = Admin panel open?
+	 * @param        $hide_marker = Hide marker?
+	 * @return       (string) HTML content
 	 */
-	function mapScriptsInit($latitude, $longitude, $zoom = 5, $panel_open = false, $hide_marker = false)
-	{
+	
+	function mapScriptsInit( $latitude, $longitude, $zoom = 5, $panel_open = false, $hide_marker = false ) {
 		
 		global $wpgeo, $post;
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];	
 		
-		if (!is_numeric($latitude) || !is_numeric($longitude))
-		{
-			// Centre on London
+		// Centre on London
+		if ( !is_numeric($latitude) || !is_numeric($longitude) ) {
 			$latitude = $wp_geo_options['default_map_latitude'];
 			$longitude = $wp_geo_options['default_map_longitude'];
 			$zoom = $wp_geo_options['default_map_zoom']; // Default 5;
@@ -934,18 +943,20 @@ class WPGeo
 		
 	}
 	
-
-
+	
+	
 	/**
-	 * Hook: the_content
+	 * @method       The Content
+	 * @description  Output Map placeholders in the content area if set to automatically.
+	 * @param        $content = HTML content
+	 * @return       (string) HTML content
 	 */
-	function the_content($content = '')
-	{
+	
+	function the_content( $content = '' ) {
 	
 		global $wpgeo;
 		
-		if ($wpgeo->show_maps())
-		{
+		if ( $wpgeo->show_maps() ) {
 		
 			global $posts, $post;
 			
@@ -959,15 +970,11 @@ class WPGeo
 			$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
 			
 			// Need a map?
-			if (is_numeric($latitude) && is_numeric($longitude))
-			{
-				if ($wp_geo_options['show_post_map'] == 'TOP')
-				{
+			if ( is_numeric($latitude) && is_numeric($longitude) ) {
+				if ( $wp_geo_options['show_post_map'] == 'TOP' ) {
 					// Show at top of post
 					return '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>' . $content;
-				}
-				elseif ($wp_geo_options['show_post_map'] == 'BOTTOM')
-				{
+				} elseif ( $wp_geo_options['show_post_map'] == 'BOTTOM' ) {
 					// Show at bottom of post
 					return $content . '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>';
 				}
@@ -982,15 +989,15 @@ class WPGeo
 	
 	
 	/**
-	 * Hook: admin_menu
+	 * @method       Admin Menu
+	 * @description  Adds WP Geo settings page menu item.
 	 */
-	function admin_menu()
-	{
+	
+	function admin_menu() {
 		
 		global $wpgeo;
 		
-		if (function_exists('add_options_page'))
-		{
+		if ( function_exists('add_options_page') ) {
 			add_options_page('WP Geo Options', 'WP Geo', 8, __FILE__, array($wpgeo, 'options_page'));
 		}
 		
@@ -999,10 +1006,11 @@ class WPGeo
 	
 	
 	/**
-	 * Widget Is Active
+	 * @method       Widget Is Active
+	 * @description  Checks if the WP Geo widget is active.
 	 */
-	function widget_is_active()
-	{
+	
+	function widget_is_active() {
 		
 		return is_active_widget(array('WPGeoWidget', 'map_widget'));
 		
@@ -1011,51 +1019,47 @@ class WPGeo
 	
 	
 	/**
-	 * Show Maps
+	 * @method       Show Maps
+	 * @description  Checks the current page/scenario and wether maps should be shown.
 	 */
-	function show_maps()
-	{
+	
+	function show_maps() {
 	
 		global $post_ID, $pagenow;
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		
 		// Check if domain is correct
-		if ( !wpgeo_check_domain() )
-		{
+		if ( !wpgeo_check_domain() ) {
 			return false;
 		}
 		
 		// Widget active
-		//if (is_active_widget(array('WPGeoWidget', 'map_widget'))) return true;
+		// if (is_active_widget(array('WPGeoWidget', 'map_widget'))) return true;
 		
 		// Check settings
-		if (is_home() && $wp_geo_options['show_maps_on_home'] == 'Y')					return true;
-		if (is_single() && $wp_geo_options['show_maps_on_posts'] == 'Y')				return true;
-		if (is_page() && $wp_geo_options['show_maps_on_pages'] == 'Y')					return true;
-		if (is_date() && $wp_geo_options['show_maps_in_datearchives'] == 'Y')			return true;
-		if (is_category() && $wp_geo_options['show_maps_in_categoryarchives'] == 'Y')	return true;
-		if (is_search() && $wp_geo_options['show_maps_in_searchresults'] == 'Y')		return true;
-		if (is_feed() && $wp_geo_options['add_geo_information_to_rss'] == 'Y')			return true;
+		if ( is_home() && $wp_geo_options['show_maps_on_home'] == 'Y' )					return true;
+		if ( is_single() && $wp_geo_options['show_maps_on_posts'] == 'Y' )				return true;
+		if ( is_page() && $wp_geo_options['show_maps_on_pages'] == 'Y' )				return true;
+		if ( is_date() && $wp_geo_options['show_maps_in_datearchives'] == 'Y' )			return true;
+		if ( is_category() && $wp_geo_options['show_maps_in_categoryarchives'] == 'Y' )	return true;
+		if ( is_search() && $wp_geo_options['show_maps_in_searchresults'] == 'Y' )		return true;
+		if ( is_feed() && $wp_geo_options['add_geo_information_to_rss'] == 'Y' )		return true;
 
 		// Activate maps in admin...
-		if (is_admin())
-		{
+		if ( is_admin() ) {
 			// If editing a post or page...
-			if (is_numeric($post_ID) && $post_ID > 0)
-			{
+			if ( is_numeric($post_ID) && $post_ID > 0 ) {
 				return true;
 			}
 			// If writing a new post or page...
-			if ($pagenow == 'post-new.php' || $pagenow == 'page-new.php')
-			{
+			if ( $pagenow == 'post-new.php' || $pagenow == 'page-new.php' ) {
 				return true;
 			}
 		}
 		
 		// Do Action
-		if ($this->show_maps_external)
-		{
+		if ( $this->show_maps_external ) {
 			return true;
 		}
 		
@@ -1064,37 +1068,41 @@ class WPGeo
 	}
 	
 	
-
+	
 	/**
-	 * Options Checkbox
+	 * @method       Options Checkbox
+	 * @description  Return the checkbox HTML.
+	 * @param        $id = Field ID
+	 * @param        $val = Field value
+	 * @param        $checked = Checked value
+	 * @return       (string) Checkbox HTML
 	 */
-	function options_checkbox($id, $val, $checked)
-	{
+	
+	function options_checkbox( $id, $val, $checked ) {
 	
 		$is_checked = '';
-		if ($val == $checked)
-		{
+		if ( $val == $checked ) {
 			$is_checked = 'checked="checked" ';
 		}
 		return '<input name="' . $id . '" type="checkbox" id="' . $id . '" value="' . $val . '" ' . $is_checked . '/>';
 	
 	}
-
-
-
+	
+	
+	
 	/**
-	 * Options Page
+	 * @method       Options Page
+	 * @description  Outputs the options page.
 	 */
-	function options_page()
-	{
+	
+	function options_page() {
 		
 		global $wpgeo;
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		
 		// Process option updates
-		if (isset($_POST['action']) && $_POST['action'] == 'update')
-		{
+		if ( isset($_POST['action']) && $_POST['action'] == 'update' ) {
 		
 			$wp_geo_options['google_api_key'] = $_POST['google_api_key'];
 			$wp_geo_options['google_map_type'] = $_POST['google_map_type'];
@@ -1148,12 +1156,10 @@ class WPGeo
 				. sprintf(__("For more information and documentation about this plugin please visit the <a %s>WP Geo Plugin</a> home page.", 'wp-geo'), 'href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/"') . '<br />'
 				. sprintf(__("If you experience any problems/bugs with the plugin, please <a %s>log it here</a>.", 'wp-geo'), 'href="http://code.google.com/p/wp-geo/issues/list"') . 
 				'</p>';
-		if (!$this->checkGoogleAPIKey())
-		{
+		if ( !$this->checkGoogleAPIKey() ) {
 			echo '<div class="error"><p>Before you can use Wp Geo you must acquire a <a href="http://code.google.com/apis/maps/signup.html">Google API Key</a> for your blog - the plugin will not function without it!</p></div>';
 		}
-		if ( !$wpgeo->markers->marker_folder_exists() )
-		{
+		if ( !$wpgeo->markers->marker_folder_exists() ) {
 			echo '<div class="error"><p>Unable to create the markers folder /wp-content/uploads/wp-geo/markers.<br />Please create it and copy the marker images to it from /wp-content/plugins/wp-geo/img/markers</p></div>';
 		}
 		echo '<table class="form-table">
@@ -1266,8 +1272,7 @@ class WPGeo
 						</td>
 					</tr>
 				</table>';
-		if (function_exists('register_setting') && function_exists('settings_fields'))
-		{
+		if ( function_exists('register_setting') && function_exists('settings_fields') ) {
 			settings_fields('wp-geo-options'); 
 		}	
 		echo '</form>
@@ -1281,12 +1286,16 @@ class WPGeo
 	}
 	
 	
-
+	
 	/**
-	 * Select Map Control
+	 * @method       Select Map Control
+	 * @description  Map control array or menu.
+	 * @param        $return = Array or menu type
+	 * @param        $selected = Selected value
+	 * @return       (array or string) Array or menu HTML
 	 */
-	function selectMapControl($return = 'array', $selected = '')
-	{
+	
+	function selectMapControl( $return = 'array', $selected = '' ) {
 		
 		// Array
 		$map_type_array = array(
@@ -1297,11 +1306,9 @@ class WPGeo
 		);
 		
 		// Menu?
-		if ($return = 'menu')
-		{
+		if ( $return = 'menu' ) {
 			$menu = '';
-			foreach ($map_type_array as $key => $val)
-			{
+			foreach ( $map_type_array as $key => $val ) {
 				$is_selected = $selected == $key ? ' selected="selected"' : '';
 				$menu .= '<option value="' . $key . '"' . $is_selected . '>' . $val . '</option>';
 			}
@@ -1317,10 +1324,14 @@ class WPGeo
 	
 	
 	/**
-	 * Select Map Zoom
+	 * @method       Select Map Zoom
+	 * @description  Map zoom array or menu.
+	 * @param        $return = Array or menu type
+	 * @param        $selected = Selected value
+	 * @return       (array or string) Array or menu HTML
 	 */
-	function selectMapZoom($return = 'array', $selected = '')
-	{
+	
+	function selectMapZoom( $return = 'array', $selected = '' ) {
 		
 		// Array
 		$map_type_array = array(
@@ -1347,11 +1358,9 @@ class WPGeo
 		);
 		
 		// Menu?
-		if ($return = 'menu')
-		{
+		if ( $return = 'menu' ) {
 			$menu = '';
-			foreach ($map_type_array as $key => $val)
-			{
+			foreach ( $map_type_array as $key => $val ) {
 				$is_selected = $selected == $key ? ' selected="selected"' : '';
 				$menu .= '<option value="' . $key . '"' . $is_selected . '>' . $val . '</option>';
 			}
@@ -1364,13 +1373,17 @@ class WPGeo
 		
 	}
 	
-
-
+	
+	
 	/**
-	 * Google Map Types
+	 * @method       Google Map Types
+	 * @description  Map type array or menu.
+	 * @param        $return = Array or menu type
+	 * @param        $selected = Selected value
+	 * @return       (array or string) Array or menu HTML
 	 */
-	function google_map_types($return = 'array', $selected = '')
-	{
+	
+	function google_map_types( $return = 'array', $selected = '' ) {
 		
 		// Array
 		$map_type_array = array(
@@ -1381,11 +1394,9 @@ class WPGeo
 		);
 		
 		// Menu?
-		if ($return = 'menu')
-		{
+		if ( $return = 'menu' ) {
 			$menu = '';
-			foreach ($map_type_array as $key => $val)
-			{
+			foreach ( $map_type_array as $key => $val ) {
 				$is_selected = $selected == $key ? ' selected="selected"' : '';
 				$menu .= '<option value="' . $key . '"' . $is_selected . '>' . $val . '</option>';
 			}
@@ -1397,14 +1408,18 @@ class WPGeo
 		return $map_type_array;
 		
 	}
-
-
-
+	
+	
+	
 	/**
-	 * Post Map Menu
+	 * @method       Post Map Menu
+	 * @description  Map position array or menu.
+	 * @param        $return = Array or menu type
+	 * @param        $selected = Selected value
+	 * @return       (array or string) Array or menu HTML
 	 */
-	function post_map_menu($return = 'array', $selected = '')
-	{
+	
+	function post_map_menu( $return = 'array', $selected = '' ) {
 		
 		// Array
 		$map_type_array = array(
@@ -1414,11 +1429,9 @@ class WPGeo
 		);
 		
 		// Menu?
-		if ($return = 'menu')
-		{
+		if ( $return = 'menu' ) {
 			$menu = '';
-			foreach ($map_type_array as $key => $val)
-			{
+			foreach ( $map_type_array as $key => $val ) {
 				$is_selected = $selected == $key ? ' selected="selected"' : '';
 				$menu .= '<option value="' . $key . '"' . $is_selected . '>' . $val . '</option>';
 			}
@@ -1434,15 +1447,15 @@ class WPGeo
 	
 	
 	/**
-	 * Hook: after_plugin_row
+	 * @method       After Plugin Row
+	 * @description  This function can be used to insert text after the WP Geo plugin row on the plugins page.
+	 *               Useful if you need to tell people something important before they upgrade.
+	 * @param        $plugin = Plugin reference
 	 */
-	// This function can be used to insert text after the WP Geo plugin row on the plugins page.
-	// Useful if you need to tell people something important before they upgrade.
-	function after_plugin_row($plugin)
-	{
+	
+	function after_plugin_row( $plugin ) {
 		
-		if ('wp-geo/wp-geo.php' == $plugin && !empty($this->plugin_message))
-		{
+		if ( 'wp-geo/wp-geo.php' == $plugin && !empty($this->plugin_message) ) {
 			//echo '<td colspan="5" class="plugin-update" style="line-height:1.2em;">' . $this->plugin_message . '</td>';
 			return;
 		}
@@ -1452,10 +1465,14 @@ class WPGeo
 	
 	
 	/**
-	 * Hook: get_wpgeo_posts
+	 * @method       Get WP Geo Posts
+	 * @description  This function can be used to insert text after the WP Geo plugin row on the plugins page.
+	 *               Useful if you need to tell people something important before they upgrade.
+	 * @param        $args = Arguments
+	 * @return       (array) of points
 	 */
-	function get_wpgeo_posts($args = 'numberposts=5')
-	{
+	
+	function get_wpgeo_posts( $args = 'numberposts=5' ) {
 		
 		global $customFields;
 		
@@ -1476,12 +1493,13 @@ class WPGeo
 		
 		$points = array();
 		
-		while ($customPosts->have_posts()) : $customPosts->the_post();
+		while ( $customPosts->have_posts() ) {
+			$customPosts->the_post();
 			$id   = get_the_ID();
 			$long = get_post_custom_values("_wp_geo_longitude");
 			$lat  = get_post_custom_values("_wp_geo_latitude");
 			$points[] = array('id' => $id, 'long' => $long, 'lat' => $lat);
-		endwhile;
+		}
 		
 		return $points;
 		
@@ -1490,10 +1508,13 @@ class WPGeo
 	
 	
 	/**
-	 * Get Custom Field Posts Join
+	 * @method       Get Custom Field Posts Join
+	 * @description  Join custom fields on to results.
+	 * @param        $join = JOIN statement
+	 * @return       (string) SQL
 	 */
-	function get_custom_field_posts_join($join)
-	{
+	
+	function get_custom_field_posts_join( $join ) {
 	
 		global $wpdb, $customFields;
 		return $join . " JOIN $wpdb->postmeta postmeta ON (postmeta.post_id = $wpdb->posts.ID and postmeta.meta_key in ($customFields))";
@@ -1503,10 +1524,13 @@ class WPGeo
 	
 	
 	/**
-	 * Get Custom Field Posts Group
+	 * @method       Get Custom Field Posts Group
+	 * @description  Group by post id.
+	 * @param        $group = GROUP BY statement
+	 * @return       (string) SQL
 	 */
-	function get_custom_field_posts_group($group)
-	{
+	
+	function get_custom_field_posts_group( $group ) {
 	
 		global $wpdb;
 		$group .= " $wpdb->posts.ID ";
@@ -1519,22 +1543,18 @@ class WPGeo
 	/* =============== Admin Edit Pages =============== */
 	
 	
-
-	/**
-	 * ---------- Add Custom Boxes ----------
-	 * Adds a custom section to the "advanced" Post and Page edit screens
-	 * using the admin_menu hook
-	 */
-	function add_custom_boxes()
-	{
 	
-		if (function_exists( 'add_meta_box'))
-		{
+	/**
+	 * @method       Add Custom Boxes
+	 * @description  Adds a custom section to the "advanced" Post and Page edit screens using the admin_menu hook.
+	 */
+	
+	function add_custom_boxes() {
+	
+		if ( function_exists( 'add_meta_box') ) {
 			add_meta_box('wpgeo_location', __('WP Geo Location', 'wpgeo'), array($this, 'wpgeo_location_inner_custom_box'), 'post', 'advanced');
 			add_meta_box('wpgeo_location', __('WP Geo Location', 'wpgeo'), array($this, 'wpgeo_location_inner_custom_box'), 'page', 'advanced');
-		}
-		else
-		{
+		} else {
 			add_action('dbx_post_advanced', array($this, 'wpgeo_location_old_custom_box'));
 			add_action('dbx_page_advanced', array($this, 'wpgeo_location_old_custom_box'));
 		}
@@ -1544,18 +1564,18 @@ class WPGeo
 	
 	
 	/**
-	 * ---------- WP Geo Location: Inner Custom Box ----------
-	 * Prints the inner fields for the custom post/page section.
+	 * @method       WP Geo Location Inner Custom Box
+	 * @description  Prints the inner fields for the custom post/page section.
 	 */
-	function wpgeo_location_inner_custom_box()
-	{
+	
+	function wpgeo_location_inner_custom_box() {
 		
 		global $post;
 		
-		$latitude = get_post_meta($post->ID, '_wp_geo_latitude', true);
+		$latitude  = get_post_meta($post->ID, '_wp_geo_latitude', true);
 		$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
-		$title = get_post_meta($post->ID, '_wp_geo_title', true);
-		$settings = get_post_meta($post->ID, '_wp_geo_map_settings', true);
+		$title     = get_post_meta($post->ID, '_wp_geo_title', true);
+		$settings  = get_post_meta($post->ID, '_wp_geo_map_settings', true);
 		
 		$wpgeo_map_settings_zoom = '';
 		$wpgeo_map_settings_type = '';
@@ -1609,11 +1629,11 @@ class WPGeo
 	
 	
 	/**
-	 * ---------- WP Geo Location: Old Custom Box ----------
-	 * Prints the edit form for pre-WordPress 2.5 post/page.
+	 * @method       WP Geo Location Old Custom Box
+	 * @description  Prints the edit form for pre-WordPress 2.5 post/page.
 	 */
-	function wpgeo_location_old_custom_box()
-	{
+	
+	function wpgeo_location_old_custom_box() {
 	
 		echo '<div class="dbx-b-ox-wrapper">' . "\n";
 		echo '<fieldset id="wpgeo_location_fieldsetid" class="dbx-box">' . "\n";
@@ -1630,43 +1650,39 @@ class WPGeo
 	
 	
 	/**
-	 * ---------- WP Geo Location: Save post data ----------
-	 * When the post is saved, saves our custom data.
+	 * @method       WP Geo Location Save post data
+	 * @description  When the post is saved, saves our custom data.
+	 * @param        $post_id = Post ID
 	 */
-	function wpgeo_location_save_postdata($post_id)
-	{
+	
+	function wpgeo_location_save_postdata( $post_id ) {
 	
 		// Verify this came from the our screen and with proper authorization,
 		// because save_post can be triggered at other times
-		if (!wp_verify_nonce($_POST['wpgeo_location_noncename'], plugin_basename(__FILE__)))
-		{
+		if ( !wp_verify_nonce($_POST['wpgeo_location_noncename'], plugin_basename(__FILE__)) ) {
 			return $post_id;
 		}
 		
 		// Authenticate user
-		if ('page' == $_POST['post_type'])
-		{
-			if (!current_user_can('edit_page', $post_id))
+		if ( 'page' == $_POST['post_type'] ) {
+			if ( !current_user_can('edit_page', $post_id) )
 				return $post_id;
-		}
-		else
-		{
-			if (!current_user_can('edit_post', $post_id))
+		} else {
+			if ( !current_user_can('edit_post', $post_id) )
 				return $post_id;
 		}
 		
 		$mydata = array();
 		
 		// Find and save the location data
-		if (isset($_POST['wp_geo_latitude']) && isset($_POST['wp_geo_longitude']))
-		{
+		if ( isset($_POST['wp_geo_latitude']) && isset($_POST['wp_geo_longitude']) ) {
 			
 			// Only delete post meta if isset (to avoid deletion in bulk/quick edit mode)
 			delete_post_meta($post_id, '_wp_geo_latitude');
 			delete_post_meta($post_id, '_wp_geo_longitude');
 			
-			if (is_numeric($_POST['wp_geo_latitude']) && is_numeric($_POST['wp_geo_longitude']))
-			{
+			if ( is_numeric($_POST['wp_geo_latitude']) && is_numeric($_POST['wp_geo_longitude']) ) {
+				
 				add_post_meta($post_id, '_wp_geo_latitude', $_POST['wp_geo_latitude']);
 				add_post_meta($post_id, '_wp_geo_longitude', $_POST['wp_geo_longitude']);
 				
@@ -1690,7 +1706,6 @@ class WPGeo
 		}
 		
 		// Find and save the settings data
-		
 		delete_post_meta($post_id, '_wp_geo_map_settings');
 		
 		$settings = array();
@@ -1726,8 +1741,7 @@ include( 'includes/shortcodes.php' );
 include( 'includes/class.feeds.php' );
 
 // Admin Includes
-if ( is_admin() )
-{
+if ( is_admin() ) {
 	include_once( 'admin/class.editor.php' );
 }
 

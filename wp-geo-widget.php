@@ -3,20 +3,20 @@
 
 
 /**
-* WP Geo Widget
-* @author Marco Alionso Ramirez, marco@onemarco.com, updated by Ben Huson, ben@thewhiteroom.net
-* @version 1.3
-* Adds a geocoding widget to WordPress (requires WP Geo plugin)
-*/
-
+ * @package    WP Geo
+ * @subpackage WP Geo Widget class
+ */
 
 
 
 /**
- * The WP Geo Widget class
+ * @class        WP Geo Widget
+ * @description  Adds a geocoding widget to WordPress (requires WP Geo plugin)
+ * @author       Marco Alionso Ramirez <marco@onemarco.com>, updated by Ben Huson <ben@thewhiteroom.net>
+ * @version      1.3
  */
-class WPGeoWidget
-{
+
+class WPGeoWidget {
 
 
 
@@ -29,10 +29,11 @@ class WPGeoWidget
 	
 
 	/**
-	 * Initialize the map widget
+	 * @method       Initialize the map widget
+	 * @description  Register widget and controls.
 	 */
-	function init_map_widget()
-	{
+	
+	function init_map_widget() {
 	
 		// This registers the widget so it appears in the sidebar
 		register_sidebar_widget('WP Geo', array('WPGeoWidget', 'map_widget'));
@@ -45,16 +46,17 @@ class WPGeoWidget
 	
 	
 	/**
-	 * Widget to display a map in the sidebar
+	 * @method       Map Widget
+	 * @description  Widget to display a map in the sidebar.
+	 * @param        $args = Arguments
 	 */
-	function map_widget($args) 
-	{	
+	
+	function map_widget( $args ) {
 	
 		global $wpgeo;
 		
 		// If Google API Key...
-		if ($wpgeo->checkGoogleAPIKey())
-		{
+		if ( $wpgeo->checkGoogleAPIKey() ) {
 		
 			// Extract the widget options
 			extract($args);
@@ -69,8 +71,7 @@ class WPGeoWidget
 			$showpolylines 	= $wp_geo_options['show_polylines'] == 'Y' ? true : false;
 			$zoom 	 	    = is_numeric( $options['zoom'] ) ? $options['zoom'] : $wp_geo_options['default_map_zoom'];
 			
-			if ($options['show_polylines'] == 'Y' || $options['show_polylines'] == 'N')
-			{
+			if ( $options['show_polylines'] == 'Y' || $options['show_polylines'] == 'N' ) {
 				$showpolylines = $options['show_polylines'] == 'Y' ? true : false;
 			}
 			
@@ -78,8 +79,7 @@ class WPGeoWidget
 			$html_content = '';
 			$map_content = WPGeoWidget::add_map($width, $height, $maptype, $showpolylines, $zoom);
 			
-			if (!empty($map_content))
-			{
+			if ( !empty($map_content) ) {
 				$html_content = $before_widget . $before_title . $title . $after_title . WPGeoWidget::add_map($width, $height, $maptype, $showpolylines, $zoom);
 				$html_content .= $after_widget;
 			}
@@ -93,10 +93,11 @@ class WPGeoWidget
 	
 	
 	/**
-	 * Control panel for the map widget
+	 * @method       Map Widget Control
+	 * @description  Control panel for the map.
 	 */
-	function map_widget_control() 
-	{
+	
+	function map_widget_control() {
 		
 		global $wpgeo;
 		
@@ -104,8 +105,7 @@ class WPGeoWidget
 		$options = $newoptions = get_option('map_widget');
 		
 		// Get the options
-		if ($_POST['wpgeo-submit']) 
-		{
+		if ( $_POST['wpgeo-submit'] ) {
 			$newoptions['title']          = strip_tags(stripslashes($_POST['wpgeo-title']));
 			$newoptions['width']          = strip_tags(stripslashes($_POST['wpgeo-width']));
 			$newoptions['height'] 	      = strip_tags(stripslashes($_POST['wpgeo-height']));
@@ -121,8 +121,7 @@ class WPGeoWidget
 		}
 		
 		// Set the options when they differ
-		if ($options != $newoptions)
-		{
+		if ( $options != $newoptions ) {
 			$options = $newoptions;
 			update_option('map_widget', $options);
 		}
@@ -146,8 +145,7 @@ class WPGeoWidget
 		}
 		
 		// Write the widget controls
-		if (!$wpgeo->checkGoogleAPIKey())
-		{
+		if ( !$wpgeo->checkGoogleAPIKey() ) {
 			// NOTE: Check if there is a 'less hard-coded' way to write link to settings page
 			echo '<p class="wp_geo_error">' . __('WP Geo is not currently active as you have not entered a Google API Key', 'wp-geo') . '. <a href="' . get_bloginfo('wpurl') . '/wp-admin/options-general.php?page=wp-geo/wp-geo.php">' . __('Please update your WP Geo settings', 'wp-geo') . '</a>.</p>';
 		}
@@ -174,13 +172,17 @@ class WPGeoWidget
 	
 	}
 	
-
-
+	
+	
 	/**
-	 * Select: Show Polylines Options
+	 * @method       Show Polylines Options
+	 * @description  Control panel for the map.
+	 * @param        $return = Type of output to return (array or menu)
+	 * @param        $selected = Selected value
+	 * @return       (array or string) Array or HTML select menu.
 	 */
-	function show_polylines_options($return = 'array', $selected = '')
-	{
+	
+	function show_polylines_options( $return = 'array', $selected = '' ) {
 		
 		// Array
 		$map_type_array = array(
@@ -190,11 +192,9 @@ class WPGeoWidget
 		);
 		
 		// Menu?
-		if ($return = 'menu')
-		{
+		if ( $return = 'menu' ) {
 			$menu = '';
-			foreach ($map_type_array as $key => $val)
-			{
+			foreach ( $map_type_array as $key => $val ) {
 				$is_selected = $selected == $key ? ' selected="selected"' : '';
 				$menu .= '<option value="' . $key . '"' . $is_selected . '>' . $val . '</option>';
 			}
@@ -210,25 +210,29 @@ class WPGeoWidget
 	
 	
 	/**
-	 * Add the map to the widget
-	 * TODO: integrate the code better into the existing one
+	 * @method       Add Map
+	 * @description  Add the map to the widget.
+	 * @param        $width = Map width
+	 * @param        $height = Map height
+	 * @param        $maptype = Map Type
+	 * @param        $showpolylines = Show Polylines
+	 * @param        $zoom = Zoom
+	 * @return       (string) HTML JavaScript.
+	 * @note         TO DO: integrate the code better into the existing one.
 	 */
-	function add_map($width = '100%', $height = 150, $maptype = '', $showpolylines = false, $zoom = null) 
-	{
+	
+	function add_map( $width = '100%', $height = 150, $maptype = '', $showpolylines = false, $zoom = null ) {
 	
 		global $posts, $wpgeo;
 		
 		// If Google API Key...
-		if ($wpgeo->checkGoogleAPIKey())
-		{
+		if ( $wpgeo->checkGoogleAPIKey() ) {
 		
 			// Set default width and height
-			if (empty($width))
-			{
+			if ( empty($width) ) {
 				$width = '100%';
 			}
-			if (empty($height))
-			{
+			if ( empty($height) ) {
 				$height = '150';
 			}
 			
@@ -237,8 +241,7 @@ class WPGeoWidget
 			
 			// Find the coordinates for the posts
 			$coords = array();
-			for ($i = 0; $i < count($posts); $i++)
-			{
+			for ( $i = 0; $i < count($posts); $i++ ) {
 			
 				$post 		= $posts[$i];
 				$latitude 	= get_post_meta($post->ID, '_wp_geo_latitude', true);
@@ -249,8 +252,7 @@ class WPGeoWidget
 					$title = $post_id->post_title;
 				}
 				
-				if (is_numeric($latitude) && is_numeric($longitude))
-				{
+				if ( is_numeric($latitude) && is_numeric($longitude) ) {
 					$push = array(
 						'id' 		=> $post->ID,
 						'latitude' 	=> $latitude,
@@ -266,31 +268,27 @@ class WPGeoWidget
 			$markers_js = '';
 			
 			// Only show map widget if there are coords to show
-			if (count($coords) > 0)
-			{
+			if ( count($coords) > 0 ) {
 			
 				$google_maps_api_key = $wpgeo->get_google_api_key();
 				if ( !is_numeric($zoom) ) {
 					$zoom = $wp_geo_options['default_map_zoom'];
 				}
 				
-				if (empty($maptype))
-				{
+				if ( empty($maptype) ) {
 					$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];			
 				}
 				
 				// Polyline JS
 				$polyline_coords_js = '[';
 				
-				for ($i = 0; $i < count($coords); $i++)
-				{
+				for ( $i = 0; $i < count($coords); $i++ ) {
 					$polyline_coords_js .= 'new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '),';
 				}
 				
 				$polyline_coords_js .= ']';		
 		
-				for ($i = 0; $i < count($coords); $i++)
-				{
+				for ( $i = 0; $i < count($coords); $i++ ) {
 					$markers_js .= 'marker' . $i . ' = wpgeo_createMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), wpgeo_icon_small, "' . addslashes(__($coords[$i]['title'])) . '", "' . get_permalink($coords[$i]['id']) . '");' . "\n";
 				}
 							
@@ -344,8 +342,7 @@ class WPGeoWidget
 							// draw the polygonal lines between points
 							';
 					
-				if ($showpolylines)
-				{
+				if ( $showpolylines ) {
 					$html_js .= 'map.addOverlay(wpgeo_createPolyline(' . $polyline_coords_js . ', "' . $wp_geo_options['polyline_colour'] . '", 2, 0.50));';
 				}
 				
@@ -366,9 +363,9 @@ class WPGeoWidget
 					</script>';
 				
 				// Set width and height
-				if (is_numeric($width))
+				if ( is_numeric($width) )
 					$width = $width . 'px';
-				if (is_numeric($height))
+				if ( is_numeric($height) )
 					$height = $height . 'px';
 				
 				$html_js .= '<div class="wp_geo_map" id="wp_geo_map_widget" style="width:' . $width . '; height:' . $height . ';"></div>';

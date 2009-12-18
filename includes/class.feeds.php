@@ -3,8 +3,9 @@
 
 
 /**
- * @package WP Geo
+ * @package    WP Geo
  * @subpackage Includes > Feeds Class
+ * @author     Ben Huson <ben@thewhiteroom.net>
  */
 
 
@@ -19,8 +20,7 @@ class WPGeo_Feeds
 	 * @description  Initialise the class.
 	 */
 	
-	function WPGeo_Feeds()
-	{
+	function WPGeo_Feeds() {
 	
 		add_action( 'init', array( $this, 'init' ) );
 		
@@ -33,8 +33,7 @@ class WPGeo_Feeds
 	 * @description  Initialise WP Geo feeds.
 	 */
 	
-	function init() 
-	{
+	function init() {
 	
 		// Add GeoRSS Feed Type
 		add_feed( 'georss', array( 'WPGeo_Feeds', 'add_feed_georss' ) );
@@ -52,8 +51,7 @@ class WPGeo_Feeds
 	 * @description  Adjusts the post limits on feeds.
 	 */
 	
-	function post_limits( $limits ) 
-	{
+	function post_limits( $limits ) {
 	
 		global $wp_query;
 		
@@ -73,8 +71,7 @@ class WPGeo_Feeds
 	 * @description  Initialise WP Geo feeds.
 	 */
 	
-	function feed_content_type( $type ) 
-	{
+	function feed_content_type( $type ) {
 		
 		if ( $type == 'georss' ) {
 			$type = 'application/rss+xml';
@@ -91,9 +88,10 @@ class WPGeo_Feeds
 	 * @description  Adds permalink rewrite GeoRSS feed.
 	 */
 	
-	function add_feed_georss() 
-	{
+	function add_feed_georss() {
+		
 		load_template( ABSPATH . 'wp-includes/feed-rss2.php' );
+	
 	}
 	
 	
@@ -103,8 +101,7 @@ class WPGeo_Feeds
 	 * @description  Adds feed hooks to output GeoRSS info.
 	 */
 	
-	function add_feed_hooks() 
-	{
+	function add_feed_hooks() {
 		
 		add_action( 'rss2_ns', array( $this, 'georss_namespace' ) );
 		add_action( 'atom_ns', array( $this, 'georss_namespace' ) );
@@ -123,13 +120,11 @@ class WPGeo_Feeds
 	 * @description  Adds the geo RSS namespace to the feed.
 	 */
 	
-	function georss_namespace() 
-	{
+	function georss_namespace() {
 	
 		global $wpgeo;
 		
-		if ( $wpgeo->show_maps() )
-		{			
+		if ( $wpgeo->show_maps() ) {
 			echo 'xmlns:georss="http://www.georss.org/georss" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:ymaps="http://api.maps.yahoo.com/Maps/V2/AnnotatedMaps.xsd"';
  		}
 	
@@ -142,13 +137,11 @@ class WPGeo_Feeds
 	 * @description  Adds geo RSS nodes to the feed item.
 	 */
 	
-	function georss_item() 
-	{
+	function georss_item() {
 	
 		global $wpgeo;
 		
-		if ( $wpgeo->show_maps() )
-		{
+		if ( $wpgeo->show_maps() ) {
 		
 			global $post;
 			
@@ -160,8 +153,7 @@ class WPGeo_Feeds
 			$longitude = get_post_meta( $post->ID, '_wp_geo_longitude', true );
 			
 			// Need a map?
-			if ( is_numeric($latitude) && is_numeric($longitude) )
-			{
+			if ( is_numeric($latitude) && is_numeric($longitude) ) {
 				echo '<georss:point>' . $latitude . ' ' . $longitude . '</georss:point>';
 				echo '<geo:lat>' . $latitude . '</geo:lat>';
 				echo '<geo:long>' . $longitude . '</geo:long>';
