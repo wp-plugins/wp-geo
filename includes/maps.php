@@ -10,7 +10,7 @@
 
 
 
-class WPGeoMap {
+class WPGeo_Map {
 	
 	
 	
@@ -35,7 +35,7 @@ class WPGeoMap {
 	 * @description  Initialise the class.
 	 */
 	
-	function WPGeoMap( $id ) {
+	function WPGeo_Map( $id ) {
 		
 		$this->id = $id;
 		$this->maptypes = array();

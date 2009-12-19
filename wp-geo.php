@@ -59,7 +59,7 @@ class WPGeo {
 	function WPGeo() {
 		
 		$this->maps = array();
-		$this->markers = new WPGeoMarkers();
+		$this->markers = new WPGeo_Markers();
 		$this->feeds = new WPGeo_Feeds();
 		
 	}
@@ -412,7 +412,7 @@ class WPGeo {
 					
 					// ----------- Start - Create maps for visible posts and pages -----------
 					
-					$map = new WPGeoMap($post->ID);										// Create map
+					$map = new WPGeo_Map($post->ID);										// Create map
 					
 					// Add point
 					$map->addPoint($latitude, $longitude, 'wpgeo_icon_large', $title, get_permalink($post->ID));
@@ -448,7 +448,7 @@ class WPGeo {
 			
 				// ----------- Start - Create map for visible posts and pages -----------
 				
-				$map = new WPGeoMap('visible');
+				$map = new WPGeo_Map('visible');
 				$map->show_polyline = true;
 				
 				// Add points
@@ -1012,7 +1012,7 @@ class WPGeo {
 	
 	function widget_is_active() {
 		
-		return is_active_widget(array('WPGeoWidget', 'map_widget'));
+		return is_active_widget(array('WPGeo_Widget', 'map_widget'));
 		
 	}
 	
@@ -1035,7 +1035,7 @@ class WPGeo {
 		}
 		
 		// Widget active
-		// if (is_active_widget(array('WPGeoWidget', 'map_widget'))) return true;
+		// if (is_active_widget(array('WPGeo_Widget', 'map_widget'))) return true;
 		
 		// Check settings
 		if ( is_home() && $wp_geo_options['show_maps_on_home'] == 'Y' )					return true;

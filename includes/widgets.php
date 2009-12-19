@@ -16,7 +16,7 @@
  * @version      1.3
  */
 
-class WPGeoWidget {
+class WPGeo_Widget {
 
 
 
@@ -36,10 +36,10 @@ class WPGeoWidget {
 	function init_map_widget() {
 	
 		// This registers the widget so it appears in the sidebar
-		register_sidebar_widget('WP Geo', array('WPGeoWidget', 'map_widget'));
+		register_sidebar_widget('WP Geo', array('WPGeo_Widget', 'map_widget'));
 	
 		// This registers the  widget control form
-		register_widget_control('WP Geo', array('WPGeoWidget', 'map_widget_control'));
+		register_widget_control('WP Geo', array('WPGeo_Widget', 'map_widget_control'));
 	
 	}
 	
@@ -77,10 +77,10 @@ class WPGeoWidget {
 			
 			// Start write widget
 			$html_content = '';
-			$map_content = WPGeoWidget::add_map($width, $height, $maptype, $showpolylines, $zoom);
+			$map_content = WPGeo_Widget::add_map($width, $height, $maptype, $showpolylines, $zoom);
 			
 			if ( !empty($map_content) ) {
-				$html_content = $before_widget . $before_title . $title . $after_title . WPGeoWidget::add_map($width, $height, $maptype, $showpolylines, $zoom);
+				$html_content = $before_widget . $before_title . $title . $after_title . WPGeo_Widget::add_map($width, $height, $maptype, $showpolylines, $zoom);
 				$html_content .= $after_widget;
 			}
 			
@@ -156,7 +156,7 @@ class WPGeoWidget {
 		echo '<p><strong>' . __('Zoom', 'wp-geo') . ':</strong> ' . $wpgeo->selectMapZoom('menu', $zoom) . '<br /><small>If not all markers fit, the map will automatically be zoomed so they do.</small></p>';
 		echo '<p><strong>' . __('Settings', 'wp-geo') . ':</strong></p>';
 		echo '<p>' . $wpgeo->google_map_types('menu', $maptype) . '</p>';
-		echo '<p>' . WPGeoWidget::show_polylines_options('menu', $show_polylines) . '</p>';
+		echo '<p>' . WPGeo_Widget::show_polylines_options('menu', $show_polylines) . '</p>';
 		
 		/*
 		echo '<p><strong>' . __('Show Maps On', 'wp-geo') . ':</strong><br /><small>' . __('If all options are unchecked the default settings will be used.', 'wp-geo') . '</small></p>';
@@ -385,7 +385,7 @@ class WPGeoWidget {
 
 
 // Widget Hooks
-add_action('init', array('WPGeoWidget', 'init_map_widget'));
+add_action('init', array('WPGeo_Widget', 'init_map_widget'));
 
 
 

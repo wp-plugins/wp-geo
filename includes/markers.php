@@ -10,7 +10,7 @@
 
 
 
-class WPGeoMarkers {
+class WPGeo_Markers {
 	
 	
 	
@@ -28,7 +28,7 @@ class WPGeoMarkers {
 	 * @description  Initialise the class.
 	 */
 	
-	function WPGeoMarkers() {
+	function WPGeo_Markers() {
 	}
 	
 	
