@@ -52,7 +52,7 @@ function get_wpgeo_latitude( $post_id = null ) {
 	$id = absint($post_id) > 0 ? absint($post_id) : $post->ID;
 	
 	if ( absint($id) > 0 ) {
-		return get_post_meta( absint($id), '_wp_geo_latitude', true );
+		return get_post_meta( absint($id), WPGEO_LATITUDE_META, true );
 	}
 	
 	return null;
@@ -75,7 +75,7 @@ function get_wpgeo_longitude( $post_id = null ) {
 	$id = absint($post_id) > 0 ? absint($post_id) : $post->ID;
 	
 	if ( absint($id) > 0 ) {
-		return get_post_meta( absint($id), '_wp_geo_longitude', true );
+		return get_post_meta( absint($id), WPGEO_LONGITUDE_META, true );
 	}
 	
 	return null;

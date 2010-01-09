@@ -27,6 +27,14 @@ if ( !defined( 'WP_PLUGIN_DIR' ) )
 
 
 
+// Constants
+define( 'WPGEO_LATITUDE_META',     '_wp_geo_latitude' );
+define( 'WPGEO_LONGITUDE_META',    '_wp_geo_longitude' );
+define( 'WPGEO_TITLE_META',        '_wp_geo_title' );
+define( 'WPGEO_MAP_SETTINGS_META', '_wp_geo_map_settings' );
+
+
+
 /**
  * @class        WP Geo class
  * @description  The main WP Geo class - this is where it all happens.
@@ -188,7 +196,7 @@ class WPGeo {
 		global $wpgeo;
 		
 		if ( $wpgeo->is_wpgeo_feed() ) {
-			$where .= " AND (wp_postmeta.meta_key = '_wp_geo_latitude' OR wp_postmeta.meta_key = '_wp_geo_longitude')";
+			$where .= " AND (wp_postmeta.meta_key = '" . WPGEO_LATITUDE_META . "' OR wp_postmeta.meta_key = '" . WPGEO_LONGITUDE_META . "')";
 		}
 		return $where;
 	
@@ -256,8 +264,8 @@ class WPGeo {
 		
 		for ( $i = 0; $i < count($posts); $i++ ) {
 			$post = $posts[$i];
-			$latitude = get_post_meta($post->ID, '_wp_geo_latitude', true);
-			$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
+			$latitude = get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
+			$longitude = get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
 			
 			if ( is_numeric($latitude) && is_numeric($longitude) ) {
 				$showmap = true;
@@ -300,9 +308,9 @@ class WPGeo {
 			
 			global $post;
 			
-			$lat =  get_post_meta($post->ID, '_wp_geo_latitude', true);
-			$long =  get_post_meta($post->ID, '_wp_geo_longitude', true);
-			$title =  get_post_meta($post->ID, '_wp_geo_title', true);
+			$lat =  get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
+			$long =  get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
+			$title =  get_post_meta($post->ID, WPGEO_TITLE_META, true);
 			$nl = "\n";
 			
 			if ( is_numeric($lat) && is_numeric($long) ) {
@@ -381,10 +389,10 @@ class WPGeo {
 			$coords = array();
 			for ( $i = 0; $i < count($posts); $i++ ) {
 				$post = $posts[$i];
-				$latitude = get_post_meta($post->ID, '_wp_geo_latitude', true);
-				$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
-				$title = get_post_meta($post->ID, '_wp_geo_title', true);
-				$settings = get_post_meta($post->ID, '_wp_geo_map_settings', true);
+				$latitude = get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
+				$longitude = get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
+				$title = get_post_meta($post->ID, WPGEO_TITLE_META, true);
+				$settings = get_post_meta($post->ID, WPGEO_MAP_SETTINGS_META, true);
 				
 				if ( empty($title) ) {
 					$title = $post->post_title;
@@ -588,8 +596,8 @@ class WPGeo {
 		if ( $wpgeo->show_maps() ) {
 			
 			// Get post location
-			$latitude = get_post_meta($post_ID, '_wp_geo_latitude', true);
-			$longitude = get_post_meta($post_ID, '_wp_geo_longitude', true);
+			$latitude = get_post_meta($post_ID, WPGEO_LATITUDE_META, true);
+			$longitude = get_post_meta($post_ID, WPGEO_LONGITUDE_META, true);
 			$default_latitude = $latitude;
 			$default_longitude = $longitude;
 			$default_zoom = 13;
@@ -723,7 +731,7 @@ class WPGeo {
 		}
 		
 		if ( is_numeric($post->ID) && $post->ID > 0 ) {
-			$settings = get_post_meta($post->ID, '_wp_geo_map_settings', true);
+			$settings = get_post_meta($post->ID, WPGEO_MAP_SETTINGS_META, true);
 			if ( is_numeric($settings['zoom']) ) {
 				$zoom = $settings['zoom'];
 			}
@@ -966,8 +974,8 @@ class WPGeo {
 			$id = $post->ID;
 		
 			// Get latitude and longitude
-			$latitude = get_post_meta($post->ID, '_wp_geo_latitude', true);
-			$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
+			$latitude = get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
+			$longitude = get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
 			
 			// Need a map?
 			if ( is_numeric($latitude) && is_numeric($longitude) ) {
@@ -1480,7 +1488,7 @@ class WPGeo {
 		$arguments = wp_parse_args($args, $default_args);
 		extract($arguments, EXTR_SKIP);
 		
-		$customFields = "'_wp_geo_longitude', '_wp_geo_latitude'";
+		$customFields = "'" . WPGEO_LONGITUDE_META . "', '" . WPGEO_LATITUDE_META . "'";
 		$customPosts = new WP_Query();
 		
 		add_filter('posts_join', array($this, 'get_custom_field_posts_join'));
@@ -1496,8 +1504,8 @@ class WPGeo {
 		while ( $customPosts->have_posts() ) {
 			$customPosts->the_post();
 			$id   = get_the_ID();
-			$long = get_post_custom_values("_wp_geo_longitude");
-			$lat  = get_post_custom_values("_wp_geo_latitude");
+			$long = get_post_custom_values(WPGEO_LONGITUDE_META);
+			$lat  = get_post_custom_values(WPGEO_LATITUDE_META);
 			$points[] = array('id' => $id, 'long' => $long, 'lat' => $lat);
 		}
 		
@@ -1572,10 +1580,10 @@ class WPGeo {
 		
 		global $post;
 		
-		$latitude  = get_post_meta($post->ID, '_wp_geo_latitude', true);
-		$longitude = get_post_meta($post->ID, '_wp_geo_longitude', true);
-		$title     = get_post_meta($post->ID, '_wp_geo_title', true);
-		$settings  = get_post_meta($post->ID, '_wp_geo_map_settings', true);
+		$latitude  = get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
+		$longitude = get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
+		$title     = get_post_meta($post->ID, WPGEO_TITLE_META, true);
+		$settings  = get_post_meta($post->ID, WPGEO_MAP_SETTINGS_META, true);
 		
 		$wpgeo_map_settings_zoom = '';
 		$wpgeo_map_settings_type = '';
@@ -1678,16 +1686,16 @@ class WPGeo {
 		if ( isset($_POST['wp_geo_latitude']) && isset($_POST['wp_geo_longitude']) ) {
 			
 			// Only delete post meta if isset (to avoid deletion in bulk/quick edit mode)
-			delete_post_meta($post_id, '_wp_geo_latitude');
-			delete_post_meta($post_id, '_wp_geo_longitude');
+			delete_post_meta($post_id, WPGEO_LATITUDE_META);
+			delete_post_meta($post_id, WPGEO_LONGITUDE_META);
 			
 			if ( is_numeric($_POST['wp_geo_latitude']) && is_numeric($_POST['wp_geo_longitude']) ) {
 				
-				add_post_meta($post_id, '_wp_geo_latitude', $_POST['wp_geo_latitude']);
-				add_post_meta($post_id, '_wp_geo_longitude', $_POST['wp_geo_longitude']);
+				add_post_meta($post_id, WPGEO_LATITUDE_META, $_POST['wp_geo_latitude']);
+				add_post_meta($post_id, WPGEO_LONGITUDE_META, $_POST['wp_geo_longitude']);
 				
-				$mydata['_wp_geo_latitude']  = $_POST['wp_geo_latitude'];
-				$mydata['_wp_geo_longitude'] = $_POST['wp_geo_longitude'];
+				$mydata[WPGEO_LATITUDE_META]  = $_POST['wp_geo_latitude'];
+				$mydata[WPGEO_LONGITUDE_META] = $_POST['wp_geo_longitude'];
 				
 			}
 			
@@ -1696,17 +1704,17 @@ class WPGeo {
 		// Find and save the title data
 		if ( isset($_POST['wp_geo_title']) ) {
 			
-			delete_post_meta($post_id, '_wp_geo_title');
+			delete_post_meta($post_id, WPGEO_TITLE_META);
 			
 			if ( !empty($_POST['wp_geo_title']) ) {
-				add_post_meta($post_id, '_wp_geo_title', $_POST['wp_geo_title']);
-				$mydata['_wp_geo_title']  = $_POST['wp_geo_title'];
+				add_post_meta($post_id, WPGEO_TITLE_META, $_POST['wp_geo_title']);
+				$mydata[WPGEO_TITLE_META]  = $_POST['wp_geo_title'];
 			}
 			
 		}
 		
 		// Find and save the settings data
-		delete_post_meta($post_id, '_wp_geo_map_settings');
+		delete_post_meta($post_id, WPGEO_MAP_SETTINGS_META);
 		
 		$settings = array();
 		if ( isset($_POST['wpgeo_map_settings_zoom']) && !empty($_POST['wpgeo_map_settings_zoom']) ) {
@@ -1716,8 +1724,8 @@ class WPGeo {
 			$settings['type'] = $_POST['wpgeo_map_settings_type'];
 		}
 		
-		add_post_meta($post_id, '_wp_geo_map_settings', $settings);
-		$mydata['_wp_geo_map_settings'] = $settings;
+		add_post_meta($post_id, WPGEO_MAP_SETTINGS_META, $settings);
+		$mydata[WPGEO_MAP_SETTINGS_META] = $settings;
 		
 		return $mydata;
 	
@@ -1733,6 +1741,7 @@ class WPGeo {
 load_plugin_textdomain('wp-geo', PLUGINDIR . '/wp-geo/languages');
 
 // Includes
+// include( 'includes/query.php' ); // Coming soon...
 include( 'includes/markers.php' );
 include( 'includes/maps.php' );
 include( 'includes/functions.php' );

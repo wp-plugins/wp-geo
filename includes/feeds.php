@@ -149,8 +149,8 @@ class WPGeo_Feeds
 			$id = $post->ID;		
 		
 			// Get latitude and longitude
-			$latitude  = get_post_meta( $post->ID, '_wp_geo_latitude', true );
-			$longitude = get_post_meta( $post->ID, '_wp_geo_longitude', true );
+			$latitude  = get_post_meta( $post->ID, WPGEO_LATITUDE_META, true );
+			$longitude = get_post_meta( $post->ID, WPGEO_LONGITUDE_META, true );
 			
 			// Need a map?
 			if ( is_numeric($latitude) && is_numeric($longitude) ) {

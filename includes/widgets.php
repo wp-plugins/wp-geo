@@ -244,10 +244,10 @@ class WPGeo_Widget {
 			for ( $i = 0; $i < count($posts); $i++ ) {
 			
 				$post 		= $posts[$i];
-				$latitude 	= get_post_meta($post->ID, '_wp_geo_latitude', true);
-				$longitude 	= get_post_meta($post->ID, '_wp_geo_longitude', true);
+				$latitude 	= get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
+				$longitude 	= get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
 				$post_id 	= get_post($post->ID);
-				$title 	    = get_post_meta($post->ID, '_wp_geo_title', true);
+				$title 	    = get_post_meta($post->ID, WPGEO_TITLE_META, true);
 				if ( empty($title) ) {
 					$title = $post_id->post_title;
 				}
