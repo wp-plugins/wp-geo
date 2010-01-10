@@ -638,6 +638,7 @@ class WPGeo {
 			
 			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&v=2.118' . $locale . '&key=' . $wpgeo->get_google_api_key() . '&sensor=false', false, '2.118');
 			wp_register_script('wpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'), '1.0');
+			wp_register_script('wpgeo-admin-post', WP_CONTENT_URL . '/plugins/wp-geo/js/admin-post.js', array('jquery', 'googlemaps'), '1.0');
 			wp_register_script('wpgeotooltip', WP_CONTENT_URL . '/plugins/wp-geo/js/tooltip.js', array('googlemaps', 'jquery'), '1.0');
 			//wp_register_script('jquerywpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'), '1.0');
 			
@@ -645,6 +646,9 @@ class WPGeo {
 			wp_enqueue_script('googlemaps');
 			wp_enqueue_script('wpgeo');
 			wp_enqueue_script('wpgeotooltip');
+			if ( is_admin() ) {
+				 wp_enqueue_script('wpgeo-admin-post');
+			}
 			//wp_enqueue_script('jquerywpgeo');
 			
 			return '';
@@ -750,122 +754,6 @@ class WPGeo {
 			<script type="text/javascript">
 			//<![CDATA[
 			
-			var map = null;
-			var geocoder = null;
-			var marker = null;
-			
-			jQuery(document).ready(function() {
-			
-				// Admin - Latitude filed updated
-				jQuery("#wp_geo_latitude").keyup(function() {
-					updatedLatLngFields();
-				});
-				
-				// Admin - Longitude filed updated
-				jQuery("#wp_geo_longitude").keyup(function() {
-					updatedLatLngFields();
-				});
-			
-			});
-			
-			function updatedLatLngFields()
-			{
-				var latField = document.getElementById("wp_geo_latitude");
-				var lngField = document.getElementById("wp_geo_longitude");
-				if (latField.value == \'\' && lngField.value == \'\')
-				{
-					marker.hide();
-				}
-				else
-				{
-					var point = new GLatLng(latField.value, lngField.value);
-					map.setCenter(point);
-					marker.setPoint(point);
-					marker.show();
-				}
-			}
-			
-			function clearLatLngFields()
-			{
-				var searchField = document.getElementById("wp_geo_search");
-				var latField = document.getElementById("wp_geo_latitude");
-				var lngField = document.getElementById("wp_geo_longitude");
-				searchField.value = \'\';
-				latField.value = \'\';
-				lngField.value = \'\';
-				marker.hide();
-			}
-			
-			function wp_geo_showAddress()
-			{
-				var searchField = document.getElementById("wp_geo_search");
-				var latField = document.getElementById("wp_geo_latitude");
-				var lngField = document.getElementById("wp_geo_longitude");
-				var address = searchField.value;
-				if (geocoder)
-				{
-					geocoder.getLatLng(
-						address,
-						function(point)
-						{
-							if (!point)
-							{
-								alert(address + " not found");
-							}
-							else
-							{
-								map.setCenter(point);
-								marker.setPoint(point);
-								marker.show();
-								latField.value = point.lat();
-								lngField.value = point.lng();
-							}
-						}
-					);
-				}
-			}
-			
-			function getMapTypeContentFromUrlArg( arg ) {
-				if (arg == G_NORMAL_MAP.getUrlArg()) {
-					return "G_NORMAL_MAP";
-				} else if (arg == G_SATELLITE_MAP.getUrlArg()) {
-					return "G_SATELLITE_MAP";
-				} else if (arg == G_HYBRID_MAP.getUrlArg()) {
-					return "G_HYBRID_MAP";
-				} else if (arg == G_PHYSICAL_MAP.getUrlArg()) {
-					return "G_PHYSICAL_MAP";
-				} else if (arg == G_MAPMAKER_NORMAL_MAP.getUrlArg()) {
-					return "G_MAPMAKER_NORMAL_MAP";
-				} else if (arg == G_MAPMAKER_HYBRID_MAP.getUrlArg()) {
-					return "G_MAPMAKER_HYBRID_MAP";
-				} else if (arg == G_MOON_ELEVATION_MAP.getUrlArg()) {
-					return "G_MOON_ELEVATION_MAP";
-				} else if (arg == G_MOON_VISIBLE_MAP.getUrlArg()) {
-					return "G_MOON_VISIBLE_MAP";
-				} else if (arg == G_MARS_ELEVATION_MAP.getUrlArg()) {
-					return "G_MARS_ELEVATION_MAP";
-				} else if (arg == G_MARS_VISIBLE_MAP.getUrlArg()) {
-					return "G_MARS_VISIBLE_MAP";
-				} else if (arg == G_MARS_INFRARED_MAP.getUrlArg()) {
-					return "G_MARS_INFRARED_MAP";
-				} else if (arg == G_SKY_VISIBLE_MAP.getUrlArg()) {
-					return "G_SKY_VISIBLE_MAP";
-				} else if (arg == G_SATELLITE_3D_MAP.getUrlArg()) {
-					return "G_SATELLITE_3D_MAP";
-				} else if (arg == G_DEFAULT_MAP_TYPES.getUrlArg()) {
-					return "G_DEFAULT_MAP_TYPES";
-				} else if (arg == G_MAPMAKER_MAP_TYPES.getUrlArg()) {
-					return "G_MAPMAKER_MAP_TYPES";
-				} else if (arg == G_MOON_MAP_TYPES.getUrlArg()) {
-					return "G_MOON_MAP_TYPES";
-				} else if (arg == G_MARS_MAP_TYPES.getUrlArg()) {
-					return "G_MARS_MAP_TYPES";
-				} else if (arg == G_SKY_MAP_TYPES.getUrlArg()) {
-					return "G_SKY_MAP_TYPES";
-				}
-				return "";
-			}
-			
 			function init_wp_geo_map_admin()
 			{
 				if (GBrowserIsCompatible() && document.getElementById("wp_geo_map"))
@@ -885,7 +773,7 @@ class WPGeo {
 					
 					map.setMapType(' . $maptype . ');
 					var type_setting = document.getElementById("wpgeo_map_settings_type");
-					type_setting.value = getMapTypeContentFromUrlArg(map.getCurrentMapType().getUrlArg());
+					type_setting.value = wpgeo_getMapTypeContentFromUrlArg(map.getCurrentMapType().getUrlArg());
 					
 					geocoder = new GClientGeocoder();
 					 
@@ -900,7 +788,7 @@ class WPGeo {
 					
 					GEvent.addListener(map, "maptypechanged", function() {
 						var type_setting = document.getElementById("wpgeo_map_settings_type");
-						type_setting.value = getMapTypeContentFromUrlArg(map.getCurrentMapType().getUrlArg());
+						type_setting.value = wpgeo_getMapTypeContentFromUrlArg(map.getCurrentMapType().getUrlArg());
 					});
 					
 					GEvent.addListener(map, "zoomend", function(oldLevel, newLevel) {
@@ -936,13 +824,10 @@ class WPGeo {
 					
 				}
 			}
-			if (document.all&&window.attachEvent) { // IE-Win
-				window.attachEvent("onload", function () { init_wp_geo_map_admin(); });
-				window.attachEvent("onunload", GUnload);
-			} else if (window.addEventListener) { // Others
-				window.addEventListener("load", function () { init_wp_geo_map_admin(); }, false);
-				window.addEventListener("unload", GUnload, false);
-			}
+			
+			jQuery(window).load( init_wp_geo_map_admin );
+			jQuery(window).unload( GUnload );
+			
 			//]]>
 			</script>';
 			
@@ -1605,7 +1490,7 @@ class WPGeo {
 		echo '<table cellpadding="3" cellspacing="5" class="form-table">
 			<tr>
 				<th scope="row">' . __('Search for location', 'wp-geo') . '<br /><span style="font-weight:normal;">(' . __('town, postcode or address', 'wp-geo') . ')</span></th>
-				<td><input name="wp_geo_search" type="text" size="45" id="wp_geo_search" value="' . $search . '" /> <span class="submit"><input type="button" id="wp_geo_search_button" name="wp_geo_search_button" value="' . __('Search', 'wp-geo') . '" onclick="wp_geo_showAddress();" /></span></td>
+				<td><input name="wp_geo_search" type="text" size="45" id="wp_geo_search" value="' . $search . '" /> <span class="submit"><input type="button" id="wp_geo_search_button" name="wp_geo_search_button" value="' . __('Search', 'wp-geo') . '" /></span></td>
 			</tr>
 			<tr>
 				<td colspan="2">
@@ -1615,7 +1500,7 @@ class WPGeo {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row">' . __('Latitude', 'wp-geo') . ', ' . __('Longitude', 'wp-geo') . '<br /><a href="#" onclick="clearLatLngFields(); return false;">' . __('clear location', 'wp-geo') . '</a></th>
+				<th scope="row">' . __('Latitude', 'wp-geo') . ', ' . __('Longitude', 'wp-geo') . '<br /><a href="#" class="wpgeo-clear-location-fields">' . __('clear location', 'wp-geo') . '</a></th>
 				<td><input name="wp_geo_latitude" type="text" size="25" id="wp_geo_latitude" value="' . $latitude . '" /> <input name="wp_geo_longitude" type="text" size="25" id="wp_geo_longitude" value="' . $longitude . '" /></td>
 			</tr>
 			<tr>
