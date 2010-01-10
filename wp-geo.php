@@ -794,7 +794,6 @@ class WPGeo {
 					GEvent.addListener(map, "zoomend", function(oldLevel, newLevel) {
 						var zoom_setting = document.getElementById("wpgeo_map_settings_zoom");
 						zoom_setting.value = newLevel;
-						map.setCenter(marker.getLatLng());
 					});
 					
 					marker = new GMarker(center, {draggable: true});
@@ -1500,8 +1499,11 @@ class WPGeo {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row">' . __('Latitude', 'wp-geo') . ', ' . __('Longitude', 'wp-geo') . '<br /><a href="#" class="wpgeo-clear-location-fields">' . __('clear location', 'wp-geo') . '</a></th>
-				<td><input name="wp_geo_latitude" type="text" size="25" id="wp_geo_latitude" value="' . $latitude . '" /> <input name="wp_geo_longitude" type="text" size="25" id="wp_geo_longitude" value="' . $longitude . '" /></td>
+				<th scope="row">' . __('Latitude', 'wp-geo') . ', ' . __('Longitude', 'wp-geo') . '</th>
+				<td><input name="wp_geo_latitude" type="text" size="25" id="wp_geo_latitude" value="' . $latitude . '" /><br />
+					<input name="wp_geo_longitude" type="text" size="25" id="wp_geo_longitude" value="' . $longitude . '" /><br />
+					<a href="#" class="wpgeo-clear-location-fields">' . __('clear location', 'wp-geo') . '</a> | <a href="#" class="wpgeo-centre-location">' . __('centre location', 'wp-geo') . '</a>
+				</td>
 			</tr>
 			<tr>
 				<th scope="row">' . __('Marker Title', 'wp-geo') . '</th>

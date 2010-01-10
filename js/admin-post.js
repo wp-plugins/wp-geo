@@ -65,6 +65,17 @@ jQuery(document).ready(function() {
 	
 	
 	
+	// Centre Location
+	jQuery("#wpgeo_location a.wpgeo-centre-location").click(function(e) {
+		
+		map.setCenter(marker.getLatLng());
+		
+		return false;
+		
+	});
+	
+	
+	
 	// Location search
 	jQuery("#wpgeo_location #wp_geo_search_button").click(function(e) {
 		
