@@ -3,9 +3,13 @@
 
 
 /**
- * @package    WP Geo
- * @subpackage Map Class
- * @author     Ben Huson <ben@thewhiteroom.net>
+ * ----- WP Geo Maps -----
+ * This file contains all the classes that manage maps
+ * and rendering maps to the page.
+ *
+ * @package     WP Geo
+ * @subpackage  Maps
+ * @author      Ben Huson <ben@thewhiteroom.net>
  */
 
 
@@ -219,7 +223,9 @@ class WPGeo_Map {
 	
 	function setMapType( $maptype = 'G_NORMAL_MAP' ) {
 	
-		$this->maptype = $maptype;
+		if ( $this->is_valid_map_type($maptype) ) {
+			$this->maptype = $maptype;
+		}
 		
 	}
 	
@@ -233,8 +239,31 @@ class WPGeo_Map {
 	
 	function addMapType( $maptype ) {
 	
-		$this->maptypes[] = $maptype;
-		$this->maptypes = array_unique($this->maptypes);
+		if ( $this->is_valid_map_type($maptype) ) {
+			$this->maptypes[] = $maptype;
+			$this->maptypes = array_unique($this->maptypes);
+		}
+		
+	}
+	
+	
+	
+	/**
+	 * @method       Is Valid Map Type
+	 * @description  Check to see if a map type is allowed.
+	 * @param        $maptype = Type of map
+	 */
+	
+	function is_valid_map_type( $maptype ) {
+	
+		$types = array(
+			'G_PHYSICAL_MAP',
+			'G_NORMAL_MAP',
+			'G_SATELLITE_MAP',
+			'G_HYBRID_MAP'
+		);
+		
+		return in_array($maptype, $types);
 		
 	}
 	
@@ -248,7 +277,7 @@ class WPGeo_Map {
 	
 	function setMapZoom( $zoom = 5 ) {
 	
-		$this->zoom = $zoom;
+		$this->zoom = absint($zoom);
 		
 	}
 	

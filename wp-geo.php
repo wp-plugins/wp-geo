@@ -402,9 +402,8 @@ class WPGeo {
 				if ( isset($settings['type']) && !empty($settings['type']) ) {
 					$mymaptype = $settings['type'];
 				}
-				
 				$mymapzoom = $mapzoom;
-				if ( isset($settings['zoom']) && !empty($settings['zoom']) ) {
+				if ( isset($settings['zoom']) && is_numeric($settings['zoom']) ) {
 					$mymapzoom = $settings['zoom'];
 				}
 				
@@ -1741,7 +1740,7 @@ class WPGeo {
 load_plugin_textdomain('wp-geo', PLUGINDIR . '/wp-geo/languages');
 
 // Includes
-// include( 'includes/query.php' ); // Coming soon...
+include( 'includes/query.php' );
 include( 'includes/markers.php' );
 include( 'includes/maps.php' );
 include( 'includes/functions.php' );
