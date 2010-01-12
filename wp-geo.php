@@ -550,6 +550,9 @@ class WPGeo {
 			// Use the save_post action to do something with the data entered
 			add_action('save_post', array($this, 'wpgeo_location_save_postdata'));
 			
+			// Do an action for plugins to detect wether WP Geo is ready
+			do_action( 'wpgeo_init', $this );
+			
 		}
 		
 	}
@@ -845,11 +848,11 @@ class WPGeo {
 	
 	function the_content( $content = '' ) {
 	
-		global $wpgeo;
+		global $wpgeo, $posts, $post, $wpdb;
+		
+		$new_content = '';
 		
 		if ( $wpgeo->show_maps() ) {
-		
-			global $posts, $post;
 			
 			$wp_geo_options = get_option('wp_geo_options');
 			
@@ -862,13 +865,21 @@ class WPGeo {
 			
 			// Need a map?
 			if ( is_numeric($latitude) && is_numeric($longitude) ) {
-				if ( $wp_geo_options['show_post_map'] == 'TOP' ) {
-					// Show at top of post
-					return '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>' . $content;
-				} elseif ( $wp_geo_options['show_post_map'] == 'BOTTOM' ) {
-					// Show at bottom of post
-					return $content . '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>';
-				}
+				
+				$new_content .= '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>';
+			
+				// Run HTML through filter
+				$new_content = apply_filters( 'wpgeo_the_content_map', $new_content );
+				
+			}
+			
+			// Add map to content
+			if ( $wp_geo_options['show_post_map'] == 'TOP' ) {
+				// Show at top of post
+				$content = $new_content . $content;
+			} elseif ( $wp_geo_options['show_post_map'] == 'BOTTOM' ) {
+				// Show at bottom of post
+				$content .= $content . $new_content;
 			}
 		
 		}
