@@ -1494,7 +1494,7 @@ class WPGeo {
 			<tr>
 				<td colspan="2">
 				<div id="wp_geo_map" style="height:300px; width:100%; padding:0px; margin:0px;">
-					Loading Google map...
+					' . __('Loading Google map, please wait...', 'wp-geo') . '
 				</div>
 				</td>
 			</tr>
@@ -1506,7 +1506,7 @@ class WPGeo {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row">' . __('Marker Title', 'wp-geo') . '</th>
+				<th scope="row">' . __('Marker Title', 'wp-geo') . ' <small>(' . __('optional', 'wp-geo') . ')</small></th>
 				<td><input name="wp_geo_title" type="text" size="25" style="width:100%;" id="wp_geo_title" value="' . $title . '" /></td>
 			</tr>
 			<tr>
