@@ -17,9 +17,9 @@ class WPGeo_Markers {
 	/**
 	 * Properties
 	 */
-	 
 	var $version = '1.0';
 	var $marker_image_dir = '/uploads/wp-geo/markers/';
+	var $markers;
 	
 	
 	
@@ -27,8 +27,10 @@ class WPGeo_Markers {
 	 * @method       Constructor
 	 * @description  Initialise the class.
 	 */
-	
 	function WPGeo_Markers() {
+		
+		$this->markers = array();
+		
 	}
 	
 	
@@ -38,10 +40,9 @@ class WPGeo_Markers {
 	 * @description  Checks that the marker images folder has been created.
 	 * @return       (boolean)
 	 */
-	
 	function marker_folder_exists() {
 		
-		if ( is_dir(WP_CONTENT_DIR . '/uploads/wp-geo/markers') ) {
+		if ( is_dir( WP_CONTENT_DIR . '/uploads/wp-geo/markers' ) ) {
 			return true;
 		}
 		return false;
@@ -55,29 +56,28 @@ class WPGeo_Markers {
 	 * @description  When the plugin is activated, created all the required folder
 	 *               and move the marker images there.
 	 */
-	
 	function register_activation() {
 		
 		// New Marker Folders
 		clearstatcache();
-		$old_umask = umask(0);
-		mkdir(WP_CONTENT_DIR . '/uploads/wp-geo');
-		mkdir(WP_CONTENT_DIR . '/uploads/wp-geo/markers');
+		$old_umask = umask( 0 );
+		mkdir( WP_CONTENT_DIR . '/uploads/wp-geo' );
+		mkdir( WP_CONTENT_DIR . '/uploads/wp-geo/markers' );
 		
 		// Marker Folders
 		$old_marker_image_dir = WP_CONTENT_DIR . '/plugins/wp-geo/img/markers/';
 		$new_marker_image_dir = WP_CONTENT_DIR . $this->marker_image_dir;
 		
 		// Marker Files
-		$this->moveFileOrDelete($old_marker_image_dir . 'dot-marker.png', $new_marker_image_dir . 'dot-marker.png');
-		$this->moveFileOrDelete($old_marker_image_dir . 'dot-marker-shadow.png', $new_marker_image_dir . 'dot-marker-shadow.png');
-		$this->moveFileOrDelete($old_marker_image_dir . 'large-marker.png', $new_marker_image_dir . 'large-marker.png');
-		$this->moveFileOrDelete($old_marker_image_dir . 'large-marker-shadow.png', $new_marker_image_dir . 'large-marker-shadow.png');
-		$this->moveFileOrDelete($old_marker_image_dir . 'small-marker.png', $new_marker_image_dir . 'small-marker.png');
-		$this->moveFileOrDelete($old_marker_image_dir . 'small-marker-shadow.png', $new_marker_image_dir . 'small-marker-shadow.png');
+		$this->moveFileOrDelete( $old_marker_image_dir . 'dot-marker.png', $new_marker_image_dir . 'dot-marker.png' );
+		$this->moveFileOrDelete( $old_marker_image_dir . 'dot-marker-shadow.png', $new_marker_image_dir . 'dot-marker-shadow.png' );
+		$this->moveFileOrDelete( $old_marker_image_dir . 'large-marker.png', $new_marker_image_dir . 'large-marker.png' );
+		$this->moveFileOrDelete( $old_marker_image_dir . 'large-marker-shadow.png', $new_marker_image_dir . 'large-marker-shadow.png' );
+		$this->moveFileOrDelete( $old_marker_image_dir . 'small-marker.png', $new_marker_image_dir . 'small-marker.png' );
+		$this->moveFileOrDelete( $old_marker_image_dir . 'small-marker-shadow.png', $new_marker_image_dir . 'small-marker-shadow.png' );
 		
 		// Reset default permissions
-		umask($old_umask);
+		umask( $old_umask );
 		
 	}
 	
@@ -87,11 +87,10 @@ class WPGeo_Markers {
 	 * @method       Move File or Delete
 	 * @description  Move a file, or replace it if one already exists.
 	 */
-	
 	function moveFileOrDelete( $old_file, $new_file ) {
 		
-		if ( !file_exists($new_file) ) {
-			$ok = copy($old_file, $new_file);
+		if ( !file_exists( $new_file ) ) {
+			$ok = copy( $old_file, $new_file );
 			if ( $ok ) {
 				// Moved OK...
 			}
@@ -105,76 +104,30 @@ class WPGeo_Markers {
 	 * @method       WP Head
 	 * @description  Output HTML header.
 	 */
-	
 	function wp_head() {
-	
-		$marker_dot = $this->get_marker_meta('dot');
-		$marker_small = $this->get_marker_meta('small');
-		$marker_large = $this->get_marker_meta('large');
+		
+		$js = '';
+		$dir = WP_CONTENT_URL . $this->marker_image_dir;
+		
+		$this->markers[] = new WPGeo_Marker( 'dot', 'WP Geo: Dot', 8, 8, 3, 6, $dir . 'dot-marker.png', $dir . 'dot-marker-shadow.png' );
+		$this->markers[] = new WPGeo_Marker( 'small', 'WP Geo: Dot', 10, 17, 5, 17, $dir . 'small-marker.png', $dir . 'small-marker-shadow.png' );
+		$this->markers[] = new WPGeo_Marker( 'large', 'WP Geo: Dot', 20, 34, 10, 34, $dir . 'large-marker.png', $dir . 'large-marker-shadow.png' );
+		
+		foreach ( $this->markers as $m ) {
+			$js .= $m->get_javascript();
+		}
 		
 		echo '
 		
 			<script type="text/javascript">
 			//<![CDATA[
-			
-			// Google Icons for WP Geo
-			var wpgeo_icon_dot = wpgeo_createIcon(' . $marker_dot['width'] . ', ' . $marker_dot['height'] . ', ' . $marker_dot['anchorX'] . ', ' . $marker_dot['anchorY'] . ', "' . $marker_dot['image'] . '", "' . $marker_dot['shadow'] . '");
-			var wpgeo_icon_small = wpgeo_createIcon(' . $marker_small['width'] . ', ' . $marker_small['height'] . ', ' . $marker_small['anchorX'] . ', ' . $marker_small['anchorY'] . ', "' . $marker_small['image'] . '", "' . $marker_small['shadow'] . '");
-			var wpgeo_icon_large = wpgeo_createIcon(' . $marker_large['width'] . ', ' . $marker_large['height'] . ', ' . $marker_large['anchorX'] . ', ' . $marker_large['anchorY'] . ', "' . $marker_large['image'] . '", "' . $marker_large['shadow'] . '");
-			
+			// ----- WP Geo Marker Icons -----
+			' . $js . '
 			//]]>
 			</script>
+			
 			';
 			
-	}
-	
-	
-	
-	/**
-	 * @method       Get Marker Meta
-	 * @description  Output HTML header.
-	 * @param        $type = Type of marker meta
-	 * @return       (string) Marker type
-	 */
-	
-	function get_marker_meta( $type = 'large' ) {
-		
-		// Array
-		$marker_types = array();
-		
-		// Large Marker
-		$marker_types['large'] = array(
-			'width' => 20,
-			'height' => 34,
-			'anchorX' => 10,
-			'anchorY' => 34,
-			'image' => WP_CONTENT_URL . $this->marker_image_dir . 'large-marker.png',
-			'shadow' => WP_CONTENT_URL . $this->marker_image_dir . 'large-marker-shadow.png'
-		);
-		
-		// Small Marker
-		$marker_types['small'] = array(
-			'width' => 10,
-			'height' => 17,
-			'anchorX' => 5,
-			'anchorY' => 17,
-			'image' => WP_CONTENT_URL . $this->marker_image_dir . 'small-marker.png',
-			'shadow' => WP_CONTENT_URL . $this->marker_image_dir . 'small-marker-shadow.png'
-		);			
-		
-		// Dot Marker
-		$marker_types['dot'] = array(
-			'width' => 8,
-			'height' => 8,
-			'anchorX' => 3,
-			'anchorY' => 6,
-			'image' => WP_CONTENT_URL . $this->marker_image_dir . 'dot-marker.png',
-			'shadow' => WP_CONTENT_URL . $this->marker_image_dir . 'dot-marker-shadow.png'
-		);
-		
-		// Default return
-		return $marker_types[$type];
-		
 	}
 	
 	
