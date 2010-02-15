@@ -85,10 +85,10 @@ function get_wpgeo_longitude( $post_id = null ) {
 
 
 /**
- * @method  WP Geo Map
+ * @method  Get WP Geo Map
  */
 
-function wpgeo_map( $query, $options = null ) {
+function get_wpgeo_map( $query, $options = null ) {
 	
 	global $wpgeo_map_id;
 	
@@ -100,7 +100,7 @@ function wpgeo_map( $query, $options = null ) {
 	
 	$posts = get_posts( $query );
 	
-	echo '
+	$output = '
 		<div id="' . $id . '" class="wpgeo_map" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>
 		<script type="text/javascript">
 		<!--
@@ -114,14 +114,14 @@ function wpgeo_map( $query, $options = null ) {
 		$latitude = get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
 		$longitude = get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
 		if ( is_numeric($latitude) && is_numeric($longitude) ) {
-			echo '
+			$output .= '
 				var center = new GLatLng(' . $latitude . ',' . $longitude . ');
 				var marker = new wpgeo_createMarker2(map, center, wpgeo_icon_small, \'' . $post->post_title . '\', \'' . get_permalink($post->ID) . '\');
 				bounds.extend(center);
 				';
 		}
 	}
-	echo '
+	$output .= '
 				zoom = map.getBoundsZoomLevel(bounds);
 				map.setCenter(bounds.getCenter(), zoom);
 			}
@@ -129,6 +129,20 @@ function wpgeo_map( $query, $options = null ) {
 		-->
 		</script>
 		';
+	
+	return $output;
+	
+}
+
+
+
+/**
+ * @method  WP Geo Map
+ */
+
+function wpgeo_map( $query, $options = null ) {
+
+	echo get_wpgeo_map( $query, $options );
 	
 }
 
