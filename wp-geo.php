@@ -54,6 +54,7 @@ class WPGeo {
 	var $show_maps_external = false;
 	var $plugin_message = '';
 	var $maps;
+	var $maps2;
 	var $editor;
 	var $feeds;
 	
@@ -67,6 +68,7 @@ class WPGeo {
 	function WPGeo() {
 		
 		$this->maps = array();
+		$this->maps2 = new WPGeo_Maps();
 		$this->markers = new WPGeo_Markers();
 		$this->feeds = new WPGeo_Feeds();
 		
@@ -92,7 +94,7 @@ class WPGeo {
 			'default_map_width' => '100%', 
 			'default_map_height' => '300px',
 			'default_map_zoom' => '5',
-			'default_map_control' => 'GLargeMapControl',
+			'default_map_control' => 'GLargeMapControl3D',
 			'show_map_type_normal' => 'Y',
 			'show_map_type_satellite' => 'Y',
 			'show_map_type_hybrid' => 'Y',
@@ -639,7 +641,7 @@ class WPGeo {
 			// Set Locale
 			$locale = $wpgeo->get_googlemaps_locale('&hl=');
 			
-			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&v=2.118' . $locale . '&key=' . $wpgeo->get_google_api_key() . '&sensor=false', false, '2.118');
+			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&v=2' . $locale . '&key=' . $wpgeo->get_google_api_key() . '&sensor=false', false, '2');
 			wp_register_script('wpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'), '1.0');
 			wp_register_script('wpgeo-admin-post', WP_CONTENT_URL . '/plugins/wp-geo/js/admin-post.js', array('jquery', 'googlemaps'), '1.0');
 			wp_register_script('wpgeotooltip', WP_CONTENT_URL . '/plugins/wp-geo/js/tooltip.js', array('googlemaps', 'jquery'), '1.0');
@@ -771,8 +773,9 @@ class WPGeo {
 					
 					// Map Controls
 					var mapTypeControl = new GMapTypeControl();
-					map.addControl(new GLargeMapControl());
+					map.addControl(new GLargeMapControl3D());
 					map.addControl(mapTypeControl);
+					//map.setUIToDefault();
 					
 					map.setMapType(' . $maptype . ');
 					var type_setting = document.getElementById("wpgeo_map_settings_type");
@@ -1042,9 +1045,10 @@ class WPGeo {
 
 		// Markers
 		$markers = array();
-		$markers['large'] = $this->markers->get_marker_meta('large');
-		$markers['small'] = $this->markers->get_marker_meta('small');
-		$markers['dot'] = $this->markers->get_marker_meta('dot');
+		$markers['large'] = $this->markers->get_marker_by_id( 'large' );
+		$markers['small'] = $this->markers->get_marker_by_id( 'small' );
+		$markers['dot']   = $this->markers->get_marker_by_id( 'dot' );
+		
 		
 		// Write the form
 		echo '
@@ -1146,30 +1150,30 @@ class WPGeo {
 					<tr valign="top">
 						<th scope="row">' . __('Large Marker', 'wp-geo') . '</th>
 						<td>
-							<p style="margin:0px; background-image:url(' . $markers['large']['shadow'] . '); background-repeat:no-repeat;"><img src="' . $markers['large']['image'] . '" /></p>
+							<p style="margin:0px; background-image:url(' . $markers['large']->shadow . '); background-repeat:no-repeat;"><img src="' . $markers['large']->image . '" /></p>
 							<p style="margin:10px 0 0 0;">
 								' . __('This is the default marker used to indicate a location on most maps.', 'wp-geo') . '<br />
-								{ width:' . $markers['large']['width'] . ', height:' . $markers['large']['height'] . ', anchorX:' . $markers['large']['anchorX'] . ', anchorY:' . $markers['large']['anchorY'] . ' }
+								{ width:' . $markers['large']->width . ', height:' . $markers['large']->height . ', anchorX:' . $markers['large']->anchorX . ', anchorY:' . $markers['large']->anchorY . ' }
 							</p>
 						</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">' . __('Small Marker', 'wp-geo') . '</th>
 						<td>
-							<p style="margin:0px; background-image:url(' . $markers['small']['shadow'] . '); background-repeat:no-repeat;"><img src="' . $markers['small']['image'] . '" /></p>
+							<p style="margin:0px; background-image:url(' . $markers['small']->shadow . '); background-repeat:no-repeat;"><img src="' . $markers['small']->image . '" /></p>
 							<p style="margin:10px 0 0 0;">
 								' . __('This is the default marker used for the WP Geo sidebar widget.', 'wp-geo') . '<br />
-								{ width:' . $markers['small']['width'] . ', height:' . $markers['small']['height'] . ', anchorX:' . $markers['small']['anchorX'] . ', anchorY:' . $markers['small']['anchorY'] . ' }
+								{ width:' . $markers['small']->width . ', height:' . $markers['small']->height . ', anchorX:' . $markers['small']->anchorX . ', anchorY:' . $markers['small']->anchorY . ' }
 							</p>
 						</td>
 					</tr>
 					<tr valign="top">
 						<th scope="row">' . __('Dot Marker', 'wp-geo') . '</th>
 						<td>
-							<p style="margin:0px; background-image:url(' . $markers['dot']['shadow'] . '); background-repeat:no-repeat;"><img src="' . $markers['dot']['image'] . '" /></p>
+							<p style="margin:0px; background-image:url(' . $markers['dot']->shadow . '); background-repeat:no-repeat;"><img src="' . $markers['dot']->image . '" /></p>
 							<p style="margin:10px 0 0 0;">
 								' . __('This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo.', 'wp-geo') . '<br />
-								{ width:' . $markers['dot']['width'] . ', height:' . $markers['dot']['height'] . ', anchorX:' . $markers['dot']['anchorX'] . ', anchorY:' . $markers['dot']['anchorY'] . ' }
+								{ width:' . $markers['dot']->width . ', height:' . $markers['dot']->height . ', anchorX:' . $markers['dot']->anchorX . ', anchorY:' . $markers['dot']->anchorY . ' }
 							</p>
 						</td>
 					</tr>
@@ -1201,6 +1205,7 @@ class WPGeo {
 		
 		// Array
 		$map_type_array = array(
+			'GLargeMapControl3D' => __('Large 3D pan/zoom control', 'wp-geo'), 
 			'GLargeMapControl' 	=> __('Large pan/zoom control', 'wp-geo'), 
 			'GSmallMapControl' 	=> __('Smaller pan/zoom control', 'wp-geo'), 
 			'GSmallZoomControl' => __('Small zoom control (no panning controls)', 'wp-geo'), 
@@ -1630,6 +1635,18 @@ class WPGeo {
 	
 	
 	
+	function wp_footer() {
+		echo '
+			<script type="text/javascript">
+			<!--
+			' . $this->maps2->get_maps_javascript() . '
+			-->
+			</script>
+			';
+	}
+	
+	
+	
 }
 
 
@@ -1639,6 +1656,7 @@ load_plugin_textdomain('wp-geo', PLUGINDIR . '/wp-geo/languages');
 
 // Includes
 include( 'includes/query.php' );
+include( 'includes/marker.php' );
 include( 'includes/markers.php' );
 include( 'includes/maps.php' );
 include( 'includes/functions.php' );
@@ -1664,6 +1682,7 @@ add_action('wp_print_scripts', array($wpgeo, 'includeGoogleMapsJavaScriptAPI'));
 
 // Frontend Hooks
 add_action('wp_head', array($wpgeo, 'wp_head'));
+add_action('wp_footer', array($wpgeo, 'wp_footer'));
 add_filter('the_content', array($wpgeo, 'the_content'));
 
 // Admin Hooks

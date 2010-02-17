@@ -14,6 +14,82 @@
 
 
 
+/**
+ * ----- WP Geo Maps Class -----
+ * The WPGeo_Maps class manages all the maps present
+ * on an HTML page and the output of those maps.
+ */
+class WPGeo_Maps {
+	
+	
+	
+	/**
+	 * ----- Maps -----
+	 * @var  (array) An array of WPGeo_Map objects.
+	 */
+	var $maps;
+	
+	
+	
+	/**
+	 * ----- Constructor -----
+	 * Sets up the Maps class.
+	 */
+	function WPGeo_Maps() {
+		
+		$this->maps = array();
+		
+	}
+	
+	
+	
+	/**
+	 * ----- Add Map -----
+	 * Adds a WPGeo_Map object to the maps array.
+	 *
+	 * @param  (object) $map WPGeo_Map object.
+	 */
+	function add_map( $map ) {
+		
+		if ( $map->id == 0 ) {
+			$map->id = count($this->maps) + 1;
+		}
+		
+		$this->maps[] = $map;
+		
+		return $map;
+		
+	}
+	
+	
+	
+	/**
+	 * ----- Maps JavaScript -----
+	 * Get the javascript to display all maps.
+	 */
+	function get_maps_javascript() {
+		
+		$javascript = '';
+		
+		foreach ( $this->maps as $map ) {
+			$javascript .= $map->get_map_javascript();
+		}
+		
+		return $javascript;
+		
+	}
+	
+	
+	
+}
+
+
+
+/**
+ * ----- WP Geo Map Class -----
+ * The WPGeo_Map class manages data for a single map
+ * and handles the output of that map.
+ */
 class WPGeo_Map {
 	
 	
@@ -27,7 +103,7 @@ class WPGeo_Map {
 	var $zoom = 5;
 	var $maptype = 'G_NORMAL_MAP';
 	var $maptypes;
-	var $mapcontrol = 'GLargeMapControl';
+	var $mapcontrol = 'GLargeMapControl3D';
 	var $show_map_scale = false;
 	var $show_map_overview = false;
 	var $show_polyline = false;
@@ -39,7 +115,7 @@ class WPGeo_Map {
 	 * @description  Initialise the class.
 	 */
 	
-	function WPGeo_Map( $id ) {
+	function WPGeo_Map( $id = 0 ) {
 		
 		$this->id = $id;
 		$this->maptypes = array();
@@ -163,6 +239,61 @@ class WPGeo_Map {
 	
 	
 	/**
+	 * @method       Get Map HTML
+	 * @description  Gets the HTML for a map.
+	 */
+	
+	function get_map_html() {
+		
+		$wp_geo_options = get_option('wp_geo_options');
+		
+		// Extract args
+		$allowed_args = array(
+			'width' => null,
+			'height' => null
+		);
+		$args = wp_parse_args($args, $allowed_args);
+		
+		$map_width = $wp_geo_options['default_map_width'];
+		$map_height = $wp_geo_options['default_map_height'];
+		
+		if ( $args['width'] != null) {
+			$map_width = $args['width'];
+			if ( is_numeric($map_width) ) {
+				$map_width = $map_width . 'px';
+			}
+		}
+		if ( $args['height'] != null) {
+			$map_height = $args['height'];
+			if ( is_numeric($map_height) ) {
+				$map_height = $map_height . 'px';
+			}
+		}
+		
+		return '<div class="wpgeo_map" id="wpgeo_map_' . $this->id . '" style="width:' . $map_width . '; height:' . $map_height . ';"></div>';
+		
+	}
+	
+	
+	
+	/**
+	 * @method       Get Map JavaScript
+	 * @description  Gets the Javascript for a map.
+	 */
+	
+	function get_map_javascript() {
+		
+		$js = '
+			wpgeo_map_' . $this->id . ' = new GMap2(document.getElementById("wpgeo_map_' . $this->id . '"));
+			';
+		
+		return $js;
+		
+	}
+	
+	
+	
+	/**
 	 * @method       Add Point
 	 * @description  Adds a point (marker) to this map.
 	 * @param        $lat = Latitude
@@ -207,7 +338,7 @@ class WPGeo_Map {
 	 * @param        $mapcontrol = Type of map control
 	 */
 	
-	function setMapControl( $mapcontrol = 'GLargeMapControl' ) {
+	function setMapControl( $mapcontrol = 'GLargeMapControl3D' ) {
 	
 		$this->mapcontrol = $mapcontrol;
 		

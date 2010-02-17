@@ -295,7 +295,7 @@ class WPGeo_Widget {
 				// Html JS
 				$wpgeo->includeGoogleMapsJavaScriptAPI();
 				
-				$small_marker = $wpgeo->markers->get_marker_meta('small');
+				$small_marker = $wpgeo->markers->get_marker_by_id('small');
 				
 				$html_js .= '
 					<script type="text/javascript">

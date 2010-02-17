@@ -31,6 +31,28 @@ class WPGeo_Markers {
 		
 		$this->markers = array();
 		
+		$dir = WP_CONTENT_URL . $this->marker_image_dir;
+		
+		$this->markers[] = new WPGeo_Marker( 'dot', 'WP Geo: Dot', 8, 8, 3, 6, $dir . 'dot-marker.png', $dir . 'dot-marker-shadow.png' );
+		$this->markers[] = new WPGeo_Marker( 'small', 'WP Geo: Dot', 10, 17, 5, 17, $dir . 'small-marker.png', $dir . 'small-marker-shadow.png' );
+		$this->markers[] = new WPGeo_Marker( 'large', 'WP Geo: Dot', 20, 34, 10, 34, $dir . 'large-marker.png', $dir . 'large-marker-shadow.png' );
+		
+	}
+	
+	
+	
+	/**
+	 * @method       Get Marker by ID
+	 * @description  Retur s marker object.
+	 */
+	function get_marker_by_id( $marker_id ) {
+		
+		foreach ( $this->markers as $m ) {
+			if ( $m->id == $marker_id ) {
+				return $m;
+			}
+		}
+		
 	}
 	
 	
@@ -107,11 +129,6 @@ class WPGeo_Markers {
 	function wp_head() {
 		
 		$js = '';
-		$dir = WP_CONTENT_URL . $this->marker_image_dir;
-		
-		$this->markers[] = new WPGeo_Marker( 'dot', 'WP Geo: Dot', 8, 8, 3, 6, $dir . 'dot-marker.png', $dir . 'dot-marker-shadow.png' );
-		$this->markers[] = new WPGeo_Marker( 'small', 'WP Geo: Dot', 10, 17, 5, 17, $dir . 'small-marker.png', $dir . 'small-marker-shadow.png' );
-		$this->markers[] = new WPGeo_Marker( 'large', 'WP Geo: Dot', 20, 34, 10, 34, $dir . 'large-marker.png', $dir . 'large-marker-shadow.png' );
 		
 		foreach ( $this->markers as $m ) {
 			$js .= $m->get_javascript();
