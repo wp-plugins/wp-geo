@@ -1388,23 +1388,23 @@ class WPGeo {
 		extract($arguments, EXTR_SKIP);
 		
 		$customFields = "'" . WPGEO_LONGITUDE_META . "', '" . WPGEO_LATITUDE_META . "'";
-		$customPosts = new WP_Query();
+		$custom_posts = new WP_Query();
 		
 		add_filter('posts_join', array($this, 'get_custom_field_posts_join'));
 		add_filter('posts_groupby', array($this, 'get_custom_field_posts_group'));
 		
-		$customPosts->query('showposts=' . $numberposts); // Uses same parameters as query_posts
+		$custom_posts->query('showposts=' . $numberposts); // Uses same parameters as query_posts
 		
 		remove_filter('posts_join', array($this, 'get_custom_field_posts_join'));
 		remove_filter('posts_groupby', array($this, 'get_custom_field_posts_group'));
 		
 		$points = array();
 		
-		while ( $customPosts->have_posts() ) {
-			$customPosts->the_post();
+		while ( $custom_posts->have_posts() ) {
+			$custom_posts->the_post();
 			$id   = get_the_ID();
-			$long = get_post_custom_values(WPGEO_LONGITUDE_META);
-			$lat  = get_post_custom_values(WPGEO_LATITUDE_META);
+			$long = get_post_custom_values( WPGEO_LONGITUDE_META );
+			$lat  = get_post_custom_values( WPGEO_LATITUDE_META );
 			$points[] = array('id' => $id, 'long' => $long, 'lat' => $lat);
 		}
 		
@@ -1532,6 +1532,7 @@ class WPGeo {
 					<label for="wpgeo_map_settings_type"><input type="checkbox" name="wpgeo_map_settings_type" id="wpgeo_map_settings_type" value="' . $wpgeo_map_settings_type . '"' . $wpgeo_map_settings_type_checked . ' /> ' . __('Save custom map type for this post', 'wp-geo') . '</label>
 				</td>
 			</tr>
+			' . apply_filters( 'wpgeo_edit_post_map_fields', '', $post->ID ) . '
 		</table>';
 		
 	}
