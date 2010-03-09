@@ -390,11 +390,14 @@ class WPGeo {
 			// Coords to show on map?
 			$coords = array();
 			for ( $i = 0; $i < count($posts); $i++ ) {
-				$post = $posts[$i];
-				$latitude = get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
+			
+				$post      = $posts[$i];
+				$latitude  = get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
 				$longitude = get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
-				$title = get_post_meta($post->ID, WPGEO_TITLE_META, true);
-				$settings = get_post_meta($post->ID, WPGEO_MAP_SETTINGS_META, true);
+				$title     = get_post_meta($post->ID, WPGEO_TITLE_META, true);
+				$settings  = get_post_meta($post->ID, WPGEO_MAP_SETTINGS_META, true);
+				
+				$title = apply_filters( 'wpeo_point_title', $title, $post->ID );
 				
 				if ( empty($title) ) {
 					$title = $post->post_title;
@@ -781,8 +784,6 @@ class WPGeo {
 					var type_setting = document.getElementById("wpgeo_map_settings_type");
 					type_setting.value = wpgeo_getMapTypeContentFromUrlArg(map.getCurrentMapType().getUrlArg());
 					
-					geocoder = new GClientGeocoder();
-					 
 					GEvent.addListener(map, "click", function(overlay, latlng) {
 						var latField = document.getElementById("wp_geo_latitude");
 						var lngField = document.getElementById("wp_geo_longitude");
