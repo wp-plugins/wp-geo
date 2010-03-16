@@ -1206,11 +1206,12 @@ class WPGeo {
 		
 		// Array
 		$map_type_array = array(
-			'GLargeMapControl3D' => __('Large 3D pan/zoom control', 'wp-geo'), 
-			'GLargeMapControl' 	=> __('Large pan/zoom control', 'wp-geo'), 
-			'GSmallMapControl' 	=> __('Smaller pan/zoom control', 'wp-geo'), 
-			'GSmallZoomControl' => __('Small zoom control (no panning controls)', 'wp-geo'), 
-			'' 					=> __('No pan/zoom controls', 'wp-geo')
+			'GLargeMapControl3D'  => __('Large 3D pan/zoom control', 'wp-geo'), 
+			'GLargeMapControl'    => __('Large pan/zoom control', 'wp-geo'), 
+			'GSmallMapControl'    => __('Smaller pan/zoom control', 'wp-geo'), 
+			'GSmallZoomControl3D' => __('Small 3D zoom control (no panning controls)', 'wp-geo'), 
+			'GSmallZoomControl'   => __('Small zoom control (no panning controls)', 'wp-geo'), 
+			''                    => __('No pan/zoom controls', 'wp-geo')
 		);
 		
 		// Menu?

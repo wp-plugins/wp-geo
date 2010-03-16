@@ -330,7 +330,7 @@ class WPGeo_Widget {
 						if(GBrowserIsCompatible())
 						{
 							map = new GMap2(document.getElementById("wp_geo_map_widget"));
-							map.addControl(new GSmallZoomControl());
+							map.addControl(new GSmallZoomControl3D());
 							map.setCenter(new GLatLng(0, 0), 0);
 							map.setMapType(' . $maptype . ');
 									
