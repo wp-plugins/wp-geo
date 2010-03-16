@@ -83,6 +83,8 @@ jQuery(document).ready(function() {
 		var longitude = jQuery("input#wp_geo_longitude").val();
 		var address = jQuery("input#wp_geo_search").val();
 		
+		var geocoder = new GClientGeocoder();
+		
 		if ( geocoder ) {
 			geocoder.getLatLng(
 				address,
