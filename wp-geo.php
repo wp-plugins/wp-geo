@@ -432,6 +432,17 @@ class WPGeo {
 					$map->setMapZoom($mymapzoom);										// Set zoom
 					$map->setMapType($mymaptype);										// Set map type
 					
+					if ( !empty( $settings['centre'] ) ) {
+						$centre = explode( ',', $settings['centre'] );
+						if ( is_array( $centre ) && count( $centre ) == 2 ) {
+							$map->setMapCentre( $centre[0], $centre[1] );
+						} else {
+							$map->setMapCentre( $latitude, $longitude );
+						}
+					} else {
+						$map->setMapCentre( $latitude, $longitude );
+					}
+					
 					if ( $wp_geo_options['show_map_type_physical'] == 'Y' )
 						$map->addMapType('G_PHYSICAL_MAP');								// Show PHYSICAL map?
 					if ( $wp_geo_options['show_map_type_normal'] == 'Y' )
@@ -741,6 +752,8 @@ class WPGeo {
 			$hide_marker = true;
 		}
 		
+		$mapcentre = array( $latitude, $longitude );
+		
 		if ( is_numeric($post->ID) && $post->ID > 0 ) {
 			$settings = get_post_meta($post->ID, WPGEO_MAP_SETTINGS_META, true);
 			if ( is_numeric($settings['zoom']) ) {
@@ -748,6 +761,9 @@ class WPGeo {
 			}
 			if ( !empty($settings['type']) ) {
 				$maptype = $settings['type'];
+			}
+			if ( !empty($settings['centre']) ) {
+				$mapcentre = explode( ',', $settings['centre'] );
 			}
 		}
 		
@@ -767,7 +783,8 @@ class WPGeo {
 				if (GBrowserIsCompatible() && document.getElementById("wp_geo_map"))
 				{
 					map = new GMap2(document.getElementById("wp_geo_map"));
-					var center = new GLatLng(' . $latitude . ', ' . $longitude . ');
+					var center = new GLatLng(' . $mapcentre[0] . ', ' . $mapcentre[1] . ');
+					var point = new GLatLng(' . $latitude . ', ' . $longitude . ');
 					map.setCenter(center, ' . $zoom . ');
 					map.addMapType(G_PHYSICAL_MAP);
 					
@@ -803,7 +820,13 @@ class WPGeo {
 						zoom_setting.value = newLevel;
 					});
 					
-					marker = new GMarker(center, {draggable: true});
+					GEvent.addListener(map, "moveend", function() {
+						var center = this.getCenter();
+						var centre_setting = document.getElementById("wpgeo_map_settings_centre");
+						centre_setting.value = center.lat() + "," + center.lng();
+					});
+					
+					marker = new GMarker(point, {draggable: true});
 					
 					GEvent.addListener(marker, "dragstart", function() {
 						map.closeInfoWindow();
@@ -1488,8 +1511,10 @@ class WPGeo {
 		
 		$wpgeo_map_settings_zoom = '';
 		$wpgeo_map_settings_type = '';
+		$wpgeo_map_settings_centre = '';
 		$wpgeo_map_settings_zoom_checked = '';
 		$wpgeo_map_settings_type_checked = '';
+		$wpgeo_map_settings_centre_checked = '';
 		
 		if ( isset($settings['zoom']) && !empty($settings['zoom']) ) {
 			$wpgeo_map_settings_zoom = $settings['zoom'];
@@ -1498,6 +1523,10 @@ class WPGeo {
 		if ( isset($settings['type']) && !empty($settings['type']) ) {
 			$wpgeo_map_settings_type = $settings['type'];
 			$wpgeo_map_settings_type_checked = ' checked="checked"';
+		}
+		if ( isset($settings['centre']) && !empty($settings['centre']) ) {
+			$wpgeo_map_settings_centre = $settings['centre'];
+			$wpgeo_map_settings_centre_checked = ' checked="checked"';
 		}
 		
 		// Use nonce for verification
@@ -1531,7 +1560,8 @@ class WPGeo {
 				<th scope="row">' . __('Map Settings', 'wp-geo') . '</th>
 				<td>
 					<label for="wpgeo_map_settings_zoom"><input type="checkbox" name="wpgeo_map_settings_zoom" id="wpgeo_map_settings_zoom" value="' . $wpgeo_map_settings_zoom . '"' . $wpgeo_map_settings_zoom_checked . ' /> ' . __('Save custom map zoom for this post', 'wp-geo') . '</label><br />
-					<label for="wpgeo_map_settings_type"><input type="checkbox" name="wpgeo_map_settings_type" id="wpgeo_map_settings_type" value="' . $wpgeo_map_settings_type . '"' . $wpgeo_map_settings_type_checked . ' /> ' . __('Save custom map type for this post', 'wp-geo') . '</label>
+					<label for="wpgeo_map_settings_type"><input type="checkbox" name="wpgeo_map_settings_type" id="wpgeo_map_settings_type" value="' . $wpgeo_map_settings_type . '"' . $wpgeo_map_settings_type_checked . ' /> ' . __('Save custom map type for this post', 'wp-geo') . '</label><br />
+					<label for="wpgeo_map_settings_centre"><input type="checkbox" name="wpgeo_map_settings_centre" id="wpgeo_map_settings_centre" value="' . $wpgeo_map_settings_centre . '"' . $wpgeo_map_settings_centre_checked . ' /> ' . __('Save map centre point for this post', 'wp-geo') . '</label>
 				</td>
 			</tr>
 			' . apply_filters( 'wpgeo_edit_post_map_fields', '', $post->ID ) . '
@@ -1627,6 +1657,9 @@ class WPGeo {
 		}
 		if ( isset($_POST['wpgeo_map_settings_type']) && !empty($_POST['wpgeo_map_settings_type']) ) {
 			$settings['type'] = $_POST['wpgeo_map_settings_type'];
+		}
+		if ( isset($_POST['wpgeo_map_settings_centre']) && !empty($_POST['wpgeo_map_settings_centre']) ) {
+			$settings['centre'] = $_POST['wpgeo_map_settings_centre'];
 		}
 		
 		add_post_meta($post_id, WPGEO_MAP_SETTINGS_META, $settings);

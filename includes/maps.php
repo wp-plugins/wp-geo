@@ -103,6 +103,7 @@ class WPGeo_Map {
 	var $zoom = 5;
 	var $maptype = 'G_NORMAL_MAP';
 	var $maptypes;
+	var $mapcentre;
 	var $mapcontrol = 'GLargeMapControl3D';
 	var $show_map_scale = false;
 	var $show_map_overview = false;
@@ -188,7 +189,7 @@ class WPGeo_Map {
 			$js_zoom .= 'map_' . $map_id . '.setCenter(bounds.getCenter(), map_' . $map_id . '.getBoundsZoomLevel(bounds));';
 		}
 		if ( count($this->points) == 1 ) {
-			$js_zoom .= 'map_' . $map_id . '.setCenter(marker_' . $map_id . '_0.getLatLng());';
+			$js_zoom .= 'map_' . $map_id . '.setCenter(new GLatLng(' . $this->mapcentre['latitude'] . ', ' . $this->mapcentre['longitude'] . '));';
 		}
 		
 		// Controls
@@ -357,6 +358,24 @@ class WPGeo_Map {
 		if ( $this->is_valid_map_type($maptype) ) {
 			$this->maptype = $maptype;
 		}
+		
+	}
+	
+	
+	
+	/**
+	 * @method       Set Map Centre
+	 * @description  Set the centre point of the map.
+	 * @param        $latitude = Latitude
+	 * @param        $longitude = Longitude
+	 */
+	
+	function setMapCentre( $latitude, $longitude ) {
+		
+		$this->mapcentre = array(
+			'latitude' => $latitude,
+			'longitude' => $longitude
+		);
 		
 	}
 	
