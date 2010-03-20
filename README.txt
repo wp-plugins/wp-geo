@@ -3,8 +3,8 @@ Contributors: Ben Huson
 Donate link: http://www.wpgeo.com/donate
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
-Tested up to: 2.8.6
-Stable tag: 3.1.2
+Tested up to: 2.9.2
+Stable tag: 3.1.3
 
 Add location maps to your posts and pages.
 
@@ -21,10 +21,10 @@ More information can be found at http://www.wpgeo.com/.
 
 = Features =
 
-* NEW - Custom marker title setting per post.
-* NEW - Custom zoom and map type per post.
-* NEW - Widget zoom option.
-* NEW - Default Map Location setting.
+* Custom marker title setting per post.
+* Custom zoom and map type per post.
+* Widget zoom option.
+* Default Map Location setting.
 * Load maps from GeoRSS or KML data.
 * Geo Meta Tags
 * Markers links to posts
@@ -74,6 +74,22 @@ If upgrading from a previous version of the plugin:
 4. Widget Settings
 
 == Changelog ==
+
+= WP Geo 3.1.3 =
+
+* Now uses new Google 3D map control.
+* Adding text colour style to tooltip text in case default text colour is white.
+* Prevent map from aligning marker centre on zoom. Added a link to centre manually instead.
+* Moved a lot of JavaScript for the post edit page to external files.
+* Code formatting clean-up, added code comments, files restructured.
+* Added WPGeo_Marker class in preparation for better marker management.
+* Added option to save post map centre point.
+* Added wpgeo_map() and get_wpgeo_map() functions to display custom maps based on a WordPress query.
+* Added 'wpgeo_init' action hook.
+* Added 'wpgeo_the_content_map' filter.
+* Added 'wpgeo_edit_post_map_fields' filter.
+* Added 'wpeo_point_title' filter.
+* Language files updated.
 
 = WP Geo 3.1.2 =
 
