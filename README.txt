@@ -4,7 +4,7 @@ Donate link: http://www.wpgeo.com/donate
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
 Tested up to: 2.9.2
-Stable tag: 3.1.3
+Stable tag: 3.1.2
 
 Add location maps to your posts and pages.
 
