@@ -36,7 +36,7 @@ define( 'WPGEO_MAP_SETTINGS_META', '_wp_geo_map_settings' );
 
 
 // Language
-load_plugin_textdomain( 'wp-geo', WP_PLUGIN_DIR . '/wp-geo/languages' );
+load_plugin_textdomain( 'wp-geo', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 
 

@@ -12,7 +12,7 @@ msgstr ""
 "PO-Revision-Date: 2009-11-28 12:53+0000\n"
 "Last-Translator: Ben Huson <ben@thewhiteroom.net>\n"
 "Language-Team: be_BY antsar.info <iliamrv@ya.ru>\n"
-"Language-Team: bg_BG \n"
+"Language-Team: bg_BG Roman Rachkov\n"
 "Language-Team: da_DK Team Blogos <wordpress@blogos.dk>\n"
 "Language-Team: de_DE Ivan Graf <contact@bildergallery.com>\n"
 "Language-Team: en_EN Ben Huson <ben@thewhiteroom.net>\n"
@@ -405,6 +405,10 @@ msgstr ""
 
 #: wp-geo.php
 msgid "centre location"
+msgstr ""
+
+#: wp-geo.php
+msgid "clear location"
 msgstr ""
 
 msgid "Save map centre point for this post"
