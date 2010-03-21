@@ -395,6 +395,21 @@ msgstr ""
 msgid "WP Geo"
 msgstr ""
 
+#: wp-geo.php
+msgid "Large 3D pan/zoom control"
+msgstr ""
+
+#: wp-geo.php
+msgid "Small 3D zoom control (no panning controls)"
+msgstr ""
+
+#: wp-geo.php
+msgid "centre location"
+msgstr ""
+
+msgid "Save map centre point for this post"
+msgstr ""
+
 #. #-#-#-#-#  plugin.pot (PACKAGE VERSION)  #-#-#-#-#
 #. Plugin URI of an extension
 #. #-#-#-#-#  plugin.pot (PACKAGE VERSION)  #-#-#-#-#
