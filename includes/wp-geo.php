@@ -873,7 +873,7 @@ class WPGeo {
 				$content = $new_content . $content;
 			} elseif ( $wp_geo_options['show_post_map'] == 'BOTTOM' ) {
 				// Show at bottom of post
-				$content .= $content . $new_content;
+				$content = $content . $new_content;
 			}
 		
 		}
