@@ -1047,7 +1047,7 @@ class WPGeo {
 			<h2>' . __('WP Geo Settings', 'wp-geo') . '</h2>
 			<form method="post">
 				<img style="float:right; padding:0 20px 0 0; margin:0 0 20px 20px;" src="' . WP_CONTENT_URL . '/plugins/wp-geo/img/logo/wp-geo.png" />';
-		include( 'admin/donate-links.php' );	
+		include( WP_PLUGIN_DIR . '/wp-geo/admin/donate-links.php' );	
 		echo '<h3>' . __('General Settings', 'wp-geo') . '</h3>
 				<p>'
 				. sprintf(__("For more information and documentation about this plugin please visit the <a %s>WP Geo Plugin</a> home page.", 'wp-geo'), 'href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/"') . '<br />'
