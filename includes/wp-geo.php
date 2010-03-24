@@ -364,7 +364,7 @@ class WPGeo {
 				$title     = get_post_meta($post->ID, WPGEO_TITLE_META, true);
 				$settings  = get_post_meta($post->ID, WPGEO_MAP_SETTINGS_META, true);
 				
-				$title = apply_filters( 'wpeo_point_title', $title, $post->ID );
+				$title = apply_filters( 'wpgeo_point_title', $title, $post->ID );
 				
 				if ( empty($title) ) {
 					$title = $post->post_title;
