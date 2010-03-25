@@ -868,10 +868,11 @@ class WPGeo {
 			}
 			
 			// Add map to content
-			if ( $wp_geo_options['show_post_map'] == 'TOP' ) {
+			$show_post_map = apply_filters( 'wpgeo_show_post_map', $wp_geo_options['show_post_map'], $id );
+			if ( $show_post_map == 'TOP' ) {
 				// Show at top of post
 				$content = $new_content . $content;
-			} elseif ( $wp_geo_options['show_post_map'] == 'BOTTOM' ) {
+			} elseif ( $show_post_map == 'BOTTOM' ) {
 				// Show at bottom of post
 				$content = $content . $new_content;
 			}

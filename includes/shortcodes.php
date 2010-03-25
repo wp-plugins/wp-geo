@@ -66,7 +66,9 @@ function shortcode_wpgeo_map( $atts, $content = null ) {
 	$id = $post->ID;
 	$wp_geo_options = get_option( 'wp_geo_options' );
 	
-	if ( $wpgeo->show_maps() && $wp_geo_options['show_post_map'] == 'HIDE' && $wpgeo->checkGoogleAPIKey() ) {
+	$show_post_map = apply_filters( 'wpgeo_show_post_map', $wp_geo_options['show_post_map'], $id );
+	
+	if ( $wpgeo->show_maps() && $show_post_map == 'HIDE' && $wpgeo->checkGoogleAPIKey() ) {
 		
 		$map_atts = array(
 			'width' => null,
