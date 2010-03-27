@@ -6,7 +6,7 @@
 Plugin Name: WP Geo
 Plugin URI: http://www.wpgeo.com/
 Description: Adds geocoding to WordPress.
-Version: 3.1.3
+Version: 3.1.4
 Author: Ben Huson
 Author URI: http://www.wpgeo.com/
 Minimum WordPress Version Required: 2.5
