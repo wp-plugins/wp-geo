@@ -4,7 +4,7 @@ Donate link: http://www.wpgeo.com/donate
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.5
 Tested up to: 2.9.2
-Stable tag: 3.1.2
+Stable tag: 3.1.4
 
 Add location maps to your posts and pages.
 
@@ -15,7 +15,7 @@ When editing a post or page, you will be able to set a physically location for t
 2. Searching for a location, town, city or address.
 3. Entering the latitude and longitude. 
 
-The WP Geo location selector is styled to fit seemlessly into the latest version of the WordPress admin.
+The WP Geo location selector is styled to fit seamlessly into the latest version of the WordPress admin.
 
 More information can be found at http://www.wpgeo.com/.
 
@@ -75,7 +75,7 @@ If upgrading from a previous version of the plugin:
 
 == Changelog ==
 
-= WP Geo 3.1.3 =
+= WP Geo 3.1.4 =
 
 * Now uses new Google 3D map control.
 * Adding text colour style to tooltip text in case default text colour is white.
@@ -88,8 +88,13 @@ If upgrading from a previous version of the plugin:
 * Added 'wpgeo_init' action hook.
 * Added 'wpgeo_the_content_map' filter.
 * Added 'wpgeo_edit_post_map_fields' filter.
-* Added 'wpeo_point_title' filter.
+* Added 'wpgeo_point_title' filter.
+* Added 'wpgeo_show_post_map' filter.
 * Language files updated.
+
+= WP Geo 3.1.3 =
+
+* Oops, loads of bugs... Fix and release as 3.1.4
 
 = WP Geo 3.1.2 =
 

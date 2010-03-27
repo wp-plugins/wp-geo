@@ -16,7 +16,7 @@ class WPGeo {
 	 * Properties
 	 */
 	 
-	var $version = '3.1.3';
+	var $version = '3.1.4';
 	var $markers;
 	var $show_maps_external = false;
 	var $plugin_message = '';
