@@ -85,6 +85,60 @@ function get_wpgeo_longitude( $post_id = null ) {
 
 
 /**
+ * @method       WP Geo Post Map
+ * @description  Outputs the HTML for a post map.
+ * @param        $post_id = Post ID (optional)
+ */
+
+function wpgeo_post_map( $post_id = null ) {
+
+	echo get_wpgeo_post_map( $post_id );
+	
+}
+
+
+
+/**
+ * @method       Get WP Geo Post Map
+ * @description  Gets the HTML for a post map.
+ * @param        $post_id = Post ID (optional)
+ * @return       (string) HTML
+ */
+
+function get_wpgeo_post_map( $post_id = null ) {
+
+	global $post, $wpgeo;
+	
+	$id = absint($post_id) > 0 ? absint($post_id) : $post->ID;
+	$wp_geo_options = get_option( 'wp_geo_options' );
+	
+	$show_post_map = apply_filters( 'wpgeo_show_post_map', $wp_geo_options['show_post_map'], $id );
+	
+	if ( $id > 0 ) {
+		if ( $wpgeo->show_maps() && $show_post_map != 'TOP' && $show_post_map != 'BOTTOM' && $wpgeo->checkGoogleAPIKey() ) {
+			
+			$map_width = $wp_geo_options['default_map_width'];
+			$map_height = $wp_geo_options['default_map_height'];
+		
+			if ( is_numeric( $map_width ) ) {
+				$map_width = $map_width . 'px';
+			}
+		
+			if ( is_numeric( $map_height ) ) {
+				$map_height = $map_height . 'px';
+			}
+			
+			return '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="width:' . $map_width . '; height:' . $map_height . ';"></div>';
+		}
+	}
+	
+	return '';
+	
+}
+
+
+
+/**
  * @method  Get WP Geo Map
  */
 
