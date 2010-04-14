@@ -1141,38 +1141,7 @@ class WPGeo {
 				</p>
 				<h2 style="margin-top:30px;">' . __('Marker Settings', 'wp-geo') . '</h2>'
 				. __('<p>Custom marker images are automatically created in your WordPress uploads folder and used by WP Geo.<br />A copy of these images will remain in the WP Geo folder in case you need to revert to them at any time.<br />You may edit these marker icons if you wish - they must be PNG files. Each marker consist of a marker image and a shadow image. If you do not wish to show a marker shadow you should use a transparent PNG for the shadow file.</p><p>Currently you must update these images manually and the anchor point must be the same - looking to provide more control in future versions.</p>', 'wp-geo') . '
-				<table class="form-table">
-					<tr valign="top">
-						<th scope="row">' . __('Large Marker', 'wp-geo') . '</th>
-						<td>
-							<p style="margin:0px; background-image:url(' . $markers['large']->shadow . '); background-repeat:no-repeat;"><img src="' . $markers['large']->image . '" /></p>
-							<p style="margin:10px 0 0 0;">
-								' . __('This is the default marker used to indicate a location on most maps.', 'wp-geo') . '<br />
-								{ width:' . $markers['large']->width . ', height:' . $markers['large']->height . ', anchorX:' . $markers['large']->anchorX . ', anchorY:' . $markers['large']->anchorY . ' }
-							</p>
-						</td>
-					</tr>
-					<tr valign="top">
-						<th scope="row">' . __('Small Marker', 'wp-geo') . '</th>
-						<td>
-							<p style="margin:0px; background-image:url(' . $markers['small']->shadow . '); background-repeat:no-repeat;"><img src="' . $markers['small']->image . '" /></p>
-							<p style="margin:10px 0 0 0;">
-								' . __('This is the default marker used for the WP Geo sidebar widget.', 'wp-geo') . '<br />
-								{ width:' . $markers['small']->width . ', height:' . $markers['small']->height . ', anchorX:' . $markers['small']->anchorX . ', anchorY:' . $markers['small']->anchorY . ' }
-							</p>
-						</td>
-					</tr>
-					<tr valign="top">
-						<th scope="row">' . __('Dot Marker', 'wp-geo') . '</th>
-						<td>
-							<p style="margin:0px; background-image:url(' . $markers['dot']->shadow . '); background-repeat:no-repeat;"><img src="' . $markers['dot']->image . '" /></p>
-							<p style="margin:10px 0 0 0;">
-								' . __('This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo.', 'wp-geo') . '<br />
-								{ width:' . $markers['dot']->width . ', height:' . $markers['dot']->height . ', anchorX:' . $markers['dot']->anchorX . ', anchorY:' . $markers['dot']->anchorY . ' }
-							</p>
-						</td>
-					</tr>
-				</table>';
+				' . $wpgeo->markers->get_admin_display();
 		if ( function_exists('register_setting') && function_exists('settings_fields') ) {
 			settings_fields('wp-geo-options'); 
 		}	
