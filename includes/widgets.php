@@ -21,14 +21,6 @@ class WPGeo_Widget {
 
 
 	/**
-	 * Properties
-	 */
-	 
-	var $version = '1.3';
-	
-	
-
-	/**
 	 * @method       Initialize the map widget
 	 * @description  Register widget and controls.
 	 */

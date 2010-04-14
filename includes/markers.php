@@ -17,7 +17,6 @@ class WPGeo_Markers {
 	/**
 	 * Properties
 	 */
-	var $version = '1.0';
 	var $marker_image_dir = '/uploads/wp-geo/markers/';
 	var $markers;
 	

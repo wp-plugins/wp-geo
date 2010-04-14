@@ -51,4 +51,42 @@ function wpgeo_check_domain() {
 
 
 
+/**
+ * @method       Check Version
+ * @description  Check if WP Geo version is greater or equal to parameters.
+ * @param        $version (string) Version number in the form 2.1.3.a
+ * @return       (boolean)
+ */
+
+function wpgeo_check_version( $version ) {
+	
+	if ( version_compare( $version, WPGeo::$version, '>=' ) ) {
+		return true;
+	}
+	
+	return false;
+	
+}
+
+
+
+/**
+ * @method       Check DB Version
+ * @description  Check if WP Geo database version is greater or equal to parameter.
+ * @param        $version (numeric) Database version number
+ * @return       (boolean)
+ */
+
+function wpgeo_check_db_version( $version ) {
+	
+	if ( $version >= WPGeo::$db_version ) {
+		return true;
+	}
+	
+	return false;
+	
+}
+
+
+
 ?>
