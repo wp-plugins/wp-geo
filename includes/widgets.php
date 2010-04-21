@@ -249,7 +249,8 @@ class WPGeo_Widget {
 						'id' 		=> $post->ID,
 						'latitude' 	=> $latitude,
 						'longitude' => $longitude,
-						'title' 	=> $title
+						'title' 	=> $title,
+						'post'		=> $post
 					);
 					array_push($coords, $push);
 				}
@@ -281,7 +282,8 @@ class WPGeo_Widget {
 				$polyline_coords_js .= ']';		
 		
 				for ( $i = 0; $i < count($coords); $i++ ) {
-					$markers_js .= 'marker' . $i . ' = wpgeo_createMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), wpgeo_icon_small, "' . addslashes(__($coords[$i]['title'])) . '", "' . get_permalink($coords[$i]['id']) . '");' . "\n";
+					$icon = apply_filters( 'wpgeo_marker_icon', 'wpgeo_icon_small', $coords[$i]['post'], 'widget' );
+					$markers_js .= 'marker' . $i . ' = wpgeo_createMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), ' . $icon . ', "' . addslashes(__($coords[$i]['title'])) . '", "' . get_permalink($coords[$i]['id']) . '");' . "\n";
 				}
 							
 				// Html JS

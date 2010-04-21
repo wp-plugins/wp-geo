@@ -389,7 +389,8 @@ class WPGeo {
 						'latitude' => $latitude,
 						'longitude' => $longitude,
 						'title' => $title,
-						'link' => get_permalink($post->ID)
+						'link' => get_permalink($post->ID),
+						'post' => $post
 					);
 					array_push($coords, $push);
 					
@@ -398,7 +399,8 @@ class WPGeo {
 					$map = new WPGeo_Map($post->ID);										// Create map
 					
 					// Add point
-					$map->addPoint($latitude, $longitude, 'wpgeo_icon_large', $title, get_permalink($post->ID));
+					$icon = apply_filters( 'wpgeo_marker_icon', 'wpgeo_icon_large', $post, 'post' );
+					$map->addPoint($latitude, $longitude, $icon, $title, get_permalink($post->ID));
 					
 					$map->setMapZoom($mymapzoom);										// Set zoom
 					$map->setMapType($mymaptype);										// Set map type
@@ -447,7 +449,8 @@ class WPGeo {
 				
 				// Add points
 				for ( $j = 0; $j < count($coords); $j++ ) {
-					$map->addPoint($coords[$j]['latitude'], $coords[$j]['longitude'], 'wpgeo_icon_small', $coords[$j]['title'], $coords[$j]['link']);
+					$icon = apply_filters( 'wpgeo_marker_icon', 'wpgeo_icon_small', $coords[$j]['post'], 'multiple' );
+					$map->addPoint($coords[$j]['latitude'], $coords[$j]['longitude'], $icon, $coords[$j]['title'], $coords[$j]['link']);
 				}
 				
 				$map->setMapZoom($mapzoom);										// Set zoom
