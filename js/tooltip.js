@@ -1,7 +1,7 @@
 
 
 var Tooltip_mouse_x = 0;
-var Tooltip_mouse_t = 0;
+var Tooltip_mouse_y = 0;
 
 
 
@@ -62,9 +62,9 @@ jQuery(document).ready(function() {
 	jQuery("body").append("<p id='tooltip2'>" + t + "</p>");
 	jQuery('#tooltip2').hide();
 	
-	jQuery().mousemove(function(e)
+	jQuery("body").mousemove(function(e)
 	{
-		
+	
 		Tooltip_mouse_x = e.pageX;
 		Tooltip_mouse_y = e.pageY;
 		
