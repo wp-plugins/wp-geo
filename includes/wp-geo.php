@@ -28,6 +28,9 @@ class WPGeo {
 	var $editor;
 	var $feeds;
 	
+	var $default_map_latitude = '51.492526418807465';
+	var $default_map_longitude = '-0.15754222869873047';
+	
 	
 	
 	/**
@@ -53,7 +56,7 @@ class WPGeo {
 	
 	function register_activation() {
 		
-		global $wpgeo;
+		$wpgeo = new WPGeo();
 		
 		$options = array(
 			'google_api_key' => '', 
@@ -86,6 +89,8 @@ class WPGeo {
 		$wp_geo_options = get_option('wp_geo_options');
 		foreach ( $options as $key => $val ) {
 			if ( !isset($wp_geo_options[$key]) ) {
+				$wp_geo_options[$key] = $options[$key];
+			} elseif ( empty( $wp_geo_options[$key] ) && in_array( $key, array( 'default_map_latitude', 'default_map_longitude' ) ) ) {
 				$wp_geo_options[$key] = $options[$key];
 			}
 		}
@@ -1012,8 +1017,8 @@ class WPGeo {
 			$wp_geo_options['google_api_key'] = $_POST['google_api_key'];
 			$wp_geo_options['google_map_type'] = $_POST['google_map_type'];
 			$wp_geo_options['show_post_map'] = $_POST['show_post_map'];
-			$wp_geo_options['default_map_latitude'] = $_POST['default_map_latitude'];
-			$wp_geo_options['default_map_longitude'] = $_POST['default_map_longitude'];
+			$wp_geo_options['default_map_latitude'] = empty( $_POST['default_map_latitude'] ) ? $wpgeo->default_map_latitude : $_POST['default_map_latitude'];
+			$wp_geo_options['default_map_longitude'] = empty( $_POST['default_map_longitude'] ) ? $wpgeo->default_map_longitude : $_POST['default_map_longitude'];
 			$wp_geo_options['default_map_width'] = wpgeo_css_dimension( $_POST['default_map_width'] );
 			$wp_geo_options['default_map_height'] = wpgeo_css_dimension( $_POST['default_map_height'] );
 			$wp_geo_options['default_map_zoom'] = $_POST['default_map_zoom'];
