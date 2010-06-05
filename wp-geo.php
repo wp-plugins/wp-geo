@@ -41,17 +41,17 @@ load_plugin_textdomain( 'wp-geo', false, dirname( plugin_basename( __FILE__ ) ) 
 
 
 // Includes
-include( WP_PLUGIN_DIR . '/wp-geo/includes/wp-geo.php' );
-include( WP_PLUGIN_DIR . '/wp-geo/includes/query.php' );
-include( WP_PLUGIN_DIR . '/wp-geo/includes/marker.php' );
-include( WP_PLUGIN_DIR . '/wp-geo/includes/markers.php' );
-include( WP_PLUGIN_DIR . '/wp-geo/includes/maps.php' );
-include( WP_PLUGIN_DIR . '/wp-geo/includes/functions.php' );
-include( WP_PLUGIN_DIR . '/wp-geo/includes/templates.php' );
-include( WP_PLUGIN_DIR . '/wp-geo/includes/shortcodes.php' );
-include( WP_PLUGIN_DIR . '/wp-geo/includes/feeds.php' );
-include( WP_PLUGIN_DIR . '/wp-geo/includes/display.php' );
-include( WP_PLUGIN_DIR . '/wp-geo/includes/widgets.php' );
+include_once( WP_PLUGIN_DIR . '/wp-geo/includes/wp-geo.php' );
+include_once( WP_PLUGIN_DIR . '/wp-geo/includes/query.php' );
+include_once( WP_PLUGIN_DIR . '/wp-geo/includes/marker.php' );
+include_once( WP_PLUGIN_DIR . '/wp-geo/includes/markers.php' );
+include_once( WP_PLUGIN_DIR . '/wp-geo/includes/maps.php' );
+include_once( WP_PLUGIN_DIR . '/wp-geo/includes/functions.php' );
+include_once( WP_PLUGIN_DIR . '/wp-geo/includes/templates.php' );
+include_once( WP_PLUGIN_DIR . '/wp-geo/includes/shortcodes.php' );
+include_once( WP_PLUGIN_DIR . '/wp-geo/includes/feeds.php' );
+include_once( WP_PLUGIN_DIR . '/wp-geo/includes/display.php' );
+include_once( WP_PLUGIN_DIR . '/wp-geo/includes/widgets.php' );
 
 
 
