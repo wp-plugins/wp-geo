@@ -934,7 +934,7 @@ class WPGeo {
 	
 	function show_maps() {
 	
-		global $post_ID, $pagenow;
+		global $post, $post_ID, $pagenow;
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		
@@ -948,7 +948,21 @@ class WPGeo {
 		
 		// Check settings
 		if ( is_home() && $wp_geo_options['show_maps_on_home'] == 'Y' )					return true;
-		if ( is_single() && $wp_geo_options['show_maps_on_posts'] == 'Y' )				return true;
+		if ( is_single() ) {
+			if ( function_exists( 'get_post_type' ) && function_exists( 'get_post_type_object' ) && function_exists( 'post_type_supports' ) ) {
+				$post_type = get_post_type( $post->ID );
+				$post_type_object = get_post_type_object( $post_type );
+				if ( $post_type == 'post' ) {
+					return true;
+				} elseif ( $wp_geo_options['show_maps_on_customposttypes'][$post_type] == 'Y' ) {
+					return true;
+				} elseif ( !$post_type_object->show_ui ) {
+					return post_type_supports( $post_type, 'wpgeo' );
+				}
+			} elseif ( $wp_geo_options['show_maps_on_posts'] == 'Y' ) {
+				return true;
+			}
+		}
 		if ( is_page() && $wp_geo_options['show_maps_on_pages'] == 'Y' )				return true;
 		if ( is_date() && $wp_geo_options['show_maps_in_datearchives'] == 'Y' )			return true;
 		if ( is_category() && $wp_geo_options['show_maps_in_categoryarchives'] == 'Y' )	return true;
@@ -988,13 +1002,19 @@ class WPGeo {
 	 * @return       (string) Checkbox HTML
 	 */
 	
-	function options_checkbox( $id, $val, $checked ) {
+	function options_checkbox( $id, $val, $checked, $disabled = false ) {
 	
 		$is_checked = '';
 		if ( $val == $checked ) {
 			$is_checked = 'checked="checked" ';
 		}
-		return '<input name="' . $id . '" type="checkbox" id="' . $id . '" value="' . $val . '" ' . $is_checked . '/>';
+		
+		$is_disabled = '';
+		if ( $val == $disabled ) {
+			$is_disabled = 'disabled="disabled" ';
+		}
+		
+		return '<input name="' . $id . '" type="checkbox" id="' . $id . '" value="' . $val . '" ' . $is_checked . $is_disabled . '/>';
 	
 	}
 	
@@ -1041,6 +1061,13 @@ class WPGeo {
 			$wp_geo_options['show_maps_in_categoryarchives'] = $_POST['show_maps_in_categoryarchives'] == 'Y' ? 'Y' : 'N';
 			$wp_geo_options['show_maps_in_tagarchives'] = $_POST['show_maps_in_tagarchives'] == 'Y' ? 'Y' : 'N';
 			$wp_geo_options['show_maps_in_searchresults'] = $_POST['show_maps_in_searchresults'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_maps_on_customposttypes'] = array();
+			
+			if ( is_array( $_POST['show_maps_on_customposttypes'] ) ) {
+				foreach ( $_POST['show_maps_on_customposttypes'] as $key => $val ) {
+					$wp_geo_options['show_maps_on_customposttypes'][$key] = $val == 'Y' ? 'Y' : 'N';
+				}
+			}
 			
 			$wp_geo_options['add_geo_information_to_rss'] = $_POST['add_geo_information_to_rss'] == 'Y' ? 'Y' : 'N';
 			
@@ -1138,7 +1165,24 @@ class WPGeo {
 							' . $wpgeo->options_checkbox('show_maps_in_datearchives', 'Y', $wp_geo_options['show_maps_in_datearchives']) . ' ' . __('Posts in date archives', 'wp-geo') . '<br />
 							' . $wpgeo->options_checkbox('show_maps_in_categoryarchives', 'Y', $wp_geo_options['show_maps_in_categoryarchives']) . ' ' . __('Posts in category archives', 'wp-geo') . '<br />
 							' . $wpgeo->options_checkbox('show_maps_in_tagarchives', 'Y', $wp_geo_options['show_maps_in_tagarchives']) . ' ' . __('Posts in tag archives', 'wp-geo') . '<br />
-							' . $wpgeo->options_checkbox('show_maps_in_searchresults', 'Y', $wp_geo_options['show_maps_in_searchresults']) . ' ' . __('Search Results', 'wp-geo') . '
+							' . $wpgeo->options_checkbox('show_maps_in_searchresults', 'Y', $wp_geo_options['show_maps_in_searchresults']) . ' ' . __('Search Results', 'wp-geo') . '<br />';
+		if ( function_exists( 'get_post_types' ) && function_exists( 'post_type_supports' ) ) {
+			$custom_post_type_checkboxes = '';
+			$post_types = get_post_types( array(), 'objects' );
+			foreach ( $post_types as $post_type ) {
+				if ( $post_type->show_ui ) {
+					$custom_post_type_checkboxes .= $wpgeo->options_checkbox( 'show_maps_on_customposttypes[' . $post_type->query_var . ']', 'Y', $wp_geo_options['show_maps_on_customposttypes'][$post_type->query_var] ) . ' ' . __( $post_type->label, 'wp-geo' ) . '<br />';
+				} elseif ( post_type_supports( $post_type->query_var, 'wpgeo' )) {
+					$custom_post_type_checkboxes .= $wpgeo->options_checkbox( 'show_maps_on_customposttypes[' . $post_type->query_var . ']', 'Y', 'Y', true ) . ' ' . __( $post_type->label, 'wp-geo' ) . '<br />';
+				
+				}
+			}
+			if ( !empty( $custom_post_type_checkboxes ) ) {
+				$custom_post_type_checkboxes = '<strong>Custom Post Types</strong><br />' . $custom_post_type_checkboxes;
+			}
+			echo $custom_post_type_checkboxes;
+		}
+		echo '
 						</td>
 					</tr>
 					<tr valign="top">
@@ -1434,10 +1478,24 @@ class WPGeo {
 	 */
 	
 	function add_custom_boxes() {
-	
+		
+		global $post;
+		
 		if ( function_exists( 'add_meta_box') ) {
 			add_meta_box('wpgeo_location', __('WP Geo Location', 'wpgeo'), array($this, 'wpgeo_location_inner_custom_box'), 'post', 'advanced');
 			add_meta_box('wpgeo_location', __('WP Geo Location', 'wpgeo'), array($this, 'wpgeo_location_inner_custom_box'), 'page', 'advanced');
+			
+			// Support for custom post types
+			// Add support using add_post_type_support( 'custom-post-type', 'wpgeo' )
+			if ( function_exists( 'get_post_types' ) && function_exists( 'post_type_supports' ) ) {
+				$post_types = get_post_types();
+				foreach ( $post_types as $post_type ) {
+					if ( post_type_supports( $post_type, 'wpgeo' ) ) {
+						add_meta_box( 'wpgeo_location', __( 'WP Geo Location', 'wpgeo' ), array( $this, 'wpgeo_location_inner_custom_box' ), $post_type, 'advanced' );
+					}
+				}
+			}
+			
 		} else {
 			add_action('dbx_post_advanced', array($this, 'wpgeo_location_old_custom_box'));
 			add_action('dbx_page_advanced', array($this, 'wpgeo_location_old_custom_box'));
@@ -1562,8 +1620,12 @@ class WPGeo {
 		if ( 'page' == $_POST['post_type'] ) {
 			if ( !current_user_can('edit_page', $post_id) )
 				return $post_id;
-		} else {
+		} elseif ( 'post' == $_POST['post_type'] ) {
 			if ( !current_user_can('edit_post', $post_id) )
+				return $post_id;
+		} elseif ( function_exists( 'get_post_type_object' ) ) {
+			$post_type = get_post_type_object( $_POST['post_type'] );
+			if ( !current_user_can( $post_type->edit_cap, $post_id ) )
 				return $post_id;
 		}
 		
