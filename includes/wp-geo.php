@@ -370,14 +370,8 @@ class WPGeo {
 				$post      = $posts[$i];
 				$latitude  = get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
 				$longitude = get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
-				$title     = get_post_meta($post->ID, WPGEO_TITLE_META, true);
+				$title     = get_wpgeo_title( $post->ID );
 				$settings  = get_post_meta($post->ID, WPGEO_MAP_SETTINGS_META, true);
-				
-				$title = apply_filters( 'wpgeo_point_title', $title, $post->ID );
-				
-				if ( empty($title) ) {
-					$title = $post->post_title;
-				}
 				
 				$mymaptype = $maptype;
 				if ( isset($settings['type']) && !empty($settings['type']) ) {

@@ -39,6 +39,21 @@ function wpgeo_longitude( $post_id = null ) {
 
 
 /**
+ * @method       WP Geo Title
+ * @description  Outputs the post title.
+ * @param        $post_id = Post ID (optional)
+ * @param        $default_to_post_title = Default to post title if point title empty (optional)
+ */
+
+function wpgeo_title( $post_id = null, $default_to_post_title = true ) {
+
+	echo get_wpgeo_title( $post_id, $default_to_post_title );
+	
+}
+
+
+
+/**
  * @method       Get WP Geo Latitude
  * @description  Gets the post latitude.
  * @param        $post_id = Post ID (optional)
@@ -76,6 +91,35 @@ function get_wpgeo_longitude( $post_id = null ) {
 	
 	if ( absint($id) > 0 ) {
 		return get_post_meta( absint($id), WPGEO_LONGITUDE_META, true );
+	}
+	
+	return null;
+	
+}
+
+
+
+/**
+ * @method       Get WP Geo Title
+ * @description  Gets the post title.
+ * @param        $post_id = Post ID (optional)
+ * @param        $default_to_post_title = Default to post title if point title empty (optional)
+ * @return       (string) Title
+ */
+
+function get_wpgeo_title( $post_id = null, $default_to_post_title = true ) {
+	
+	global $post;
+	
+	$id = absint( $post_id ) > 0 ? absint( $post_id ) : $post->ID;
+	
+	if ( absint( $id ) > 0 ) {
+		$title = get_post_meta( $id, WPGEO_TITLE_META, true );
+		if ( empty( $title ) && $default_to_post_title ) {
+			$title = $post->post_title;
+		}
+		$title = apply_filters( 'wpgeo_point_title', $title, $id );
+		return $title;
 	}
 	
 	return null;
