@@ -9,11 +9,12 @@ Stable tag: 3.1.4
 Add location maps to your posts and pages.
 
 == Description ==
-When editing a post or page, you will be able to set a physically location for that post. You can select the location by:
+When editing a post or page, you will be able to set a physical location for that post and easily embed a Google map into your post. You can select the location by:
 
-1. Clicking on the map to position the point.
+1. Clicking on the map of the world to position the point.
 2. Searching for a location, town, city or address.
 3. Entering the latitude and longitude. 
+
 
 The WP Geo location selector is styled to fit seamlessly into the latest version of the WordPress admin.
 
