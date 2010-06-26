@@ -267,7 +267,7 @@ class WPGeo {
 			}
 		}
 		
-		if ( $showmap && $this->checkGoogleAPIKey() ) {
+		if ( $showmap && !is_feed() && $this->checkGoogleAPIKey() ) {
 			echo '<div class="wp_geo_map" id="wp_geo_map_visible" style="width:' . $map_width . '; height:' . $map_height . ';"></div>';
 		}
 		
@@ -852,7 +852,7 @@ class WPGeo {
 		
 		$new_content = '';
 		
-		if ( $wpgeo->show_maps() ) {
+		if ( $wpgeo->show_maps() && !is_feed() ) {
 			
 			$wp_geo_options = get_option('wp_geo_options');
 			
