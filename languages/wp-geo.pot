@@ -45,6 +45,32 @@ msgstr ""
 msgid "title"
 msgstr ""
 
+#: includes/markers.php:38
+msgid "Default Large Marker"
+msgstr ""
+
+#: includes/markers.php:39
+msgid "This is the default marker used to indicate a location on most maps."
+msgstr ""
+
+#: includes/markers.php:48
+msgid "Default Small Marker"
+msgstr ""
+
+#: includes/markers.php:49
+msgid "This is the default marker used for the WP Geo sidebar widget."
+msgstr ""
+
+#: includes/markers.php:58
+msgid "Default Dot Marker"
+msgstr ""
+
+#: includes/markers.php:59
+msgid ""
+"This marker image is not currently used but it is anticipated that it will "
+"be used to indicate less important locations in a future versions of WP Geo."
+msgstr ""
+
 #: includes/widgets.php:142
 msgid "WP Geo is not currently active as you have not entered a Google API Key"
 msgstr ""
