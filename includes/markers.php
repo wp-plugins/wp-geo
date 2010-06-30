@@ -35,8 +35,8 @@ class WPGeo_Markers {
 		// Large Marker
 		$this->markers[] = new WPGeo_Marker(
 			'large',
-			'Default Large Marker',
-			'This is the default marker used to indicate a location on most maps.',
+			__( 'Default Large Marker' ),
+			__( 'This is the default marker used to indicate a location on most maps.' ),
 			20, 34, 10, 34,
 			$dir . 'large-marker.png',
 			$dir . 'large-marker-shadow.png'
@@ -45,8 +45,8 @@ class WPGeo_Markers {
 		// Small Marker
 		$this->markers[] = new WPGeo_Marker(
 			'small',
-			'Default Small Marker',
-			'This is the default marker used for the WP Geo sidebar widget.',
+			__( 'Default Small Marker' ),
+			__( 'This is the default marker used for the WP Geo sidebar widget.' ),
 			10, 17, 5, 17,
 			$dir . 'small-marker.png',
 			$dir . 'small-marker-shadow.png'
@@ -55,8 +55,8 @@ class WPGeo_Markers {
 		// Dot Marker
 		$this->markers[] = new WPGeo_Marker(
 			'dot',
-			'Default Dot Marker',
-			'This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo.',
+			__( 'Default Dot Marker' ),
+			__( 'This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo.' ),
 			8, 8, 3, 6,
 			$dir . 'dot-marker.png',
 			$dir . 'dot-marker-shadow.png'
