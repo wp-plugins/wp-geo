@@ -565,7 +565,7 @@ class WPGeo {
 			$post_types = get_post_types();
 			foreach ( $post_types as $post_type ) {
 				$post_type_object = get_post_type_object( $post_type );
-				if ( $post_type_object->show_ui && $wp_geo_options['show_maps_on_customposttypes'][$post_type] == 'Y' ) {
+				if ( $post_type_object->show_ui && array_key_exists( $post_type, $wp_geo_options['show_maps_on_customposttypes'] ) && $wp_geo_options['show_maps_on_customposttypes'][$post_type] == 'Y' ) {
 					add_post_type_support( $post_type, 'wpgeo' );
 				}
 			}
@@ -756,7 +756,7 @@ class WPGeo {
 		
 		if ( is_numeric($post->ID) && $post->ID > 0 ) {
 			$settings = get_post_meta($post->ID, WPGEO_MAP_SETTINGS_META, true);
-			if ( is_numeric($settings['zoom']) ) {
+			if ( isset( $settings['zoom'] ) && is_numeric( $settings['zoom'] ) ) {
 				$zoom = $settings['zoom'];
 			}
 			if ( !empty($settings['type']) ) {
@@ -1055,36 +1055,36 @@ class WPGeo {
 		// Process option updates
 		if ( isset($_POST['action']) && $_POST['action'] == 'update' ) {
 		
-			$wp_geo_options['google_api_key'] = $_POST['google_api_key'];
-			$wp_geo_options['google_map_type'] = $_POST['google_map_type'];
-			$wp_geo_options['show_post_map'] = $_POST['show_post_map'];
-			$wp_geo_options['default_map_latitude'] = empty( $_POST['default_map_latitude'] ) ? $wpgeo->default_map_latitude : $_POST['default_map_latitude'];
+			$wp_geo_options['google_api_key']        = $_POST['google_api_key'];
+			$wp_geo_options['google_map_type']       = $_POST['google_map_type'];
+			$wp_geo_options['show_post_map']         = $_POST['show_post_map'];
+			$wp_geo_options['default_map_latitude']  = empty( $_POST['default_map_latitude'] ) ? $wpgeo->default_map_latitude : $_POST['default_map_latitude'];
 			$wp_geo_options['default_map_longitude'] = empty( $_POST['default_map_longitude'] ) ? $wpgeo->default_map_longitude : $_POST['default_map_longitude'];
-			$wp_geo_options['default_map_width'] = wpgeo_css_dimension( $_POST['default_map_width'] );
-			$wp_geo_options['default_map_height'] = wpgeo_css_dimension( $_POST['default_map_height'] );
-			$wp_geo_options['default_map_zoom'] = $_POST['default_map_zoom'];
+			$wp_geo_options['default_map_width']     = wpgeo_css_dimension( $_POST['default_map_width'] );
+			$wp_geo_options['default_map_height']    = wpgeo_css_dimension( $_POST['default_map_height'] );
+			$wp_geo_options['default_map_zoom']      = $_POST['default_map_zoom'];
 			
-			$wp_geo_options['default_map_control'] = $_POST['default_map_control'];
-			$wp_geo_options['show_map_type_normal'] = $_POST['show_map_type_normal'] == 'Y' ? 'Y' : 'N';
-			$wp_geo_options['show_map_type_satellite'] = $_POST['show_map_type_satellite'] == 'Y' ? 'Y' : 'N';
-			$wp_geo_options['show_map_type_hybrid'] = $_POST['show_map_type_hybrid'] == 'Y' ? 'Y' : 'N';
-			$wp_geo_options['show_map_type_physical'] = $_POST['show_map_type_physical'] == 'Y' ? 'Y' : 'N';
-			$wp_geo_options['show_map_scale'] = $_POST['show_map_scale'] == 'Y' ? 'Y' : 'N';
-			$wp_geo_options['show_map_overview'] = $_POST['show_map_overview'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['default_map_control']     = isset( $_POST['default_map_control'] ) && $_POST['default_map_control'];
+			$wp_geo_options['show_map_type_normal']    = isset( $_POST['show_map_type_normal'] ) && $_POST['show_map_type_normal'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_map_type_satellite'] = isset( $_POST['show_map_type_satellite'] ) && $_POST['show_map_type_satellite'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_map_type_hybrid']    = isset( $_POST['show_map_type_hybrid'] ) && $_POST['show_map_type_hybrid'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_map_type_physical']  = isset( $_POST['show_map_type_physical'] ) && $_POST['show_map_type_physical'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_map_scale']          = isset( $_POST['show_map_scale'] ) && $_POST['show_map_scale'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_map_overview']       = isset( $_POST['show_map_overview'] ) && $_POST['show_map_overview'] == 'Y' ? 'Y' : 'N';
 			
-			$wp_geo_options['show_polylines'] = $_POST['show_polylines'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_polylines']  = isset( $_POST['show_polylines'] ) && $_POST['show_polylines'] == 'Y' ? 'Y' : 'N';
 			$wp_geo_options['polyline_colour'] = $_POST['polyline_colour'];
 			
-			$wp_geo_options['show_maps_on_home'] = $_POST['show_maps_on_home'] == 'Y' ? 'Y' : 'N';
-			$wp_geo_options['show_maps_on_pages'] = $_POST['show_maps_on_pages'] == 'Y' ? 'Y' : 'N';
-			$wp_geo_options['show_maps_on_posts'] = $_POST['show_maps_on_posts'] == 'Y' ? 'Y' : 'N';
-			$wp_geo_options['show_maps_in_datearchives'] = $_POST['show_maps_in_datearchives'] == 'Y' ? 'Y' : 'N';
-			$wp_geo_options['show_maps_in_categoryarchives'] = $_POST['show_maps_in_categoryarchives'] == 'Y' ? 'Y' : 'N';
-			$wp_geo_options['show_maps_in_tagarchives'] = $_POST['show_maps_in_tagarchives'] == 'Y' ? 'Y' : 'N';
-			$wp_geo_options['show_maps_in_searchresults'] = $_POST['show_maps_in_searchresults'] == 'Y' ? 'Y' : 'N';
-			$wp_geo_options['show_maps_on_customposttypes'] = array();
+			$wp_geo_options['show_maps_on_home']             = isset( $_POST['show_maps_on_home'] ) && $_POST['show_maps_on_home'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_maps_on_pages']            = isset( $_POST['show_maps_on_pages'] ) && $_POST['show_maps_on_pages'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_maps_on_posts']            = isset( $_POST['show_maps_on_posts'] ) && $_POST['show_maps_on_posts'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_maps_in_datearchives']     = isset( $_POST['show_maps_in_datearchives'] ) && $_POST['show_maps_in_datearchives'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_maps_in_categoryarchives'] = isset( $_POST['show_maps_in_categoryarchives'] ) && $_POST['show_maps_in_categoryarchives'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_maps_in_tagarchives']      = isset( $_POST['show_maps_in_tagarchives'] ) && $_POST['show_maps_in_tagarchives'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_maps_in_searchresults']    = isset( $_POST['show_maps_in_searchresults'] ) && $_POST['show_maps_in_searchresults'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['show_maps_on_customposttypes']  = array();
 			
-			if ( is_array( $_POST['show_maps_on_customposttypes'] ) ) {
+			if ( isset( $_POST['show_maps_on_customposttypes'] ) && is_array( $_POST['show_maps_on_customposttypes'] ) ) {
 				foreach ( $_POST['show_maps_on_customposttypes'] as $key => $val ) {
 					$wp_geo_options['show_maps_on_customposttypes'][$key] = $val == 'Y' ? 'Y' : 'N';
 				}
@@ -1537,6 +1537,7 @@ class WPGeo {
 		
 		global $post;
 		
+		$search    = '';
 		$latitude  = get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
 		$longitude = get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
 		$title     = get_post_meta($post->ID, WPGEO_TITLE_META, true);
@@ -1635,7 +1636,7 @@ class WPGeo {
 	
 		// Verify this came from the our screen and with proper authorization,
 		// because save_post can be triggered at other times
-		if ( !wp_verify_nonce($_POST['wpgeo_location_noncename'], plugin_basename(__FILE__)) ) {
+		if ( isset( $_POST['wpgeo_location_noncename'] ) && !wp_verify_nonce( $_POST['wpgeo_location_noncename'], plugin_basename( __FILE__ ) ) ) {
 			return $post_id;
 		}
 		
