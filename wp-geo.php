@@ -76,6 +76,7 @@ register_activation_hook( __FILE__, array( $wpgeo, 'register_activation' ) );
 
 // Action Hooks
 add_action( 'init', array( $wpgeo, 'init' ) );
+add_action( 'init', array( $wpgeo, 'init_later' ), 10000 );
 add_action( 'wp_print_scripts', array( $wpgeo, 'includeGoogleMapsJavaScriptAPI' ) );
 add_action( 'wp_head', array( $wpgeo, 'wp_head' ) );
 add_action( 'wp_footer', array( $wpgeo, 'wp_footer' ) );

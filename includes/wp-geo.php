@@ -549,6 +549,30 @@ class WPGeo {
 	
 	
 	/**
+	 * @method       wp
+	 * @description  Runs after WordPress is ready.
+	 */
+	
+	function init_later() {
+		
+		$wp_geo_options = get_option( 'wp_geo_options' );
+		
+		// Support for custom post types
+		if ( function_exists( 'get_post_types' ) && function_exists( 'add_post_type_support' ) ) {
+			$post_types = get_post_types();
+			foreach ( $post_types as $post_type ) {
+				$post_type_object = get_post_type_object( $post_type );
+				if ( $post_type_object->show_ui && $wp_geo_options['show_maps_on_customposttypes'][$post_type] == 'Y' ) {
+					add_post_type_support( $post_type, 'wpgeo' );
+				}
+			}
+		}
+		
+	}
+	
+	
+	
+	/**
 	 * @method       Admin Init
 	 * @description  Runs actions required in the admin.
 	 */
@@ -1482,12 +1506,11 @@ class WPGeo {
 			add_meta_box('wpgeo_location', __('WP Geo Location', 'wpgeo'), array($this, 'wpgeo_location_inner_custom_box'), 'page', 'advanced');
 			
 			// Support for custom post types
-			// Add support using add_post_type_support( 'custom-post-type', 'wpgeo' )
 			if ( function_exists( 'get_post_types' ) && function_exists( 'post_type_supports' ) ) {
 				$post_types = get_post_types();
 				foreach ( $post_types as $post_type ) {
 					$post_type_object = get_post_type_object( $post_type );
-					if ( post_type_supports( $post_type, 'wpgeo' ) || ( $post_type_object->show_ui && $wp_geo_options['show_maps_on_customposttypes'][$post_type] == 'Y' ) ) {
+					if ( post_type_supports( $post_type, 'wpgeo' ) ) {
 						add_meta_box( 'wpgeo_location', __( 'WP Geo Location', 'wpgeo' ), array( $this, 'wpgeo_location_inner_custom_box' ), $post_type, 'advanced' );
 					}
 				}
