@@ -315,6 +315,9 @@ class WPGeo {
 		
 		global $wpgeo;
 		
+		$js_map_inits = '';
+		$js_marker_inits = '';
+		
 		$this->meta_tags();
 		
 		// WP Geo Default Settings
@@ -485,7 +488,7 @@ class WPGeo {
 						
 				// Script
 				$wpgeo->includeGoogleMapsJavaScriptAPI();
-				$html_content .= '
+				$html_content = '
 				<script type="text/javascript">
 				//<![CDATA[
 				
@@ -771,7 +774,7 @@ class WPGeo {
 		
 		// Script
 		$wpgeo->includeGoogleMapsJavaScriptAPI();
-		$html_content .= '
+		$html_content = '
 			<script type="text/javascript">
 			//<![CDATA[
 			

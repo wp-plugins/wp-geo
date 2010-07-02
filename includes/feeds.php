@@ -37,7 +37,7 @@ class WPGeo_Feeds
 	
 		// Add GeoRSS Feed Type
 		add_feed( 'georss', array( 'WPGeo_Feeds', 'add_feed_georss' ) );
-		add_filter( 'feed_content_type', array( $this, 'feed_content_type' ),Ê100Ê);
+		add_filter( 'feed_content_type', array( $this, 'feed_content_type' ), 100 );
 		add_filter( 'post_limits', array( $this, 'post_limits' ) );
 		
 		$this->add_feed_hooks();
