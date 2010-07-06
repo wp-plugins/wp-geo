@@ -97,7 +97,7 @@ class WPGeo {
 		update_option('wp_geo_options', $wp_geo_options);
 		
 		// Files
-		$this->markers->register_activation();
+		$wpgeo->markers->register_activation();
 		
 	}
 	

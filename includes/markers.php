@@ -111,20 +111,25 @@ class WPGeo_Markers {
 		// New Marker Folders
 		clearstatcache();
 		$old_umask = umask( 0 );
-		mkdir( WP_CONTENT_DIR . '/uploads/wp-geo' );
-		mkdir( WP_CONTENT_DIR . '/uploads/wp-geo/markers' );
+		
+		if ( is_writable( WP_CONTENT_DIR ) && ( !is_dir( WP_CONTENT_DIR . '/uploads/wp-geo' ) || !is_dir( WP_CONTENT_DIR . '/uploads/wp-geo/markers' ) ) ) {
+			mkdir( WP_CONTENT_DIR . '/uploads/wp-geo' );
+			mkdir( WP_CONTENT_DIR . '/uploads/wp-geo/markers' );
+		}
 		
 		// Marker Folders
 		$old_marker_image_dir = WP_CONTENT_DIR . '/plugins/wp-geo/img/markers/';
 		$new_marker_image_dir = WP_CONTENT_DIR . $this->marker_image_dir;
 		
 		// Marker Files
-		$this->moveFileOrDelete( $old_marker_image_dir . 'dot-marker.png', $new_marker_image_dir . 'dot-marker.png' );
-		$this->moveFileOrDelete( $old_marker_image_dir . 'dot-marker-shadow.png', $new_marker_image_dir . 'dot-marker-shadow.png' );
-		$this->moveFileOrDelete( $old_marker_image_dir . 'large-marker.png', $new_marker_image_dir . 'large-marker.png' );
-		$this->moveFileOrDelete( $old_marker_image_dir . 'large-marker-shadow.png', $new_marker_image_dir . 'large-marker-shadow.png' );
-		$this->moveFileOrDelete( $old_marker_image_dir . 'small-marker.png', $new_marker_image_dir . 'small-marker.png' );
-		$this->moveFileOrDelete( $old_marker_image_dir . 'small-marker-shadow.png', $new_marker_image_dir . 'small-marker-shadow.png' );
+		if ( is_dir( $new_marker_image_dir ) ) {
+			$this->moveFileOrDelete( $old_marker_image_dir . 'dot-marker.png', $new_marker_image_dir . 'dot-marker.png' );
+			$this->moveFileOrDelete( $old_marker_image_dir . 'dot-marker-shadow.png', $new_marker_image_dir . 'dot-marker-shadow.png' );
+			$this->moveFileOrDelete( $old_marker_image_dir . 'large-marker.png', $new_marker_image_dir . 'large-marker.png' );
+			$this->moveFileOrDelete( $old_marker_image_dir . 'large-marker-shadow.png', $new_marker_image_dir . 'large-marker-shadow.png' );
+			$this->moveFileOrDelete( $old_marker_image_dir . 'small-marker.png', $new_marker_image_dir . 'small-marker.png' );
+			$this->moveFileOrDelete( $old_marker_image_dir . 'small-marker-shadow.png', $new_marker_image_dir . 'small-marker-shadow.png' );
+		}
 		
 		// Reset default permissions
 		umask( $old_umask );
