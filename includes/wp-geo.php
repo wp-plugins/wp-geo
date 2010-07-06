@@ -1064,7 +1064,7 @@ class WPGeo {
 			$wp_geo_options['default_map_height']    = wpgeo_css_dimension( $_POST['default_map_height'] );
 			$wp_geo_options['default_map_zoom']      = $_POST['default_map_zoom'];
 			
-			$wp_geo_options['default_map_control']     = isset( $_POST['default_map_control'] ) && $_POST['default_map_control'];
+			$wp_geo_options['default_map_control']     = $_POST['default_map_control'];
 			$wp_geo_options['show_map_type_normal']    = isset( $_POST['show_map_type_normal'] ) && $_POST['show_map_type_normal'] == 'Y' ? 'Y' : 'N';
 			$wp_geo_options['show_map_type_satellite'] = isset( $_POST['show_map_type_satellite'] ) && $_POST['show_map_type_satellite'] == 'Y' ? 'Y' : 'N';
 			$wp_geo_options['show_map_type_hybrid']    = isset( $_POST['show_map_type_hybrid'] ) && $_POST['show_map_type_hybrid'] == 'Y' ? 'Y' : 'N';
