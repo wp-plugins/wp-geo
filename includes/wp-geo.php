@@ -1193,7 +1193,12 @@ class WPGeo {
 			foreach ( $post_types as $post_type ) {
 				if ( $post_type->show_ui ) {
 					$custom_post_type_checkbox_value = isset( $wp_geo_options['show_maps_on_customposttypes'][$post_type->query_var] ) ? $wp_geo_options['show_maps_on_customposttypes'][$post_type->query_var] : '';
-					$custom_post_type_checkboxes .= $wpgeo->options_checkbox( 'show_maps_on_customposttypes[' . $post_type->query_var . ']', 'Y', $custom_post_type_checkbox_value ) . ' ' . __( $post_type->label, 'wp-geo' ) . '<br />';
+					$custom_post_type_disabled = false;
+					if ( post_type_supports( $post_type->query_var, 'wpgeo' ) ) {
+						$custom_post_type_checkbox_value = 'Y';
+						$custom_post_type_disabled = true;
+					}
+					$custom_post_type_checkboxes .= $wpgeo->options_checkbox( 'show_maps_on_customposttypes[' . $post_type->query_var . ']', 'Y', $custom_post_type_checkbox_value, $custom_post_type_disabled ) . ' ' . __( $post_type->label, 'wp-geo' ) . '<br />';
 				} elseif ( post_type_supports( $post_type->query_var, 'wpgeo' )) {
 					$custom_post_type_checkboxes .= $wpgeo->options_checkbox( 'show_maps_on_customposttypes[' . $post_type->query_var . ']', 'Y', 'Y', true ) . ' ' . __( $post_type->label, 'wp-geo' ) . '<br />';
 				
