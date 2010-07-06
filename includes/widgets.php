@@ -217,6 +217,8 @@ class WPGeo_Widget {
 	
 		global $posts, $wpgeo;
 		
+		$html_js = '';
+		
 		// If Google API Key...
 		if ( $wpgeo->checkGoogleAPIKey() ) {
 		
