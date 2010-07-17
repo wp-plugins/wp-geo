@@ -259,7 +259,7 @@ msgstr "Documentazione"
 
 #: wp-geo.php:1228
 msgid "<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a location has been set for the post). You can only include the Shortcode once within a post. If you select another Show Post Map option then the Shortcode will be ignored and the map will be positioned automatically.</p>"
-msgstr "<p>Se imposti l'opzione \"Mostra mappa nell'articolo\" come &quot;Manuale&quot;, puoi usare il codice <code>[wp_geo_map]</code> nell'articolo per decidere dove mostrare la mappa (se una località è stata imposta nell'articolo). Puoi solo includere il codice una volta all'interno dell'articolo. Se selezioni un'altra opzione in \"Mostra mappa nell'articolo\" allora il codice sarà ignorato e la mappa sarà posizionata automaticamente.</p>"
+msgstr "<p>Se imposti l'opzione &quot;Mostra mappa nell'articolo&quot; come &quot;Manuale&quot;, puoi usare il codice <code>[wp_geo_map]</code> nell'articolo per decidere dove mostrare la mappa (se una località è stata imposta nell'articolo). Puoi solo includere il codice una volta all'interno dell'articolo. Se selezioni un'altra opzione in &quot;Mostra mappa nell'articolo&quot; allora il codice sarà ignorato e la mappa sarà posizionata automaticamente.</p>"
 
 #: wp-geo.php:1229
 msgid "Feedback"
