@@ -1191,6 +1191,9 @@ class WPGeo {
 			$custom_post_type_checkboxes = '';
 			$post_types = get_post_types( array(), 'objects' );
 			foreach ( $post_types as $post_type ) {
+				if ( $post_type->name == 'post' || $post_type->name == 'page' ) {
+					continue;
+				}
 				if ( $post_type->show_ui ) {
 					$custom_post_type_checkbox_value = isset( $wp_geo_options['show_maps_on_customposttypes'][$post_type->query_var] ) ? $wp_geo_options['show_maps_on_customposttypes'][$post_type->query_var] : '';
 					$custom_post_type_disabled = false;
