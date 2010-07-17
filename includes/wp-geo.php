@@ -1655,7 +1655,8 @@ class WPGeo {
 				return $post_id;
 		} elseif ( function_exists( 'get_post_type_object' ) ) {
 			$post_type = get_post_type_object( $_POST['post_type'] );
-			if ( !current_user_can( $post_type->edit_cap, $post_id ) )
+			// Should this be "edit_" . $post_type->capability_type
+			if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
 				return $post_id;
 		}
 		
