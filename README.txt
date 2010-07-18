@@ -2,9 +2,9 @@
 Contributors: Ben Huson
 Donate link: http://www.wpgeo.com/donate
 Tags: maps, map, geo, geocoding, google, location, georss
-Requires at least: 2.5
-Tested up to: 2.9.2
-Stable tag: 3.1.4
+Requires at least: 2.7
+Tested up to: 3.0
+Stable tag: 3.2
 
 Add location maps to your posts and pages.
 
@@ -24,6 +24,7 @@ More information can be found at http://www.wpgeo.com/.
 
 * Custom marker title setting per post.
 * Custom zoom and map type per post.
+* Supports custom post types.
 * Widget zoom option.
 * Default Map Location setting.
 * Load maps from GeoRSS or KML data.
@@ -75,6 +76,23 @@ If upgrading from a previous version of the plugin:
 4. Widget Settings
 
 == Changelog ==
+
+= WP Geo 3.2 =
+
+* Fix for tooltip not working in WordPress 3.0.
+* Fix to allow maps to be shown on tag archive pages by Lee Willis.
+* Fix for default_map_control setting not being saved correctly.
+* Ensure default map location is populated, otherwise map does not display when editing a post in the admin.
+* Don't try to show maps in feeds.
+* Make sure includes are only included once.
+* Added support for custom post types in WordPress 3.0.
+* Added wpgeo_title() and get_wpgeo_title() template tags.
+* Added wpgeo_post_map() and get_wpgeo_post_map() template tags.
+* Added wpgeo_check_version() and wpgeo_check_db_version() for checking WP Geo version.
+* Added 'wpgeo_markers' filter in preparation for being able to add new marker icons.
+* Added 'wpgeo_marker_icon' filter. Allows you to override a marker icon based on post data and context.
+* Added Simplified Chinese language.
+* Language files updated.
 
 = WP Geo 3.1.4 =
 
@@ -252,10 +270,14 @@ If upgrading from a previous version of the plugin:
 
 WP Geo is currently available in the following languages:
 
+* Belorussian (by Ilyuha)
+* Bulgarian (by Roman Rachkov)
+* Chinese, Simplified (by Steen Chow)
+* Croatian (by Andrija Papec)
 * English (default)
-* Danish (by <a href="http://wordpress.blogos.dk/s¿g-efter-downloads/?did=91">Georg</a>)
-* French
-* German
-* Italian
-* Russian (by <a href="http://www.fatcow.com/">Fat Cower</a>)
-* Spanish
+* Danish (by Georg)
+* French (by Alain Messin)
+* German (by Ivan Graf)
+* Italian (by Diego Pierotto)
+* Russian (by Fat Cower)
+* Spanish (by Alberto)
