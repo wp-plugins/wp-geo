@@ -354,7 +354,7 @@ class WPGeo {
 			';
 		
 		// CSS
-		echo '<link rel="stylesheet" href="' . WP_CONTENT_URL . '/plugins/wp-geo/css/wp-geo.css" type="text/css" />';
+		echo '<link rel="stylesheet" href="' . WP_CONTENT_URL . '/plugins/' . WPGEO_PLUGIN_BASENAME . '/css/wp-geo.css" type="text/css" />';
 		
 		if ( $wpgeo->show_maps() || $wpgeo->widget_is_active() ) {
 		
@@ -608,7 +608,7 @@ class WPGeo {
 	
 		global $wpgeo, $post_ID;
 		
-		echo '<link rel="stylesheet" href="' . WP_CONTENT_URL . '/plugins/wp-geo/css/wp-geo.css" type="text/css" />';
+		echo '<link rel="stylesheet" href="' . WP_CONTENT_URL . '/plugins/' . WPGEO_PLUGIN_BASENAME . '/css/wp-geo.css" type="text/css" />';
 		
 		// Only load if on a post or page
 		if ( $wpgeo->show_maps() ) {
@@ -656,10 +656,10 @@ class WPGeo {
 			$locale = $wpgeo->get_googlemaps_locale('&hl=');
 			
 			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&v=2' . $locale . '&key=' . $wpgeo->get_google_api_key() . '&sensor=false', false, '2');
-			wp_register_script('wpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'), '1.0');
-			wp_register_script('wpgeo-admin-post', WP_CONTENT_URL . '/plugins/wp-geo/js/admin-post.js', array('jquery', 'googlemaps'), '1.0');
-			wp_register_script('wpgeotooltip', WP_CONTENT_URL . '/plugins/wp-geo/js/tooltip.js', array('googlemaps', 'jquery'), '1.0');
-			//wp_register_script('jquerywpgeo', WP_CONTENT_URL . '/plugins/wp-geo/js/jquery.wp-geo.js', array('jquery', 'googlemaps'), '1.0');
+			wp_register_script('wpgeo', WP_CONTENT_URL . '/plugins/' . WPGEO_PLUGIN_BASENAME . '/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'), '1.0');
+			wp_register_script('wpgeo-admin-post', WP_CONTENT_URL . '/plugins/' . WPGEO_PLUGIN_BASENAME . '/js/admin-post.js', array('jquery', 'googlemaps'), '1.0');
+			wp_register_script('wpgeotooltip', WP_CONTENT_URL . '/plugins/' . WPGEO_PLUGIN_BASENAME . '/js/tooltip.js', array('googlemaps', 'jquery'), '1.0');
+			//wp_register_script('jquerywpgeo', WP_CONTENT_URL . '/plugins/' . WPGEO_PLUGIN_BASENAME . '/js/jquery.wp-geo.js', array('jquery', 'googlemaps'), '1.0');
 			
 			wp_enqueue_script('jquery');
 			wp_enqueue_script('googlemaps');
@@ -1109,8 +1109,8 @@ class WPGeo {
 		<div class="wrap">
 			<h2>' . __('WP Geo Settings', 'wp-geo') . '</h2>
 			<form method="post">
-				<img style="float:right; padding:0 20px 0 0; margin:0 0 20px 20px;" src="' . WP_CONTENT_URL . '/plugins/wp-geo/img/logo/wp-geo.png" />';
-		include( WP_PLUGIN_DIR . '/wp-geo/admin/donate-links.php' );	
+				<img style="float:right; padding:0 20px 0 0; margin:0 0 20px 20px;" src="' . WP_CONTENT_URL . '/plugins/' . WPGEO_PLUGIN_BASENAME . '/img/logo/wp-geo.png" />';
+		include( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/admin/donate-links.php' );	
 		echo '<h3>' . __('General Settings', 'wp-geo') . '</h3>
 				<p>'
 				. sprintf(__("For more information and documentation about this plugin please visit the <a %s>WP Geo Plugin</a> home page.", 'wp-geo'), 'href="http://www.benhuson.co.uk/wordpress-plugins/wp-geo/"') . '<br />'
@@ -1120,7 +1120,7 @@ class WPGeo {
 			echo '<div class="error"><p>Before you can use Wp Geo you must acquire a <a href="http://code.google.com/apis/maps/signup.html">Google API Key</a> for your blog - the plugin will not function without it!</p></div>';
 		}
 		if ( !$wpgeo->markers->marker_folder_exists() ) {
-			echo '<div class="error"><p>Unable to create the markers folder /wp-content/uploads/wp-geo/markers.<br />Please create it and copy the marker images to it from /wp-content/plugins/wp-geo/img/markers</p></div>';
+			echo '<div class="error"><p>Unable to create the markers folder /wp-content/uploads/wp-geo/markers.<br />Please create it and copy the marker images to it from /wp-content/plugins/' . WPGEO_PLUGIN_BASENAME . '/img/markers</p></div>';
 		}
 		echo '<table class="form-table">
 					<tr valign="top">
@@ -1410,7 +1410,7 @@ class WPGeo {
 	
 	function after_plugin_row( $plugin ) {
 		
-		if ( 'wp-geo/wp-geo.php' == $plugin && !empty($this->plugin_message) ) {
+		if ( WPGEO_PLUGIN_BASENAME . '/wp-geo.php' == $plugin && !empty($this->plugin_message) ) {
 			//echo '<td colspan="5" class="plugin-update" style="line-height:1.2em;">' . $this->plugin_message . '</td>';
 			return;
 		}

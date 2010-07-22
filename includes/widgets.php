@@ -139,7 +139,7 @@ class WPGeo_Widget {
 		// Write the widget controls
 		if ( !$wpgeo->checkGoogleAPIKey() ) {
 			// NOTE: Check if there is a 'less hard-coded' way to write link to settings page
-			echo '<p class="wp_geo_error">' . __('WP Geo is not currently active as you have not entered a Google API Key', 'wp-geo') . '. <a href="' . get_bloginfo('wpurl') . '/wp-admin/options-general.php?page=wp-geo/wp-geo.php">' . __('Please update your WP Geo settings', 'wp-geo') . '</a>.</p>';
+			echo '<p class="wp_geo_error">' . __('WP Geo is not currently active as you have not entered a Google API Key', 'wp-geo') . '. <a href="' . get_bloginfo('wpurl') . '/wp-admin/options-general.php?page=' . WPGEO_PLUGIN_BASENAME . '/wp-geo.php">' . __('Please update your WP Geo settings', 'wp-geo') . '</a>.</p>';
 		}
 		echo '
 			<p><label for="wpgeo-title">' . __('Title', 'wp-geo') . ': <input class="widefat" id="wpgeo-title" name="wpgeo-title" type="text" value="' . $title . '" /></label></p>

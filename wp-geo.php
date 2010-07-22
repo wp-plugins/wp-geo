@@ -32,33 +32,34 @@ define( 'WPGEO_LATITUDE_META',     '_wp_geo_latitude' );
 define( 'WPGEO_LONGITUDE_META',    '_wp_geo_longitude' );
 define( 'WPGEO_TITLE_META',        '_wp_geo_title' );
 define( 'WPGEO_MAP_SETTINGS_META', '_wp_geo_map_settings' );
+define( 'WPGEO_PLUGIN_BASENAME',   dirname( plugin_basename( __FILE__ ) ) );
 
 
 
 // Language
-load_plugin_textdomain( 'wp-geo', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+load_plugin_textdomain( 'wp-geo', false, WPGEO_PLUGIN_BASENAME . '/languages' );
 
 
 
 // Includes
-include_once( WP_PLUGIN_DIR . '/wp-geo/includes/wp-geo.php' );
-include_once( WP_PLUGIN_DIR . '/wp-geo/includes/query.php' );
-include_once( WP_PLUGIN_DIR . '/wp-geo/includes/marker.php' );
-include_once( WP_PLUGIN_DIR . '/wp-geo/includes/markers.php' );
-include_once( WP_PLUGIN_DIR . '/wp-geo/includes/maps.php' );
-include_once( WP_PLUGIN_DIR . '/wp-geo/includes/functions.php' );
-include_once( WP_PLUGIN_DIR . '/wp-geo/includes/templates.php' );
-include_once( WP_PLUGIN_DIR . '/wp-geo/includes/shortcodes.php' );
-include_once( WP_PLUGIN_DIR . '/wp-geo/includes/feeds.php' );
-include_once( WP_PLUGIN_DIR . '/wp-geo/includes/display.php' );
-include_once( WP_PLUGIN_DIR . '/wp-geo/includes/widgets.php' );
+include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/includes/wp-geo.php' );
+include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/includes/query.php' );
+include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/includes/marker.php' );
+include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/includes/markers.php' );
+include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/includes/maps.php' );
+include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/includes/functions.php' );
+include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/includes/templates.php' );
+include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/includes/shortcodes.php' );
+include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/includes/feeds.php' );
+include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/includes/display.php' );
+include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/includes/widgets.php' );
 
 
 
 // Admin Includes
 if ( is_admin() ) {
-	include_once( WP_PLUGIN_DIR . '/wp-geo/admin/editor.php' );
-	include_once( WP_PLUGIN_DIR . '/wp-geo/admin/dashboard.php' );
+	include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/admin/editor.php' );
+	include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/admin/dashboard.php' );
 }
 
 
