@@ -60,7 +60,9 @@ function wpgeo_check_domain() {
 
 function wpgeo_check_version( $version ) {
 	
-	if ( version_compare( $version, WPGeo::$version, '>=' ) ) {
+	global $wpgeo;
+	
+	if ( version_compare( $version, $wpgeo->version, '>=' ) ) {
 		return true;
 	}
 	
@@ -79,7 +81,9 @@ function wpgeo_check_version( $version ) {
 
 function wpgeo_check_db_version( $version ) {
 	
-	if ( $version >= WPGeo::$db_version ) {
+	global $wpgeo;
+	
+	if ( $version >= $wpgeo->db_version ) {
 		return true;
 	}
 	
