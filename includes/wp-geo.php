@@ -60,7 +60,7 @@ class WPGeo {
 		
 		$options = array(
 			'google_api_key' => '', 
-			'google_map_type' => 'G_NORMAL_MAP', 
+			'google_map_type' => 'ROADMAP', 
 			'show_post_map' => 'TOP', 
 			'default_map_latitude' => '51.492526418807465',
 			'default_map_longitude' => '-0.15754222869873047',
@@ -325,13 +325,13 @@ class WPGeo {
 		
 		$controltypes = array();
 		if ( $wp_geo_options['show_map_type_normal'] == 'Y' )
-			$controltypes[] = 'G_NORMAL_MAP';
+			$controltypes[] = 'ROADMAP';
 		if ( $wp_geo_options['show_map_type_satellite'] == 'Y' )
-			$controltypes[] = 'G_SATELLITE_MAP';
+			$controltypes[] = 'SATELLITE';
 		if ( $wp_geo_options['show_map_type_hybrid'] == 'Y' )
-			$controltypes[] = 'G_HYBRID_MAP';
+			$controltypes[] = 'HYBRID';
 		if ( $wp_geo_options['show_map_type_physical'] == 'Y' )
-			$controltypes[] = 'G_PHYSICAL_MAP';
+			$controltypes[] = 'TERRAIN';
 		
 		echo '
 		
@@ -363,7 +363,7 @@ class WPGeo {
 			$this->markers->wp_head();
 			
 			$wp_geo_options = get_option('wp_geo_options');
-			$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];
+			$maptype = empty($wp_geo_options['google_map_type']) ? 'ROADMAP' : $wp_geo_options['google_map_type'];
 			$mapzoom = $wp_geo_options['default_map_zoom'];
 			
 			// Coords to show on map?
@@ -419,13 +419,13 @@ class WPGeo {
 					}
 					
 					if ( $wp_geo_options['show_map_type_physical'] == 'Y' )
-						$map->addMapType('G_PHYSICAL_MAP');								// Show PHYSICAL map?
+						$map->addMapType('TERRAIN');								// Show PHYSICAL map?
 					if ( $wp_geo_options['show_map_type_normal'] == 'Y' )
-						$map->addMapType('G_NORMAL_MAP');								// Show NORMAL map?
+						$map->addMapType('ROADMAP');								// Show NORMAL map?
 					if ( $wp_geo_options['show_map_type_satellite'] == 'Y' )
-						$map->addMapType('G_SATELLITE_MAP');							// Show SATELLITE map?
+						$map->addMapType('SATELLITE');							// Show SATELLITE map?
 					if ( $wp_geo_options['show_map_type_hybrid'] == 'Y' )
-						$map->addMapType('G_HYBRID_MAP');								// Show HYBRID map?
+						$map->addMapType('HYBRID');								// Show HYBRID map?
 					
 					if ( $wp_geo_options['show_map_scale'] == 'Y' )
 						$map->showMapScale(true);										// Show map scale
@@ -459,13 +459,13 @@ class WPGeo {
 				$map->setMapType($maptype);										// Set map type
 				
 				if ( $wp_geo_options['show_map_type_physical'] == 'Y' )			// Show PHYSICAL map?
-					$map->addMapType('G_PHYSICAL_MAP');
+					$map->addMapType('TERRAIN');
 				if ( $wp_geo_options['show_map_type_normal'] == 'Y' )			// Show NORMAL map?
-					$map->addMapType('G_NORMAL_MAP');
+					$map->addMapType('ROADMAP');
 				if ( $wp_geo_options['show_map_type_satellite'] == 'Y' )			// Show SATELLITE map?
-					$map->addMapType('G_SATELLITE_MAP');
+					$map->addMapType('SATELLITE');
 				if ( $wp_geo_options['show_map_type_hybrid'] == 'Y' )			// Show HYBRID map?
-					$map->addMapType('G_HYBRID_MAP');
+					$map->addMapType('HYBRID');
 				
 				if ( $wp_geo_options['show_map_scale'] == 'Y' )
 					$map->showMapScale(true);									// Show map scale
@@ -653,9 +653,10 @@ class WPGeo {
 		if ( ($wpgeo->show_maps() || $wpgeo->widget_is_active()) && $wpgeo->checkGoogleAPIKey() ) {
 			
 			// Set Locale
-			$locale = $wpgeo->get_googlemaps_locale('&hl=');
+			$locale = $wpgeo->get_googlemaps_locale('&language=');
 			
-			wp_register_script('googlemaps', 'http://maps.google.com/maps?file=api&v=2' . $locale . '&key=' . $wpgeo->get_google_api_key() . '&sensor=false', false, '2');
+			wp_register_script('googlemaps', 'http://maps.google.com/maps/api/js?sensor=false', false, null);
+			//wp_register_script('googlemaps', 'http://maps.google.com/maps/api/js?sensor=false' . $locale, false, '');
 			wp_register_script('wpgeo', WP_CONTENT_URL . '/plugins/' . WPGEO_PLUGIN_BASENAME . '/js/wp-geo.js', array('googlemaps', 'wpgeotooltip'), '1.0');
 			wp_register_script('wpgeo-admin-post', WP_CONTENT_URL . '/plugins/' . WPGEO_PLUGIN_BASENAME . '/js/admin-post.js', array('jquery', 'googlemaps'), '1.0');
 			wp_register_script('wpgeotooltip', WP_CONTENT_URL . '/plugins/' . WPGEO_PLUGIN_BASENAME . '/js/tooltip.js', array('googlemaps', 'jquery'), '1.0');
@@ -741,15 +742,15 @@ class WPGeo {
 		global $wpgeo, $post;
 		
 		$wp_geo_options = get_option('wp_geo_options');
-		$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];	
+		$maptype = empty($wp_geo_options['google_map_type']) ? 'ROADMAP' : $wp_geo_options['google_map_type'];	
 		
 		// Centre on London
 		if ( !is_numeric($latitude) || !is_numeric($longitude) ) {
 			$latitude = $wp_geo_options['default_map_latitude'];
 			$longitude = $wp_geo_options['default_map_longitude'];
 			$zoom = $wp_geo_options['default_map_zoom']; // Default 5;
-			$panel_open = true;
-			$hide_marker = true;
+			//$panel_open = true;
+			//$hide_marker = true;
 		}
 		
 		$mapcentre = array( $latitude, $longitude );
@@ -769,8 +770,28 @@ class WPGeo {
 		
 		// Vars
 		$google_maps_api_key = $wpgeo->get_google_api_key();
-		$panel_open ? $panel_open = 'jQuery(\'#wpgeolocationdiv.postbox h3\').click();' : $panel_open = '';
-		$hide_marker ? $hide_marker = 'marker.hide();' : $hide_marker = '';
+		//$panel_open ? $panel_open = 'jQuery(\'#wpgeo_location h3\').click();' : $panel_open = '';
+		//$hide_marker ? $hide_marker = 'marker.hide();' : $hide_marker = '';
+		
+		// Map Type
+		$maptype = strtoupper( $maptype );
+		switch ( $maptype ) {
+			case 'G_NORMAL_MAP':
+				$maptype = 'ROADMAP';
+				break;
+			case 'G_SATELLITE_MAP':
+				$maptype = 'SATELLITE';
+				break;
+			case 'G_HYBRID_MAP':
+				$maptype = 'HYBRID';
+				break;
+			case 'G_PHYSICAL_MAP':
+				$maptype = 'TERRAIN';
+				break;
+		}
+		if ( !in_array( $maptype, array( 'ROADMAP', 'SATELLITE', 'HYBRID', 'TERRAIN' ) ) ) {
+			$maptype = 'ROADMAP';
+		}
 		
 		// Script
 		$wpgeo->includeGoogleMapsJavaScriptAPI();
@@ -780,82 +801,84 @@ class WPGeo {
 			
 			function init_wp_geo_map_admin()
 			{
-				if (GBrowserIsCompatible() && document.getElementById("wp_geo_map"))
+				if (document.getElementById("wp_geo_map"))
 				{
-					map = new GMap2(document.getElementById("wp_geo_map"));
-					var center = new GLatLng(' . $mapcentre[0] . ', ' . $mapcentre[1] . ');
-					var point = new GLatLng(' . $latitude . ', ' . $longitude . ');
-					map.setCenter(center, ' . $zoom . ');
-					map.addMapType(G_PHYSICAL_MAP);
+				
+					var latField = document.getElementById("wp_geo_latitude");
+					var lngField = document.getElementById("wp_geo_longitude");
 					
+					var center = new google.maps.LatLng(' . $mapcentre[0] . ', ' . $mapcentre[1] . ');
+					var point = new google.maps.LatLng(' . $latitude . ', ' . $longitude . ');
+					var myOptions = {
+						zoom: ' . $zoom . ',
+						center: center,
+						mapTypeId: google.maps.MapTypeId.' . $maptype . ', // ROADMAP, SATELLITE, HYBRID, TERRAIN
+					}
+					map = new google.maps.Map(document.getElementById("wp_geo_map"), myOptions);
+					' . apply_filters( 'wpgeo_map_js_preoverlays', '', 'map' ) . '
+					marker = new google.maps.Marker({
+						position: point, 
+						draggable: true
+					});
+					
+					if ( latField.value != "" && lngField.value != "" ) {
+						marker.setMap(map);
+					}
+					
+					// MapType checkbox value
+					var type_setting = document.getElementById("wpgeo_map_settings_type");
+					type_setting.value = map.getMapTypeId();
+					
+					// Zoom checkbox value
 					var zoom_setting = document.getElementById("wpgeo_map_settings_zoom");
 					zoom_setting.value = ' . $zoom . ';
 					
-					// Map Controls
-					var mapTypeControl = new GMapTypeControl();
-					map.addControl(new GLargeMapControl3D());
-					map.addControl(mapTypeControl);
-					//map.setUIToDefault();
+					// Map Center checkbox value
+					var center = map.getCenter();
+					var centre_setting = document.getElementById("wpgeo_map_settings_centre");
+					centre_setting.value = center.lat() + "," + center.lng();
 					
-					map.setMapType(' . $maptype . ');
-					var type_setting = document.getElementById("wpgeo_map_settings_type");
-					type_setting.value = wpgeo_getMapTypeContentFromUrlArg(map.getCurrentMapType().getUrlArg());
-					
-					GEvent.addListener(map, "click", function(overlay, latlng) {
-						var latField = document.getElementById("wp_geo_latitude");
-						var lngField = document.getElementById("wp_geo_longitude");
-						latField.value = latlng.lat();
-						lngField.value = latlng.lng();
-						marker.setPoint(latlng);
-						marker.show();
+					// Map Click
+					google.maps.event.addListener(map, "click", function(e) {
+						latField.value = e.latLng.lat();
+						lngField.value = e.latLng.lng();
+						marker.setPosition(e.latLng);
+						marker.setMap(map);
 					});
 					
-					GEvent.addListener(map, "maptypechanged", function() {
-						var type_setting = document.getElementById("wpgeo_map_settings_type");
-						type_setting.value = wpgeo_getMapTypeContentFromUrlArg(map.getCurrentMapType().getUrlArg());
-					});
-					
-					GEvent.addListener(map, "zoomend", function(oldLevel, newLevel) {
-						var zoom_setting = document.getElementById("wpgeo_map_settings_zoom");
-						zoom_setting.value = newLevel;
-					});
-					
-					GEvent.addListener(map, "moveend", function() {
-						var center = this.getCenter();
-						var centre_setting = document.getElementById("wpgeo_map_settings_centre");
-						centre_setting.value = center.lat() + "," + center.lng();
-					});
-					
-					marker = new GMarker(point, {draggable: true});
-					
-					GEvent.addListener(marker, "dragstart", function() {
-						map.closeInfoWindow();
-					});
-					
-					GEvent.addListener(marker, "dragend", function() {
-						var coords = marker.getLatLng();
-						var latField = document.getElementById("wp_geo_latitude");
-						var lngField = document.getElementById("wp_geo_longitude");
+					// Marker Drag End
+					google.maps.event.addListener(marker, "dragend", function() {
+						var coords = marker.getPosition();
 						latField.value = coords.lat();
 						lngField.value = coords.lng();
 					});
 					
-					' . apply_filters( 'wpgeo_map_js_preoverlays', '', 'map' ) . '
+					// Map Type Changed
+					google.maps.event.addListener(map, "maptypeid_changed", function() {
+						var type_setting = document.getElementById("wpgeo_map_settings_type");
+						type_setting.value = map.getMapTypeId();
+					});
 					
-					map.addOverlay(marker);
+					// Map Zoomed
+					google.maps.event.addListener(map, "zoom_changed", function() {
+						var zoom_setting = document.getElementById("wpgeo_map_settings_zoom");
+						zoom_setting.value = map.getZoom();
+					});
 					
-					' . $panel_open . '
+					// Map Moved
+					google.maps.event.addListener(map, "center_changed", function() {
+						var center = map.getCenter();
+						var centre_setting = document.getElementById("wpgeo_map_settings_centre");
+						centre_setting.value = center.lat() + "," + center.lng();
+					});
 					
-					var latField = document.getElementById("wp_geo_latitude");
-					var lngField = document.getElementById("wp_geo_longitude");
-					
-					' . $hide_marker . '
+					//' . $panel_open . '
+					//' . $hide_marker . '
 					
 				}
 			}
 			
 			jQuery(window).load( init_wp_geo_map_admin );
-			jQuery(window).unload( GUnload );
 			
 			//]]>
 			</script>';
@@ -1342,10 +1365,10 @@ class WPGeo {
 		
 		// Array
 		$map_type_array = array(
-			'G_NORMAL_MAP' 		=> __('Normal', 'wp-geo'), 
-			'G_SATELLITE_MAP' 	=> __('Satellite (photographic map)', 'wp-geo'), 
-			'G_HYBRID_MAP' 		=> __('Hybrid (photographic map with normal features)', 'wp-geo'),
-			'G_PHYSICAL_MAP' 	=> __('Physical (terrain map)', 'wp-geo')
+			'ROADMAP' 		=> __('Normal', 'wp-geo'), 
+			'SATELLITE' 	=> __('Satellite (photographic map)', 'wp-geo'), 
+			'HYBRID' 		=> __('Hybrid (photographic map with normal features)', 'wp-geo'),
+			'TERRAIN' 	=> __('Physical (terrain map)', 'wp-geo')
 		);
 		
 		// Menu?
@@ -1666,17 +1689,19 @@ class WPGeo {
 		if ( isset($_POST['wp_geo_latitude']) && isset($_POST['wp_geo_longitude']) ) {
 			
 			// Only delete post meta if isset (to avoid deletion in bulk/quick edit mode)
-			delete_post_meta($post_id, WPGEO_LATITUDE_META);
-			delete_post_meta($post_id, WPGEO_LONGITUDE_META);
-			
 			if ( is_numeric($_POST['wp_geo_latitude']) && is_numeric($_POST['wp_geo_longitude']) ) {
 				
-				add_post_meta($post_id, WPGEO_LATITUDE_META, $_POST['wp_geo_latitude']);
-				add_post_meta($post_id, WPGEO_LONGITUDE_META, $_POST['wp_geo_longitude']);
+				update_post_meta($post_id, WPGEO_LATITUDE_META, $_POST['wp_geo_latitude']);
+				update_post_meta($post_id, WPGEO_LONGITUDE_META, $_POST['wp_geo_longitude']);
 				
 				$mydata[WPGEO_LATITUDE_META]  = $_POST['wp_geo_latitude'];
 				$mydata[WPGEO_LONGITUDE_META] = $_POST['wp_geo_longitude'];
 				
+			} else {
+				
+				delete_post_meta($post_id, WPGEO_LATITUDE_META);
+				delete_post_meta($post_id, WPGEO_LONGITUDE_META);
+			
 			}
 			
 		}
@@ -1684,17 +1709,19 @@ class WPGeo {
 		// Find and save the title data
 		if ( isset($_POST['wp_geo_title']) ) {
 			
-			delete_post_meta($post_id, WPGEO_TITLE_META);
+			//delete_post_meta($post_id, WPGEO_TITLE_META);
 			
 			if ( !empty($_POST['wp_geo_title']) ) {
-				add_post_meta($post_id, WPGEO_TITLE_META, $_POST['wp_geo_title']);
+				update_post_meta($post_id, WPGEO_TITLE_META, $_POST['wp_geo_title']);
 				$mydata[WPGEO_TITLE_META]  = $_POST['wp_geo_title'];
+			} else {
+				delete_post_meta( $post_id, WPGEO_TITLE_META );
 			}
 			
 		}
 		
 		// Find and save the settings data
-		delete_post_meta($post_id, WPGEO_MAP_SETTINGS_META);
+		//delete_post_meta($post_id, WPGEO_MAP_SETTINGS_META);
 		
 		$settings = array();
 		if ( isset($_POST['wpgeo_map_settings_zoom']) && !empty($_POST['wpgeo_map_settings_zoom']) ) {
@@ -1707,7 +1734,7 @@ class WPGeo {
 			$settings['centre'] = $_POST['wpgeo_map_settings_centre'];
 		}
 		
-		add_post_meta($post_id, WPGEO_MAP_SETTINGS_META, $settings);
+		update_post_meta($post_id, WPGEO_MAP_SETTINGS_META, $settings);
 		$mydata[WPGEO_MAP_SETTINGS_META] = $settings;
 		
 		return $mydata;

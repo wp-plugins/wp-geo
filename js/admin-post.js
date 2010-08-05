@@ -21,12 +21,12 @@ function wpgeo_updatedLatLngFields() {
 	var longitude = jQuery("input#wp_geo_longitude").val();
 	
 	if ( latitude == '' || longitude == '' ) {
-		marker.hide();
+		marker.setMap(null);
 	} else {
-		var point = new GLatLng(latitude, longitude);
+		var point = new google.maps.LatLng(latitude, longitude);
+		marker.setPosition(point);
 		map.setCenter(point);
-		marker.setPoint(point);
-		marker.show();
+		marker.setMap(map);
 	}
 	
 }
@@ -57,7 +57,7 @@ jQuery(document).ready(function() {
 		jQuery("input#wp_geo_search").val('');
 		jQuery("input#wp_geo_latitude").val('');
 		jQuery("input#wp_geo_longitude").val('');
-		marker.hide();
+		wpgeo_updatedLatLngFields();
 		
 		return false;
 		
@@ -68,7 +68,7 @@ jQuery(document).ready(function() {
 	// Centre Location
 	jQuery("#wpgeo_location a.wpgeo-centre-location").click(function(e) {
 		
-		map.setCenter(marker.getLatLng());
+		map.setCenter(marker.getPosition());
 		
 		return false;
 		
@@ -83,20 +83,20 @@ jQuery(document).ready(function() {
 		var longitude = jQuery("input#wp_geo_longitude").val();
 		var address = jQuery("input#wp_geo_search").val();
 		
-		var geocoder = new GClientGeocoder();
+		var geocoder = new google.maps.Geocoder();
 		
 		if ( geocoder ) {
-			geocoder.getLatLng(
-				address,
-				function(point) {
-					if ( !point ) {
-						alert(address + " not found");
+			geocoder.geocode(
+				{ 'address': address },
+				function(results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						map.setCenter(results[0].geometry.location);
+						marker.setPosition(results[0].geometry.location);
+						marker.setMap(map);
+						jQuery("input#wp_geo_latitude").val(results[0].geometry.location.lat());
+						jQuery("input#wp_geo_longitude").val(results[0].geometry.location.lng());
 					} else {
-						map.setCenter(point);
-						marker.setPoint(point);
-						marker.show();
-						jQuery("input#wp_geo_latitude").val(point.lat());
-						jQuery("input#wp_geo_longitude").val(point.lng());
+						alert(address + " not found");
 					}
 				}
 			);

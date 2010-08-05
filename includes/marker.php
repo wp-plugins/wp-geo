@@ -162,7 +162,12 @@ class WPGeo_Marker {
 	
 	function get_javascript() {
 		
-		return "var wpgeo_icon_" . $this->id . " = wpgeo_createIcon(" . $this->width . ", " . $this->height . ", " . $this->anchorX . ", " . $this->anchorY . ", '" . $this->image . "', '" . $this->shadow . "');";
+		return 'var wpgeo_icon_' . $this->id . ' = new google.maps.MarkerImage(
+				"' . $this->image . '",
+				new google.maps.Size(' . $this->width . ', ' . $this->height . '), // Size
+				new google.maps.Point(0,0), // Origin
+				new google.maps.Point(' . $this->anchorX . ', ' . $this->anchorY . ') // Anchor
+			);';
 		
 	}		
 	

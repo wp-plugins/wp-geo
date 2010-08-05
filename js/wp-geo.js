@@ -32,39 +32,38 @@ function wpgeo_createIcon(width, height, anchorX, anchorY, image, transparent)
 /**
 * Create a marker for the map
 */
-function wpgeo_createMarker(latlng, icon, title, link) 
+function wpgeo_createMarker(map, latlng, icon, title, link) 
 {
 	
 	var tooltip;
 	
-	// Create the marker
-	var marker = new GMarker(latlng, icon);
+	var marker = new google.maps.Marker({
+		position: latlng,
+		map: map,
+		icon: icon,
+		title: title
+	});
 	
-	// Create a custom tooltip
-	if (title)
-	{
+	google.maps.event.addListener(marker, "click", function() {
+		document.location = link;
+	});
+	
+	if (title) {
 		tooltip = new Tooltip(marker, title)
 	}
 	
-	marker.latlng = latlng;
-	marker.tooltip = tooltip;
-	marker.title = title;
-	marker.link = link;
+	if (tooltip) {
 	
-	if (tooltip)
-	{
-		GEvent.addListener(marker, "mouseover", wpgeo_markerOverHandler);
-		GEvent.addListener(marker, "mouseout", wpgeo_markerOutHandler);
+		google.maps.event.addListener(marker, "mouseover", function() {
+			if(marker.getVisible() ) {
+				tooltip.show();
+			}
+		});
+	
+		google.maps.event.addListener(marker, "mouseout", function() {
+			tooltip.hide();
+		});
 	}
-	
-	if (link)
-	{
-		GEvent.addListener(marker, "click", wpgeo_markerClickHandler);
-	}
-	
-	map.addOverlay(marker);
-	
-	bounds.extend(marker.getPoint());
 	
 	return marker;
 	

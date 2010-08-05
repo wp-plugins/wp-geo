@@ -270,24 +270,53 @@ class WPGeo_Widget {
 					$zoom = $wp_geo_options['default_map_zoom'];
 				}
 				
+				// Map Type
 				if ( empty($maptype) ) {
 					$maptype = empty($wp_geo_options['google_map_type']) ? 'G_NORMAL_MAP' : $wp_geo_options['google_map_type'];			
+				}
+				$maptype = strtoupper( $maptype );
+				switch ( $maptype ) {
+					case 'G_NORMAL_MAP':
+						$maptype = 'ROADMAP';
+						break;
+					case 'G_SATELLITE_MAP':
+						$maptype = 'SATELLITE';
+						break;
+					case 'G_HYBRID_MAP':
+						$maptype = 'HYBRID';
+						break;
+					case 'G_PHYSICAL_MAP':
+						$maptype = 'TERRAIN';
+						break;
+				}
+				if ( !in_array( $maptype, array( 'ROADMAP', 'SATELLITE', 'HYBRID', 'TERRAIN' ) ) ) {
+					$maptype = 'ROADMAP';
 				}
 				
 				// Polyline JS
 				$polyline_coords_js = '[';
 				
 				for ( $i = 0; $i < count($coords); $i++ ) {
-					$polyline_coords_js .= 'new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '),';
+					$polyline_coords_js .= 'new google.maps.LatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '),';
 				}
 				
 				$polyline_coords_js .= ']';		
-		
+				
+				$markers_js .= '
+					var point = new google.maps.LatLng(' . $coords[0]['latitude'] . ', ' . $coords[0]['longitude'] . ');
+					bounds = new google.maps.LatLngBounds(point, point);';
 				for ( $i = 0; $i < count($coords); $i++ ) {
 					$icon = apply_filters( 'wpgeo_marker_icon', 'wpgeo_icon_small', $coords[$i]['post'], 'widget' );
-					$markers_js .= 'marker' . $i . ' = wpgeo_createMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), ' . $icon . ', "' . addslashes(__($coords[$i]['title'])) . '", "' . get_permalink($coords[$i]['id']) . '");' . "\n";
+					$markers_js .= '
+					marker_' . $i . ' = wpgeo_createMarker(map, new google.maps.LatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), ' . $icon . ', "' . addslashes(__($coords[$i]['title'])) . '", "' . get_permalink($coords[$i]['id']) . '");
+				
+					';
+					if ( $i . 0 ) {
+						$markers_js .= 'bounds.extend(new google.maps.LatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '));';
+					}
 				}
-							
+				$markers_js .= 'map.fitBounds(bounds);';
+						
 				// Html JS
 				$wpgeo->includeGoogleMapsJavaScriptAPI();
 				
@@ -297,63 +326,49 @@ class WPGeo_Widget {
 					<script type="text/javascript">
 					//<![CDATA[
 					
-					
-					
 					/**
-					* Define variables
-					*/
+					 * WP Geo Widget
+					 */
 					
-					var map = "";
-					var bounds = "";
+					var map;
+					var bounds;
+					var center = new google.maps.LatLng(0, 0, 0);
 					
-					
-					
-					/**
-					* Add events to load the map
-					*/
-				
-					GEvent.addDomListener(window, "load", createMapWidget);
-					GEvent.addDomListener(window, "unload", GUnload);
-				
-				
-				
-					/**
-					* Create the map
-					*/
-					
-					function createMapWidget()
-					{
-						if(GBrowserIsCompatible())
-						{
-							map = new GMap2(document.getElementById("wp_geo_map_widget"));
-							map.addControl(new GSmallZoomControl3D());
-							map.setCenter(new GLatLng(0, 0), 0);
-							map.setMapType(' . $maptype . ');
-									
-							bounds = new GLatLngBounds();		
-							
-							// Add the markers	
-							'.	$markers_js .'
-											
-							// draw the polygonal lines between points
-							';
-					
-				if ( $showpolylines ) {
-					$html_js .= 'map.addOverlay(wpgeo_createPolyline(' . $polyline_coords_js . ', "' . $wp_geo_options['polyline_colour'] . '", 2, 0.50));';
-				}
-				
-				$html_js .='
-							// Center the map to show all markers
-							var center = bounds.getCenter();
-							var zoom = map.getBoundsZoomLevel(bounds)
-							if (zoom > ' . $zoom . ')
-							{
-								zoom = ' . $zoom . ';
-							}
-							map.setCenter(center, zoom);
+					function createMapWidget() {
+						
+						var myOptions = {
+							zoom: 0,
+							center: center,
+							disableDefaultUI: true,
+							navigationControl: true,
+							mapTypeId: google.maps.MapTypeId.' . $maptype . ',
 						}
+						map = new google.maps.Map(document.getElementById("wp_geo_map_widget"), myOptions);
+						
+						// Add the markers	
+						'.	$markers_js .'
+										
+						// draw the polygonal lines between points
+						';
+				
+			if ( $showpolylines ) {
+				$html_js .= '
+					var flightPath = new google.maps.Polyline({
+						path: ' . $polyline_coords_js . ',
+						strokeColor: "' . $wp_geo_options['polyline_colour'] . '",
+						strokeOpacity: 0.5,
+						strokeWeight: 2
+					});
+					flightPath.setMap(map);';
+			}
+			
+			$html_js .='
+						// Center the map to show all markers
+						map.fitBounds(bounds);
+						
 					}
 					
+					jQuery(window).load( createMapWidget );
 					
 					//]]>
 					</script>';
