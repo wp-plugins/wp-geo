@@ -190,14 +190,7 @@ class WPGeo {
 	
 	function checkGoogleAPIKey() {
 		
-		global $wpgeo;
-		
-		$wp_geo_options = get_option('wp_geo_options');
-		$api_key = $wpgeo->get_google_api_key();
-		
-		if ( empty($api_key ) || !isset($api_key) ) {
-			return false;
-		}
+		// API Key no longer needed for Google Maps API v3
 		return true;
 		
 	}
@@ -1140,7 +1133,7 @@ class WPGeo {
 				. sprintf(__("If you experience any problems/bugs with the plugin, please <a %s>log it here</a>.", 'wp-geo'), 'href="http://code.google.com/p/wp-geo/issues/list"') . 
 				'</p>';
 		if ( !$this->checkGoogleAPIKey() ) {
-			echo '<div class="error"><p>Before you can use Wp Geo you must acquire a <a href="http://code.google.com/apis/maps/signup.html">Google API Key</a> for your blog - the plugin will not function without it!</p></div>';
+			echo '<div class="error"><p>Before you can use WP Geo you must acquire a <a href="http://code.google.com/apis/maps/signup.html">Google API Key</a> for your blog - the plugin will not function without it!</p></div>';
 		}
 		if ( !$wpgeo->markers->marker_folder_exists() ) {
 			echo '<div class="error"><p>Unable to create the markers folder /wp-content/uploads/wp-geo/markers.<br />Please create it and copy the marker images to it from /wp-content/plugins/' . WPGEO_PLUGIN_BASENAME . '/img/markers</p></div>';
