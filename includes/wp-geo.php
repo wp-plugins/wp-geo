@@ -17,8 +17,8 @@ class WPGeo {
 	 */
 	
 	// Version Information
-	var $version    = '3.1.4';
-	var $db_version = 1;
+	var $version    = '3.2';
+	var $db_version = 2;
 	
 	var $markers;
 	var $show_maps_external = false;
@@ -438,7 +438,7 @@ class WPGeo {
 			if ( count($coords) > 0 ) {
 			
 				// ----------- Start - Create map for visible posts and pages -----------
-				
+				/*
 				$map = new WPGeo_Map('visible');
 				$map->show_polyline = true;
 				
@@ -467,7 +467,7 @@ class WPGeo {
 					
 				$map->setMapControl($wp_geo_options['default_map_control']);	// Set map control
 				array_push($this->maps, $map);									// Add map to maps array
-				
+				*/
 				// ----------- End - Create map for visible posts and pages -----------
 				
 				$google_maps_api_key = $wpgeo->get_google_api_key();
@@ -484,24 +484,10 @@ class WPGeo {
 				$html_content = '
 				<script type="text/javascript">
 				//<![CDATA[
-				
-				var map = null; ' . $js_map_inits . '
-				var marker = null; ' . $js_marker_inits . '
-				
-				function init_wp_geo_map()
-				{
-					if (GBrowserIsCompatible())
-					{
-						' . $js_map_writes . '
-					}
+				function init_wp_geo_map() {
+					' . $js_map_writes . '
 				}
-				if (document.all&&window.attachEvent) { // IE-Win
-					window.attachEvent("onload", function () { init_wp_geo_map(); });
-					window.attachEvent("onunload", GUnload);
-				} else if (window.addEventListener) { // Others
-					window.addEventListener("load", function () { init_wp_geo_map(); }, false);
-					window.addEventListener("unload", GUnload, false);
-				}
+				jQuery(window).load( init_wp_geo_map );
 				//]]>
 				</script>';
 				
@@ -805,7 +791,19 @@ class WPGeo {
 					var myOptions = {
 						zoom: ' . $zoom . ',
 						center: center,
-						mapTypeId: google.maps.MapTypeId.' . $maptype . ', // ROADMAP, SATELLITE, HYBRID, TERRAIN
+						mapTypeId: google.maps.MapTypeId.' . $maptype . ', // ROADMAP, SATELLITE, HYBRID, TERRAIN';
+		if ( $wp_geo_options['default_map_control'] != '' ) {
+			$html_content .= '
+						navigationControl: true,
+						navigationControlOptions: {
+							style: google.maps.NavigationControlStyle.' . $wp_geo_options['default_map_control'] . '
+						},';
+		} else {
+			$html_content .= '
+				navigationControl: false,
+				';
+		}
+		$html_content .= '
 					}
 					map = new google.maps.Map(document.getElementById("wp_geo_map"), myOptions);
 					' . apply_filters( 'wpgeo_map_js_preoverlays', '', 'map' ) . '
@@ -1268,12 +1266,10 @@ class WPGeo {
 		
 		// Array
 		$map_type_array = array(
-			'GLargeMapControl3D'  => __('Large 3D pan/zoom control', 'wp-geo'), 
-			'GLargeMapControl'    => __('Large pan/zoom control', 'wp-geo'), 
-			'GSmallMapControl'    => __('Smaller pan/zoom control', 'wp-geo'), 
-			'GSmallZoomControl3D' => __('Small 3D zoom control (no panning controls)', 'wp-geo'), 
-			'GSmallZoomControl'   => __('Small zoom control (no panning controls)', 'wp-geo'), 
-			''                    => __('No pan/zoom controls', 'wp-geo')
+			'DEFAULT'  => __('Control based on the map\'s size', 'wp-geo'), 
+			'ZOOM_PAN' => __('Standard pan/zoom control', 'wp-geo'), 
+			'SMALL'    => __('Mini zoom control', 'wp-geo'), 
+			''         => __('No pan/zoom controls', 'wp-geo')
 		);
 		
 		// Menu?

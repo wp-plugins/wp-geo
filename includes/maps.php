@@ -101,10 +101,10 @@ class WPGeo_Map {
 	var $id;
 	var $points;
 	var $zoom = 5;
-	var $maptype = 'G_NORMAL_MAP';
+	var $maptype = 'ROADMAP';
 	var $maptypes;
 	var $mapcentre;
-	var $mapcontrol = 'GLargeMapControl3D';
+	var $mapcontrol = 'DEFAULT';
 	var $show_map_scale = false;
 	var $show_map_overview = false;
 	var $show_polyline = false;
@@ -134,12 +134,50 @@ class WPGeo_Map {
 	 */
 	
 	function renderMapJS( $map_id = false ) {
-	
-		$wp_geo_options = get_option('wp_geo_options');
+		
+		$wp_geo_options = get_option( 'wp_geo_options' );
 		
 		// ID of div for map output
 		$map_id = $map_id ? $map_id : $this->id;
 		$div = 'wp_geo_map_' . $map_id;
+		
+		$navigationControl = 'navigationControl: false,';
+		
+		if ( in_array( $wp_geo_options['default_map_control'], array( 'DEFAULT', 'ZOOM_PAN', 'SMALL' ) ) ) {
+			$navigationControl = 'navigationControl: true,
+				navigationControlOptions: {
+					style: google.maps.NavigationControlStyle.' . $wp_geo_options['default_map_control'] . '
+				},';
+		}
+		
+		$js = '
+			var center = new google.maps.LatLng(' . $this->mapcentre['latitude'] . ', ' . $this->mapcentre['longitude'] . ');
+			
+			var myOptions = {
+				zoom: ' . $this->zoom . ',
+				center: center,
+				' . $navigationControl . '
+				mapTypeId: google.maps.MapTypeId.' . $this->maptype . ', // ROADMAP, SATELLITE, HYBRID, TERRAIN
+			}
+			var map_' . $map_id . ' = new google.maps.Map(document.getElementById("' . $div . '"), myOptions);
+			';
+		
+		// Points
+		for ( $p = 0; $p < count( $this->points ); $p++ ) {
+			$icon = apply_filters( 'wpgeo_marker_icon', $this->points[$p]['icon'], $this->points[$p]['link'], 'post' );
+			$js .= '
+				var map_' . $map_id . '_' . $p . ' = wpgeo_createMarker(map_' . $map_id . ', new google.maps.LatLng(' . $this->points[$p]['latitude'] . ', ' . $this->points[$p]['longitude'] . '), ' . $icon . ', "' . addslashes( __( $this->points[$p]['title'] ) ) . '", "' . $this->points[$p]['link'] . '");
+				';
+		}
+		
+		$js .= apply_filters( 'wpgeo_map_js_preoverlays', '', 'map_' . $map_id );
+		
+		return $js;
+		
+		
+		/* THE FOLLOWING IS OLD */
+		
+		
 		
 		// Map Types
 		$maptypes = $this->maptypes;
@@ -341,7 +379,7 @@ class WPGeo_Map {
 	 * @param        $mapcontrol = Type of map control
 	 */
 	
-	function setMapControl( $mapcontrol = 'GLargeMapControl3D' ) {
+	function setMapControl( $mapcontrol = 'DEFAULT' ) {
 	
 		$this->mapcontrol = $mapcontrol;
 		
@@ -355,8 +393,10 @@ class WPGeo_Map {
 	 * @param        $maptype = Type of map
 	 */
 	
-	function setMapType( $maptype = 'G_NORMAL_MAP' ) {
+	function setMapType( $maptype = 'ROADMAP' ) {
 	
+		$maptype = strToUpper( $maptype );
+		
 		if ( $this->is_valid_map_type($maptype) ) {
 			$this->maptype = $maptype;
 		}
@@ -409,10 +449,10 @@ class WPGeo_Map {
 	function is_valid_map_type( $maptype ) {
 	
 		$types = array(
-			'G_PHYSICAL_MAP',
-			'G_NORMAL_MAP',
-			'G_SATELLITE_MAP',
-			'G_HYBRID_MAP'
+			'TERRAIN',
+			'ROADMAP',
+			'SATELLITE',
+			'HYBRID'
 		);
 		
 		return in_array($maptype, $types);

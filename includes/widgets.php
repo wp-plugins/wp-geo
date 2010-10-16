@@ -311,7 +311,7 @@ class WPGeo_Widget {
 					marker_' . $i . ' = wpgeo_createMarker(map, new google.maps.LatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), ' . $icon . ', "' . addslashes(__($coords[$i]['title'])) . '", "' . get_permalink($coords[$i]['id']) . '");
 				
 					';
-					if ( $i . 0 ) {
+					if ( $i > 0 ) {
 						$markers_js .= 'bounds.extend(new google.maps.LatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '));';
 					}
 				}

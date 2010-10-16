@@ -195,6 +195,7 @@ function get_wpgeo_map( $query, $options = null ) {
 	$id = 'wpgeo_map_id_' . $wpgeo_map_id;
 	
 	$wp_geo_options = get_option('wp_geo_options');
+	$maptype = 'ROADMAP';
 	
 	$posts = get_posts( $query );
 	
@@ -203,31 +204,97 @@ function get_wpgeo_map( $query, $options = null ) {
 		<script type="text/javascript">
 		<!--
 		jQuery(window).load( function() {
-			if ( GBrowserIsCompatible() ) {
-				var bounds = new GLatLngBounds();
-				map = new GMap2(document.getElementById("' . $id . '"));
-				map.addControl(new GLargeMapControl3D());
-				';
+			var bounds;
+			
+			var myOptions = {
+				zoom: wpgeo_zoom,
+				disableDefaultUI: true,
+				navigationControl: true,
+				mapTypeId: google.maps.MapTypeId.' . $maptype . ',
+			}		
+			var map_' . $id . ' = new google.maps.Map(document.getElementById("' . $id . '"), myOptions);
+			
+			';
+	
+	$marker_count = 0;
 	foreach ( $posts as $post ) {
-		$latitude = get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
-		$longitude = get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
-		if ( is_numeric($latitude) && is_numeric($longitude) ) {
+		$latitude = get_post_meta( $post->ID, WPGEO_LATITUDE_META, true );
+		$longitude = get_post_meta( $post->ID, WPGEO_LONGITUDE_META, true );
+		if ( is_numeric( $latitude ) && is_numeric( $longitude ) ) {
 			$icon = apply_filters( 'wpgeo_marker_icon', 'wpgeo_icon_small', $post, 'wpgeo_map' );
 			$output .= '
-				var center = new GLatLng(' . $latitude . ',' . $longitude . ');
-				var marker = new wpgeo_createMarker2(map, center, ' . $icon . ', \'' . $post->post_title . '\', \'' . get_permalink($post->ID) . '\');
-				bounds.extend(center);
+				var ' . $id . '_' . $marker_count . ' = wpgeo_createMarker(map_' . $id . ', new google.maps.LatLng(' . $latitude . ', ' . $longitude . '), ' . $icon . ', "' . addslashes(__($post->post_title)) . '", "' . get_permalink($post->ID) . '");
 				';
+			if ( $marker_count > 0 ) {
+				$output .= 'bounds.extend(new google.maps.LatLng(' . $latitude . ', ' . $longitude . '));';
+			} else {
+				$output .= 'bounds = new google.maps.LatLngBounds(new google.maps.LatLng(' . $latitude . ', ' . $longitude . '));';
+			}
+			$marker_count++;
 		}
 	}
+	
 	$output .= '
-				zoom = map.getBoundsZoomLevel(bounds);
-				map.setCenter(bounds.getCenter(), zoom);
-			}
+			map_' . $id . '.fitBounds(bounds);
 		} );
 		-->
 		</script>
 		';
+	
+	
+	/*
+$markers_js .= '
+					var point = new google.maps.LatLng(' . $coords[0]['latitude'] . ', ' . $coords[0]['longitude'] . ');
+					bounds = new google.maps.LatLngBounds(point, point);';
+				for ( $i = 0; $i < count($coords); $i++ ) {
+					$icon = apply_filters( 'wpgeo_marker_icon', 'wpgeo_icon_small', $coords[$i]['post'], 'widget' );
+					$markers_js .= '
+					marker_' . $i . ' = wpgeo_createMarker(map, new google.maps.LatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), ' . $icon . ', "' . addslashes(__($coords[$i]['title'])) . '", "' . get_permalink($coords[$i]['id']) . '");
+				
+					';
+					if ( $i > 0 ) {
+						$markers_js .= 'bounds.extend(new google.maps.LatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '));';
+					}
+				}
+				$markers_js .= 'map.fitBounds(bounds);';
+						
+				// Html JS
+				$wpgeo->includeGoogleMapsJavaScriptAPI();
+				
+				$small_marker = $wpgeo->markers->get_marker_by_id('small');
+				
+				$html_js .= '
+					<script type="text/javascript">
+					//<![CDATA[
+			
+					
+					var map;
+					var bounds;
+					var center = new google.maps.LatLng(0, 0, 0);
+					
+					function createMapWidget() {
+						
+						var myOptions = {
+							zoom: 0,
+							center: center,
+							disableDefaultUI: true,
+							navigationControl: true,
+							mapTypeId: google.maps.MapTypeId.' . $maptype . ',
+						}
+						map = new google.maps.Map(document.getElementById("wp_geo_map_widget"), myOptions);
+						
+						// Add the markers	
+						'.	$markers_js .'
+										
+						// draw the polygonal lines between points
+						';
+				
+		
+			
+			$html_js .='
+						// Center the map to show all markers
+						map.fitBounds(bounds);
+	*/
 	
 	return $output;
 	
