@@ -28,7 +28,7 @@ add_shortcode( 'wpgeo_latitude', 'shortcode_wpgeo_latitude' );
 function shortcode_wpgeo_latitude( $atts, $content = null ) {
 
 	global $post;
-	return get_wpgeo_longitude($post->ID);
+	return get_wpgeo_latitude($post->ID);
 	
 }
 
@@ -45,7 +45,7 @@ function shortcode_wpgeo_latitude( $atts, $content = null ) {
 function shortcode_wpgeo_longitude( $atts, $content = null ) {
 
 	global $post;
-	return get_wpgeo_latitude($post->ID);
+	return get_wpgeo_longitude($post->ID);
 	
 }
 
