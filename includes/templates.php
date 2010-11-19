@@ -215,7 +215,7 @@ function get_wpgeo_map( $query, $options = null ) {
 			$icon = apply_filters( 'wpgeo_marker_icon', 'wpgeo_icon_small', $post, 'wpgeo_map' );
 			$output .= '
 				var center = new GLatLng(' . $latitude . ',' . $longitude . ');
-				var marker = new wpgeo_createMarker2(map, center, ' . $icon . ', \'' . $post->post_title . '\', \'' . get_permalink($post->ID) . '\');
+				var marker = new wpgeo_createMarker2(map, center, ' . $icon . ', \'' . esc_js( $post->post_title ) . '\', \'' . get_permalink($post->ID) . '\');
 				bounds.extend(center);
 				';
 		}
