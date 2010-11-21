@@ -59,6 +59,7 @@ include_once( WP_PLUGIN_DIR . '/wp-geo/includes/widgets.php' );
 if ( is_admin() ) {
 	include_once( WP_PLUGIN_DIR . '/wp-geo/admin/editor.php' );
 	include_once( WP_PLUGIN_DIR . '/wp-geo/admin/dashboard.php' );
+	include_once( WP_PLUGIN_DIR . '/wp-geo/admin/settings.php' );
 }
 
 

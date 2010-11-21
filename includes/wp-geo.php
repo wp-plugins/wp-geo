@@ -26,6 +26,7 @@ class WPGeo {
 	var $maps;
 	var $maps2;
 	var $editor;
+	var $settings;
 	var $feeds;
 	
 	var $default_map_latitude = '51.492526418807465';
@@ -594,6 +595,9 @@ class WPGeo {
 				$this->editor->add_buttons();
 			}
 		}
+		
+		// Show Settings Link
+		$this->settings = new WPGeo_Settings();
 		
 	}
 	
