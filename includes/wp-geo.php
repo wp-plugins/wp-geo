@@ -574,6 +574,9 @@ class WPGeo {
 			}
 		}
 		
+		// Show Settings Link
+		$this->settings = new WPGeo_Settings();
+		
 	}
 	
 	

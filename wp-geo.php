@@ -60,6 +60,7 @@ include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/includes/widgets.p
 if ( is_admin() ) {
 	include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/admin/editor.php' );
 	include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/admin/dashboard.php' );
+	include_once( WP_PLUGIN_DIR . '/' . WPGEO_PLUGIN_BASENAME . '/admin/settings.php' );
 }
 
 
