@@ -13,7 +13,14 @@ div.wp_geo_map img {
 	background: transparent;
 	border: none;
 	padding: 0px;
-	max-width:none; /* This fixes some themes like PrimePress but breaks the Google Map scale */
+}
+
+/* Try to fix theme with max-width images */
+div.wp_geo_map img,
+#content div.wp_geo_map img,
+#content .attachment div.wp_geo_map img,
+#sidebar div.wp_geo_map img {
+	max-width:none;
 }
 
 
