@@ -62,6 +62,16 @@ class WPGeo_Markers {
 			$dir . 'dot-marker-shadow.png'
 		);
 		
+	}
+	
+	
+	
+	/**
+	 * @method       Add extra markers
+	 * @description  Allow plugins and themes to add markers.
+	 */
+	function add_extra_markers() {
+		
 		// Allow plugins and themes to add markers
 		$this->markers = apply_filters( 'wpgeo_markers', $this->markers );
 		
