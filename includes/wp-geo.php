@@ -550,6 +550,9 @@ class WPGeo {
 			}
 		}
 		
+		// Add extra markers
+		$this->markers->add_extra_markers();
+		
 	}
 	
 	
