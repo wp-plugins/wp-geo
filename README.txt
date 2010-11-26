@@ -77,6 +77,16 @@ If upgrading from a previous version of the plugin:
 
 == Changelog ==
 
+= WP Geo 3.2.1 =
+
+* Fix for category map markers all displaying the same tooltip title.
+* Fixed 'wpgeo_markers' filter. Was being run to early before other plugin and theme functions.php had a chance to do anything.
+* Add styles to try to override max-width images in themes which can cause map tiles to render incorrectly.
+* Added settings link to plugins page.
+* Escaped post title for use in JavaScript in get_wpgeo_map() and bumped minimum WordPress version up to 2.8. props RavanH.
+* Fixed longitude and latitude shortcodes - they were the wrong way round.
+* German language files updated.
+
 = WP Geo 3.2 =
 
 * Fix for tooltip not working in WordPress 3.0.
