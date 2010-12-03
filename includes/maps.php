@@ -159,7 +159,8 @@ class WPGeo_Map {
 		$js_markers = '';
 		if ( count($this->points) > 0 ) {
 			for ( $i = 0; $i < count($this->points); $i++ ) {
-				$js_markers .= 'var marker_' . $map_id .'_' . $i . ' = new wpgeo_createMarker2(map_' . $map_id . ', new GLatLng(' . $this->points[$i]['latitude'] . ', ' . $this->points[$i]['longitude'] . '), ' . $this->points[$i]['icon'] . ', \'' . addslashes(__($this->points[$i]['title'])) . '\', \'' . $this->points[$i]['link'] . '\');' . "\n";
+				$icon = 'wpgeo_icon_' . apply_filters( 'wpgeo_marker_icon', $this->points[$i]['icon'], $this->id, 'wpgeo_map' );
+				$js_markers .= 'var marker_' . $map_id .'_' . $i . ' = new wpgeo_createMarker2(map_' . $map_id . ', new GLatLng(' . $this->points[$i]['latitude'] . ', ' . $this->points[$i]['longitude'] . '), ' . $icon . ', \'' . addslashes(__($this->points[$i]['title'])) . '\', \'' . $this->points[$i]['link'] . '\');' . "\n";
 				$js_markers .= 'bounds.extend(new GLatLng(' . $this->points[$i]['latitude'] . ', ' . $this->points[$i]['longitude'] . '));';
 			}
 		}
@@ -306,7 +307,7 @@ class WPGeo_Map {
 	 * @param        $link = URL to link to when point is clicked
 	 */
 	
-	function addPoint( $lat, $long, $icon = 'wpgeo_icon_large', $title = '', $link = '' ) {
+	function addPoint( $lat, $long, $icon = 'large', $title = '', $link = '' ) {
 	
 		// Save point data
 		$this->points[] = array(

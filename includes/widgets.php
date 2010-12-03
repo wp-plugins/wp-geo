@@ -284,7 +284,7 @@ class WPGeo_Widget {
 				$polyline_coords_js .= ']';		
 		
 				for ( $i = 0; $i < count($coords); $i++ ) {
-					$icon = apply_filters( 'wpgeo_marker_icon', 'wpgeo_icon_small', $coords[$i]['post'], 'widget' );
+					$icon = 'wpgeo_icon_' . apply_filters( 'wpgeo_marker_icon', 'small', $coords[$i]['post'], 'widget' );
 					$markers_js .= 'marker' . $i . ' = wpgeo_createMarker(new GLatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), ' . $icon . ', "' . addslashes(__($coords[$i]['title'])) . '", "' . get_permalink($coords[$i]['id']) . '");' . "\n";
 				}
 							
