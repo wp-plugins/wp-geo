@@ -394,7 +394,7 @@ class WPGeo {
 					$map = new WPGeo_Map($post->ID);										// Create map
 					
 					// Add point
-					$icon = apply_filters( 'wpgeo_marker_icon', 'wpgeo_icon_large', $post, 'post' );
+					$icon = apply_filters( 'wpgeo_marker_icon', 'large', $post, 'post' );
 					$map->addPoint($latitude, $longitude, $icon, $title, get_permalink($post->ID));
 					
 					$map->setMapZoom($mymapzoom);										// Set zoom
@@ -444,7 +444,7 @@ class WPGeo {
 				
 				// Add points
 				for ( $j = 0; $j < count($coords); $j++ ) {
-					$icon = apply_filters( 'wpgeo_marker_icon', 'wpgeo_icon_small', $coords[$j]['post'], 'multiple' );
+					$icon = apply_filters( 'wpgeo_marker_icon', 'small', $coords[$j]['post'], 'multiple' );
 					$map->addPoint($coords[$j]['latitude'], $coords[$j]['longitude'], $icon, $coords[$j]['title'], $coords[$j]['link']);
 				}
 				

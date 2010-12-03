@@ -222,7 +222,7 @@ function get_wpgeo_map( $query, $options = null ) {
 		$latitude = get_post_meta( $post->ID, WPGEO_LATITUDE_META, true );
 		$longitude = get_post_meta( $post->ID, WPGEO_LONGITUDE_META, true );
 		if ( is_numeric( $latitude ) && is_numeric( $longitude ) ) {
-			$icon = apply_filters( 'wpgeo_marker_icon', 'wpgeo_icon_small', $post, 'wpgeo_map' );
+			$icon = 'wpgeo_icon_' . apply_filters( 'wpgeo_marker_icon', 'wpgeo_icon_small', $post, 'wpgeo_map' );
 			$output .= '
 				var ' . $id . '_' . $marker_count . ' = wpgeo_createMarker(map_' . $id . ', new google.maps.LatLng(' . $latitude . ', ' . $longitude . '), ' . $icon . ', "' . esc_js( __($post->post_title) ) . '", "' . get_permalink($post->ID) . '");
 				';

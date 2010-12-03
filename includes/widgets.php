@@ -306,7 +306,7 @@ class WPGeo_Widget {
 					var point = new google.maps.LatLng(' . $coords[0]['latitude'] . ', ' . $coords[0]['longitude'] . ');
 					bounds = new google.maps.LatLngBounds(point, point);';
 				for ( $i = 0; $i < count($coords); $i++ ) {
-					$icon = apply_filters( 'wpgeo_marker_icon', 'wpgeo_icon_small', $coords[$i]['post'], 'widget' );
+					$icon = 'wpgeo_icon_' . apply_filters( 'wpgeo_marker_icon', 'small', $coords[$i]['post'], 'widget' );
 					$markers_js .= '
 					marker_' . $i . ' = wpgeo_createMarker(map, new google.maps.LatLng(' . $coords[$i]['latitude'] . ', ' . $coords[$i]['longitude'] . '), ' . $icon . ', "' . addslashes(__($coords[$i]['title'])) . '", "' . get_permalink($coords[$i]['id']) . '");
 				

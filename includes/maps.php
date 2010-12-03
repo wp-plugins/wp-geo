@@ -164,7 +164,7 @@ class WPGeo_Map {
 		
 		// Points
 		for ( $p = 0; $p < count( $this->points ); $p++ ) {
-			$icon = apply_filters( 'wpgeo_marker_icon', $this->points[$p]['icon'], $this->points[$p]['link'], 'post' );
+			$icon = 'wpgeo_icon_' . apply_filters( 'wpgeo_marker_icon', $this->points[$p]['icon'], $this->points[$p]['link'], 'post' );
 			$js .= '
 				var map_' . $map_id . '_' . $p . ' = wpgeo_createMarker(map_' . $map_id . ', new google.maps.LatLng(' . $this->points[$p]['latitude'] . ', ' . $this->points[$p]['longitude'] . '), ' . $icon . ', "' . addslashes( __( $this->points[$p]['title'] ) ) . '", "' . $this->points[$p]['link'] . '");
 				';
@@ -344,7 +344,7 @@ class WPGeo_Map {
 	 * @param        $link = URL to link to when point is clicked
 	 */
 	
-	function addPoint( $lat, $long, $icon = 'wpgeo_icon_large', $title = '', $link = '' ) {
+	function addPoint( $lat, $long, $icon = 'large', $title = '', $link = '' ) {
 	
 		// Save point data
 		$this->points[] = array(
