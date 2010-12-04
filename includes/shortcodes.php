@@ -14,6 +14,7 @@
 add_shortcode( 'wp_geo_map', 'shortcode_wpgeo_map' );
 add_shortcode( 'wpgeo_longitude', 'shortcode_wpgeo_longitude' );
 add_shortcode( 'wpgeo_latitude', 'shortcode_wpgeo_latitude' );
+add_shortcode( 'wpgeo_map_link', 'shortcode_wpgeo_map_link' );
 
 
 
@@ -46,6 +47,32 @@ function shortcode_wpgeo_longitude( $atts, $content = null ) {
 
 	global $post;
 	return get_wpgeo_longitude($post->ID);
+	
+}
+
+
+
+/**
+ * @method       WP Geo Map Link
+ * @description  Outputs a map link.
+ * @param        $atts = Shortcode attributes
+ * @param        $content = Content between shortcode tags
+ * @return       (string) Map link
+ */
+
+function shortcode_wpgeo_map_link( $atts = null, $content = null ) {
+	
+	$defaults = array(
+		'target' => '_self'
+	);
+	
+	// Validate Args
+	$r = wp_parse_args( $atts, $defaults );
+	
+	$atts['echo'] = 0;
+	
+	$url = wpgeo_map_link( $atts );
+	return '<a href="' . $url . '" target="' . $r['target'] . '">' . do_shortcode( $content ) . '</a>';
 	
 }
 
