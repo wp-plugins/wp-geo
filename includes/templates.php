@@ -130,6 +130,63 @@ function get_wpgeo_title( $post_id = null, $default_to_post_title = true ) {
 
 
 /**
+ * @method       WP Geo Map Link
+ * @description  Gets a link to an external map.
+ * @param        $args = Array of arguments (optional)
+ * @return       (string) Map URL
+ */
+
+function wpgeo_map_link( $args = null ) {
+	
+	global $post;
+	
+	$defaults = array(
+		'post_id'   => $post->ID,
+		'latitude'  => null,
+		'longitude' => null,
+		'zoom'      => 5,
+		'echo'      => 1
+	);
+	
+	// Validate Args
+	$r = wp_parse_args( $args, $defaults );
+	$r['post_id']   = absint( $r['post_id'] );
+	$r['latitude']  = (float) $r['latitude'];
+	$r['longitude'] = (float) $r['longitude'];
+	$r['zoom']      = absint( $r['zoom'] );
+	$r['echo']      = absint( $r['echo'] );
+	echo $r['latitude'] . '-';
+	
+	// If a post is specified override lat/lng...
+	if ( !$r['latitude'] && !$r['longitude'] ) {
+		$r['latitude']  = get_wpgeo_latitude( $r['post_id'] );
+		$r['longitude'] = get_wpgeo_longitude( $r['post_id'] );
+	}
+	
+	// If lat/lng...
+	$url = '';
+	if ( $r['latitude'] && $r['longitude'] ) {
+	
+		$q = 'q=' . $r['latitude'] . ',' . $r['longitude'];
+		$z = $r['zoom'] ? '&z=' . $r['zoom'] : '';
+		
+		$url = 'http://maps.google.co.uk/maps?' . $q . $z;
+		$url = apply_filters( 'wpgeo_map_link', $url, $r );
+		
+	}
+	
+	// Output
+	if ( $r['echo'] == 0 ) {
+		return $url;
+	} else {
+		echo $url;
+	}
+	
+}
+
+
+
+/**
  * @method       WP Geo Post Map
  * @description  Outputs the HTML for a post map.
  * @param        $post_id = Post ID (optional)
