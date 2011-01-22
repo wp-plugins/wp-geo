@@ -100,6 +100,7 @@ function shortcode_wpgeo_map( $atts, $content = null ) {
 		$map_atts = array(
 			'width' => null,
 			'height' => null,
+			'align' => 'none',
 			'lat' => null,
 			'long' => null,
 			'type' => 'G_NORMAL_MAP',
@@ -130,7 +131,10 @@ function shortcode_wpgeo_map( $atts, $content = null ) {
 	
 		// To Do: Add in lon/lat check and output map if needed
 		
-		return '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="width:' . $map_width . '; height:' . $map_height . ';">' . $content . '</div>';
+		// Alignment
+		$float = in_array( strtolower( $atts['align'] ), array( 'left', 'right' ) ) ? 'float:' . strtolower( $atts['align'] ) . ';' : '';
+		
+		return '<div class="wp_geo_map" id="wp_geo_map_' . $id . '" style="' . $float . 'width:' . $map_width . '; height:' . $map_height . ';">' . $content . '</div>';
 	
 	} else {
 	
