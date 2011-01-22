@@ -254,10 +254,24 @@ function get_wpgeo_map( $query, $options = null ) {
 	
 	$wp_geo_options = get_option('wp_geo_options');
 	
+	$defaults = array(
+		'width'   => $wp_geo_options['default_map_width'],
+		'height'  => $wp_geo_options['default_map_height']
+	);
+	
+	// Validate Args
+	$r = wp_parse_args( $query, $defaults );
+	if ( is_numeric( $r['width'] ) ) {
+		$r['width'] .= 'px';
+	}
+	if ( is_numeric( $r['height'] ) ) {
+		$r['height'] .= 'px';
+	}
+	
 	$posts = get_posts( $query );
 	
 	$output = '
-		<div id="' . $id . '" class="wpgeo_map" style="width:' . $wp_geo_options['default_map_width'] . '; height:' . $wp_geo_options['default_map_height'] . ';"></div>
+		<div id="' . $id . '" class="wpgeo_map" style="width:' . $r['width'] . '; height:' . $r['height'] . ';"></div>
 		<script type="text/javascript">
 		<!--
 		jQuery(window).load( function() {
