@@ -9,7 +9,10 @@ div.wp_geo_map {
 	overflow: hidden;
 }
 
-div.wp_geo_map img {
+
+/* Try to fix theme with image background colours */
+#content div.wp_geo_map img,
+#content div.wpgeo_map img {
 	background: transparent;
 	border: none;
 	padding: 0px;
@@ -19,7 +22,11 @@ div.wp_geo_map img {
 div.wp_geo_map img,
 #content div.wp_geo_map img,
 #content .attachment div.wp_geo_map img,
-#sidebar div.wp_geo_map img {
+#sidebar div.wp_geo_map img,
+div.wpgeo_map img,
+#content div.wpgeo_map img,
+#content .attachment div.wpgeo_map img,
+#sidebar div.wpgeo_map img {
 	max-width:none;
 }
 

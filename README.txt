@@ -3,8 +3,8 @@ Contributors: husobj
 Donate link: http://www.wpgeo.com/donate
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 2.8
-Tested up to: 3.0
-Stable tag: 3.2.1
+Tested up to: 3.0.4
+Stable tag: 3.2.2
 
 Add location maps to your posts and pages.
 
@@ -76,6 +76,13 @@ If upgrading from a previous version of the plugin:
 4. Widget Settings
 
 == Changelog ==
+
+= WP Geo 3.2.2 =
+
+* Added [wpgeo_mashup] shortcode. props RavanH.
+* Added align attribute to shortcode.
+* Try to fix themes with image background colours.
+* get_wpgeo_map() now accepts width and height arguments.
 
 = WP Geo 3.2.1 =
 
