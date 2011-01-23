@@ -15,6 +15,7 @@ add_shortcode( 'wp_geo_map', 'shortcode_wpgeo_map' );
 add_shortcode( 'wpgeo_longitude', 'shortcode_wpgeo_longitude' );
 add_shortcode( 'wpgeo_latitude', 'shortcode_wpgeo_latitude' );
 add_shortcode( 'wpgeo_map_link', 'shortcode_wpgeo_map_link' );
+add_shortcode( 'wpgeo_mashup', 'shortcode_wpgeo_mashup' );
 
 
 
@@ -98,8 +99,8 @@ function shortcode_wpgeo_map( $atts, $content = null ) {
 	if ( $wpgeo->show_maps() && !is_feed() && $show_post_map != 'TOP' && $show_post_map != 'BOTTOM' && $wpgeo->checkGoogleAPIKey() ) {
 		
 		$map_atts = array(
-			'width' => null,
-			'height' => null,
+			'width' => $wp_geo_options['default_map_width'],
+			'height' => $wp_geo_options['default_map_height'],
 			'align' => 'none',
 			'lat' => null,
 			'long' => null,
@@ -141,6 +142,42 @@ function shortcode_wpgeo_map( $atts, $content = null ) {
 		return '';
 	
 	}
+	
+}
+
+
+
+/**
+ * @method       Shortcode [wpgeo_mashup type="G_NORMAL_MAP"]
+ * @description  Outputs a map mashup.
+ * @param        $atts = Shortcode attributes
+ * @param        $content = Content between shortcode tags
+ * @return       HTML required to display map
+ */
+
+function shortcode_wpgeo_mashup( $atts, $content = null ) {
+
+	// Original function by RavanH (updated by Ben)
+	// See http://wordpress.org/extend/plugins/wp-geo-mashup-map/
+	
+	global $wpgeo;
+	
+	$wp_geo_options = get_option( 'wp_geo_options' );
+	
+	// Default attributes
+	$map_atts = array(
+		'width' => $wp_geo_options['default_map_width'],
+		'height' => $wp_geo_options['default_map_height'],
+		'align' => 'none',
+		'type' => 'G_NORMAL_MAP',
+		'numberposts' => -1
+	);
+	extract( shortcode_atts( $map_atts, $atts ) );
+	
+	if ( !is_feed() && isset( $wpgeo ) && $wpgeo->show_maps() && $wpgeo->checkGoogleAPIKey() )
+		return get_wpgeo_map( $atts );
+	else
+		return '';
 	
 }
 
