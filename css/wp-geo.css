@@ -11,7 +11,9 @@ div.wp_geo_map {
 
 
 /* Try to fix theme with image background colours */
+div.wp_geo_map img,
 #content div.wp_geo_map img,
+div.wpgeo_map img,
 #content div.wpgeo_map img {
 	background: transparent;
 	border: none;
