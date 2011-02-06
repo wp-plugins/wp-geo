@@ -30,16 +30,14 @@ class WPGeo_Markers {
 		
 		$this->markers = array();
 		
-		$dir = WP_CONTENT_URL . $this->marker_image_dir;
-		
 		// Large Marker
 		$this->markers[] = new WPGeo_Marker(
 			'large',
 			__( 'Default Large Marker' ),
 			__( 'This is the default marker used to indicate a location on most maps.' ),
 			20, 34, 10, 34,
-			$dir . 'large-marker.png',
-			$dir . 'large-marker-shadow.png'
+			$this->get_image_url( 'large-marker.png' ),
+			$this->get_image_url( 'large-marker-shadow.png' )
 		);
 		
 		// Small Marker
@@ -48,8 +46,8 @@ class WPGeo_Markers {
 			__( 'Default Small Marker' ),
 			__( 'This is the default marker used for the WP Geo sidebar widget.' ),
 			10, 17, 5, 17,
-			$dir . 'small-marker.png',
-			$dir . 'small-marker-shadow.png'
+			$this->get_image_url( 'small-marker.png' ),
+			$this->get_image_url( 'small-marker-shadow.png' )
 		);
 		
 		// Dot Marker
@@ -58,9 +56,29 @@ class WPGeo_Markers {
 			__( 'Default Dot Marker' ),
 			__( 'This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo.' ),
 			8, 8, 3, 6,
-			$dir . 'dot-marker.png',
-			$dir . 'dot-marker-shadow.png'
+			$this->get_image_url( 'dot-marker.png' ),
+			$this->get_image_url( 'dot-marker-shadow.png' )
 		);
+		
+	}
+	
+	
+	
+	/**
+	 * @method       Get Image URL
+	 * @description  Get the URL of the image.
+	 */
+	function get_image_url( $img ) {
+		
+		$plugin_url = WP_PLUGIN_URL . '/wp-geo/img/markers/';
+		$upload_url = WP_CONTENT_URL . $this->marker_image_dir;
+		$upload_dir = WP_CONTENT_DIR . $this->marker_image_dir;
+		
+		if ( file_exists( $upload_dir . $img ) ) {
+			return $upload_url . $img;
+		}
+		
+		return $plugin_url . $img;
 		
 	}
 	
