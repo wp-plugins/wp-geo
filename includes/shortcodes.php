@@ -182,11 +182,18 @@ if ( !function_exists( 'shortcode_wpgeo_mashup' ) ) {
 		
 		// Default attributes
 		$map_atts = array(
-			'width' => $wp_geo_options['default_map_width'],
-			'height' => $wp_geo_options['default_map_height'],
-			'align' => 'none',
-			'type' => 'G_NORMAL_MAP',
-			'numberposts' => -1
+			'width'           => $wp_geo_options['default_map_width'],
+			'height'          => $wp_geo_options['default_map_height'],
+			'type'            => $wp_geo_options['google_map_type'],
+			'polylines'       => $wp_geo_options['show_polylines'],
+			'polyline_colour' => $wp_geo_options['polyline_colour'],
+			'align'           => 'none',
+			'numberposts'     => -1,
+			'post_type'       => null,
+			'post_status'     => 'publish',
+			'orderby'         => 'post_date',
+			'order'           => 'DESC',
+			'markers'         => 'large'
 		);
 		extract( shortcode_atts( $map_atts, $atts ) );
 		
