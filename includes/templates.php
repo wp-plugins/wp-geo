@@ -155,7 +155,6 @@ function wpgeo_map_link( $args = null ) {
 	$r['longitude'] = (float) $r['longitude'];
 	$r['zoom']      = absint( $r['zoom'] );
 	$r['echo']      = absint( $r['echo'] );
-	echo $r['latitude'] . '-';
 	
 	// If a post is specified override lat/lng...
 	if ( !$r['latitude'] && !$r['longitude'] ) {
