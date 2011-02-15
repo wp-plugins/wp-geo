@@ -72,7 +72,7 @@ class WPGeo_Widget {
 			$map_content = WPGeo_Widget::add_map($width, $height, $maptype, $showpolylines, $zoom);
 			
 			if ( !empty($map_content) ) {
-				$html_content = $before_widget . $before_title . $title . $after_title . WPGeo_Widget::add_map($width, $height, $maptype, $showpolylines, $zoom);
+				$html_content = $before_widget . $before_title . $title . $after_title . $map_content;
 				$html_content .= $after_widget;
 			}
 			
