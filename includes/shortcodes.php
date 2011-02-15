@@ -77,6 +77,9 @@ if ( !function_exists( 'shortcode_wpgeo_map_link' ) ) {
 		$atts['echo'] = 0;
 		
 		$url = wpgeo_map_link( $atts );
+		
+		if ( !$content ) $content = __( 'View Larger Map', 'wp-geo' );
+		
 		return '<a href="' . $url . '" target="' . $r['target'] . '">' . do_shortcode( $content ) . '</a>';
 		
 	}
