@@ -1753,13 +1753,18 @@ class WPGeo {
 	
 	
 	function wp_footer() {
-		echo '
-			<script type="text/javascript">
-			<!--
-			' . $this->maps2->get_maps_javascript() . '
-			-->
-			</script>
-			';
+		
+		$js = $this->maps2->get_maps_javascript();
+		
+		if ( !empty( $js ) ) {
+			echo '<script type="text/javascript">
+				<!--
+				' . $js . '
+				-->
+				</script>
+				';
+		}
+		
 	}
 	
 	
