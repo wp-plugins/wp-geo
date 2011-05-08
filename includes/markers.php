@@ -228,6 +228,48 @@ class WPGeo_Markers {
 	
 	
 	
+	/**
+	 * @method       Dropdown Markers
+	 * @description  Output marker select menu.
+	 */
+	function dropdown_markers( $args ) {
+		
+		$defaults = array(
+			'selected'          => '',
+			'echo'              => 1,
+			'name'              => 'marker_id',
+			'id'                => '',
+			'show_option_none'  => '',
+			'option_none_value' => ''
+		);
+		$r = wp_parse_args( $args, $defaults );
+		
+		$output = '';
+		$name = esc_attr( $r['name'] );
+		
+		if ( empty( $r['id'] ) )
+			$r['id'] = $r['name'];
+		
+		$output = '<select name="' . $name . '" id="' . $id . '">';
+		if ( !empty( $r['show_option_none'] ) )
+			$output .= '<option value="' . esc_attr( $r['option_none_value'] ) . '">' . $r['show_option_none'] . '</option>';
+		foreach ( $this->markers as $marker ) {
+			$selected = '';
+			if ( $r['selected'] == $marker->id )
+				$selected = ' selected="selected"';
+			$output .= '<option value="' . esc_attr( $marker->id ) . '"' . $selected . '>' . $marker->name . '</option>';
+		}
+		$output .= '</select>';
+		
+		if ( $echo )
+			echo $output;
+		
+		return $output;
+		
+	}
+	
+	
+	
 }
 
 

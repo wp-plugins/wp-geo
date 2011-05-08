@@ -31,6 +31,7 @@ if ( !defined( 'WP_PLUGIN_DIR' ) )
 define( 'WPGEO_LATITUDE_META',     '_wp_geo_latitude' );
 define( 'WPGEO_LONGITUDE_META',    '_wp_geo_longitude' );
 define( 'WPGEO_TITLE_META',        '_wp_geo_title' );
+define( 'WPGEO_MARKER_META',       '_wp_geo_marker' );
 define( 'WPGEO_MAP_SETTINGS_META', '_wp_geo_map_settings' );
 
 

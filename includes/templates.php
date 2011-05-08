@@ -295,7 +295,10 @@ function get_wpgeo_map( $query, $options = null ) {
 			$latitude = get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
 			$longitude = get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
 			if ( is_numeric($latitude) && is_numeric($longitude) ) {
-				$icon = 'wpgeo_icon_' . apply_filters( 'wpgeo_marker_icon', $r['markers'], $post, 'wpgeo_map' );
+				$marker = get_post_meta($post->ID, WPGEO_MARKER_META, true);
+				if ( empty( $marker ) )
+					$marker = $r['markers'];
+				$icon = 'wpgeo_icon_' . apply_filters( 'wpgeo_marker_icon', $marker, $post, 'wpgeo_map' );
 				$polyline_coords_js .= 'new GLatLng(' . $latitude . ', ' . $longitude . '),';
 				$output .= '
 					var center = new GLatLng(' . $latitude . ',' . $longitude . ');

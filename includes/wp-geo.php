@@ -377,6 +377,7 @@ class WPGeo {
 				$latitude  = get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
 				$longitude = get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
 				$title     = get_wpgeo_title( $post->ID );
+				$marker    = get_post_meta($post->ID, WPGEO_MARKER_META, true);
 				$settings  = get_post_meta($post->ID, WPGEO_MAP_SETTINGS_META, true);
 				
 				$mymaptype = $maptype;
@@ -404,7 +405,8 @@ class WPGeo {
 					$map = new WPGeo_Map($post->ID);										// Create map
 					
 					// Add point
-					$icon = apply_filters( 'wpgeo_marker_icon', 'large', $post, 'post' );
+					$marker_large = empty( $marker ) ? 'large' : $marker;
+					$icon = apply_filters( 'wpgeo_marker_icon', $marker_large, $post, 'post' );
 					$map->addPoint($latitude, $longitude, $icon, $title, get_permalink($post->ID));
 					
 					$map->setMapZoom($mymapzoom);										// Set zoom
@@ -454,7 +456,8 @@ class WPGeo {
 				
 				// Add points
 				for ( $j = 0; $j < count($coords); $j++ ) {
-					$icon = apply_filters( 'wpgeo_marker_icon', 'small', $coords[$j]['post'], 'multiple' );
+					$marker_small = empty( $marker ) ? 'small' : $marker;
+					$icon = apply_filters( 'wpgeo_marker_icon', $marker_small, $coords[$j]['post'], 'multiple' );
 					$map->addPoint($coords[$j]['latitude'], $coords[$j]['longitude'], $icon, $coords[$j]['title'], $coords[$j]['link']);
 				}
 				
@@ -1583,6 +1586,7 @@ class WPGeo {
 		$latitude  = get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
 		$longitude = get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
 		$title     = get_post_meta($post->ID, WPGEO_TITLE_META, true);
+		$marker    = get_post_meta($post->ID, WPGEO_MARKER_META, true);
 		$settings  = get_post_meta($post->ID, WPGEO_MAP_SETTINGS_META, true);
 		
 		$wpgeo_map_settings_zoom = '';
@@ -1591,6 +1595,14 @@ class WPGeo {
 		$wpgeo_map_settings_zoom_checked = '';
 		$wpgeo_map_settings_type_checked = '';
 		$wpgeo_map_settings_centre_checked = '';
+		
+		$markers_menu = array(
+			'selected'          => $marker,
+			'echo'              => 0,
+			'name'              => 'wp_geo_marker',
+			'show_option_none'  => '(' . __( 'Use Default' ) . ')',
+			'option_none_value' => ''
+		);
 		
 		if ( isset($settings['zoom']) && !empty($settings['zoom']) ) {
 			$wpgeo_map_settings_zoom = $settings['zoom'];
@@ -1631,6 +1643,10 @@ class WPGeo {
 			<tr>
 				<th scope="row">' . __('Marker Title', 'wp-geo') . ' <small>(' . __('optional', 'wp-geo') . ')</small></th>
 				<td><input name="wp_geo_title" type="text" size="25" style="width:100%;" id="wp_geo_title" value="' . $title . '" /></td>
+			</tr>
+			<tr>
+				<th scope="row">' . __('Marker Image', 'wp-geo') . '</th>
+				<td>' . $this->markers->dropdown_markers( $markers_menu ) . '</td>
 			</tr>
 			<tr>
 				<th scope="row">' . __('Map Settings', 'wp-geo') . '</th>
@@ -1727,6 +1743,16 @@ class WPGeo {
 				$mydata[WPGEO_TITLE_META]  = $_POST['wp_geo_title'];
 			}
 			
+		}
+		
+		// Find and save the marker data
+		if ( isset( $_POST['wp_geo_marker'] ) ) {
+			if ( !empty($_POST['wp_geo_marker']) ) {
+				update_post_meta( $post_id, WPGEO_MARKER_META, $_POST['wp_geo_marker'] );
+				$mydata[WPGEO_MARKER_META] = $_POST['wp_geo_marker'];
+			} else {
+				delete_post_meta( $post_id, WPGEO_MARKER_META );
+			}
 		}
 		
 		// Find and save the settings data
