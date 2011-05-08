@@ -10,7 +10,7 @@ Version: 3.2.3
 Author: Ben Huson
 Author URI: http://www.benhuson.co.uk/
 Minimum WordPress Version Required: 2.9
-Tested up to: 3.0.4
+Tested up to: 3.1.2
 */
 
 
