@@ -90,6 +90,7 @@ add_action( 'after_plugin_row', array( $wpgeo, 'after_plugin_row' ) );
 
 // Filters
 add_filter( 'the_content', array( $wpgeo, 'the_content' ) );
+add_filter( 'get_the_excerpt', array( $wpgeo, 'get_the_excerpt' ) );
 add_filter( 'post_limits', array( $wpgeo, 'post_limits' ) );
 add_filter( 'posts_join', array( $wpgeo, 'posts_join' ) );
 add_filter( 'posts_where', array( $wpgeo, 'posts_where' ) );
