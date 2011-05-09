@@ -1106,6 +1106,10 @@ class WPGeo {
 			$wp_geo_options['show_map_scale']          = isset( $_POST['show_map_scale'] ) && $_POST['show_map_scale'] == 'Y' ? 'Y' : 'N';
 			$wp_geo_options['show_map_overview']       = isset( $_POST['show_map_overview'] ) && $_POST['show_map_overview'] == 'Y' ? 'Y' : 'N';
 			
+			$wp_geo_options['save_post_zoom']         = isset( $_POST['save_post_zoom'] ) && $_POST['save_post_zoom'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['save_post_map_type']     = isset( $_POST['save_post_map_type'] ) && $_POST['save_post_map_type'] == 'Y' ? 'Y' : 'N';
+			$wp_geo_options['save_post_centre_point'] = isset( $_POST['save_post_centre_point'] ) && $_POST['save_post_centre_point'] == 'Y' ? 'Y' : 'N';
+			
 			$wp_geo_options['show_polylines']  = isset( $_POST['show_polylines'] ) && $_POST['show_polylines'] == 'Y' ? 'Y' : 'N';
 			$wp_geo_options['polyline_colour'] = $_POST['polyline_colour'];
 			
@@ -1202,6 +1206,16 @@ class WPGeo {
 							<p style="margin:1em 0 0 0;"><strong>' . __('Other Controls', 'wp-geo') . '</strong></p>
 							' . $wpgeo->options_checkbox('show_map_scale', 'Y', $wp_geo_options['show_map_scale']) . ' ' . __('Show map scale', 'wp-geo') . '<br />
 							' . $wpgeo->options_checkbox('show_map_overview', 'Y', $wp_geo_options['show_map_overview']) . ' ' . __('Show collapsible overview map (in the corner of the map)', 'wp-geo') . '
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">' . __('Default Post Options', 'wp-geo') . '</th>
+						<td>
+							<p style="margin:0;">
+							' . $wpgeo->options_checkbox('save_post_zoom', 'Y', $wp_geo_options['save_post_zoom']) . ' ' . __('Save custom map zoom for this post', 'wp-geo') . '<br />
+							' . $wpgeo->options_checkbox('save_post_map_type', 'Y', $wp_geo_options['save_post_map_type']) . ' ' . __('Save custom map type for this post', 'wp-geo') . '<br />
+							' . $wpgeo->options_checkbox('save_post_centre_point', 'Y', $wp_geo_options['save_post_centre_point']) . ' ' . __('Save map centre point for this post', 'wp-geo') . '
+							</p>
 						</td>
 					</tr>
 					<tr valign="top">
@@ -1582,6 +1596,8 @@ class WPGeo {
 		
 		global $post;
 		
+		$wp_geo_options = get_option('wp_geo_options');
+		
 		$search    = '';
 		$latitude  = get_post_meta($post->ID, WPGEO_LATITUDE_META, true);
 		$longitude = get_post_meta($post->ID, WPGEO_LONGITUDE_META, true);
@@ -1607,13 +1623,22 @@ class WPGeo {
 		if ( isset($settings['zoom']) && !empty($settings['zoom']) ) {
 			$wpgeo_map_settings_zoom = $settings['zoom'];
 			$wpgeo_map_settings_zoom_checked = ' checked="checked"';
+		} elseif ( $wp_geo_options['save_post_zoom'] == 'Y' ) {
+			$wpgeo_map_settings_zoom = $wp_geo_options['save_post_zoom'];
+			$wpgeo_map_settings_zoom_checked = ' checked="checked"';
 		}
 		if ( isset($settings['type']) && !empty($settings['type']) ) {
 			$wpgeo_map_settings_type = $settings['type'];
 			$wpgeo_map_settings_type_checked = ' checked="checked"';
+		} elseif ( $wp_geo_options['save_post_zoom'] == 'Y' ) {
+			$wpgeo_map_settings_type = $wp_geo_options['save_post_zoom'];
+			$wpgeo_map_settings_type_checked = ' checked="checked"';
 		}
 		if ( isset($settings['centre']) && !empty($settings['centre']) ) {
 			$wpgeo_map_settings_centre = $settings['centre'];
+			$wpgeo_map_settings_centre_checked = ' checked="checked"';
+		} elseif ( $wp_geo_options['save_post_centre_point'] == 'Y' ) {
+			$wpgeo_map_settings_centre = $wp_geo_options['save_post_centre_point'];
 			$wpgeo_map_settings_centre_checked = ' checked="checked"';
 		}
 		
