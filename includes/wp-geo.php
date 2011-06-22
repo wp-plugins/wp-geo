@@ -17,7 +17,7 @@ class WPGeo {
 	 */
 	
 	// Version Information
-	var $version    = '3.2.1';
+	var $version    = '3.2.4';
 	var $db_version = 1;
 	
 	var $markers;
