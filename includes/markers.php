@@ -33,8 +33,8 @@ class WPGeo_Markers {
 		// Large Marker
 		$this->markers[] = new WPGeo_Marker(
 			'large',
-			__( 'Default Large Marker' ),
-			__( 'This is the default marker used to indicate a location on most maps.' ),
+			__( 'Default Large Marker', 'wp-geo' ),
+			__( 'This is the default marker used to indicate a location on most maps.', 'wp-geo' ),
 			20, 34, 10, 34,
 			$this->get_image_url( 'large-marker.png' ),
 			$this->get_image_url( 'large-marker-shadow.png' )
@@ -43,8 +43,8 @@ class WPGeo_Markers {
 		// Small Marker
 		$this->markers[] = new WPGeo_Marker(
 			'small',
-			__( 'Default Small Marker' ),
-			__( 'This is the default marker used for the WP Geo sidebar widget.' ),
+			__( 'Default Small Marker', 'wp-geo' ),
+			__( 'This is the default marker used for the WP Geo sidebar widget.', 'wp-geo' ),
 			10, 17, 5, 17,
 			$this->get_image_url( 'small-marker.png' ),
 			$this->get_image_url( 'small-marker-shadow.png' )
@@ -53,8 +53,8 @@ class WPGeo_Markers {
 		// Dot Marker
 		$this->markers[] = new WPGeo_Marker(
 			'dot',
-			__( 'Default Dot Marker' ),
-			__( 'This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo.' ),
+			__( 'Default Dot Marker', 'wp-geo' ),
+			__( 'This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo.', 'wp-geo' ),
 			8, 8, 3, 6,
 			$this->get_image_url( 'dot-marker.png' ),
 			$this->get_image_url( 'dot-marker-shadow.png' )
@@ -252,12 +252,12 @@ class WPGeo_Markers {
 		
 		$output = '<select name="' . $name . '" id="' . $id . '">';
 		if ( !empty( $r['show_option_none'] ) )
-			$output .= '<option value="' . esc_attr( $r['option_none_value'] ) . '">' . __( $r['show_option_none'] ) . '</option>';
+			$output .= '<option value="' . esc_attr( $r['option_none_value'] ) . '">' . $r['show_option_none'] . '</option>';
 		foreach ( $this->markers as $marker ) {
 			$selected = '';
 			if ( $r['selected'] == $marker->id )
 				$selected = ' selected="selected"';
-			$output .= '<option value="' . esc_attr( $marker->id ) . '"' . $selected . '>' . __( $marker->name ) . '</option>';
+			$output .= '<option value="' . esc_attr( $marker->id ) . '"' . $selected . '>' . $marker->name . '</option>';
 		}
 		$output .= '</select>';
 		
