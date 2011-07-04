@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Geo | V3.2\n"
+"Project-Id-Version: WP Geo | V3.2.5\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-geo\n"
 "POT-Creation-Date: 2010-06-29 20:42+0000\n"
 "PO-Revision-Date: \n"
@@ -48,29 +48,29 @@ msgstr "Titel"
 
 #: includes/markers.php:38
 msgid "Default Large Marker"
-msgstr "Standardeinstellung Grosser Marker"
+msgstr "Standardmarker Gross"
 
 #: includes/markers.php:39
 msgid "This is the default marker used to indicate a location on most maps."
-msgstr "Das ist der Standard Marker für die Positionsanzeige in den gebräuchlichsten Karten."
+msgstr "Das ist der Standardmarker für die Positionsanzeige in den gebräuchlichsten Karten."
 
 #: includes/markers.php:48
 msgid "Default Small Marker"
-msgstr "Standardeinstellung Kleiner Marker"
+msgstr "Standardmarker Klein"
 
 #: includes/markers.php:49
 msgid "This is the default marker used for the WP Geo sidebar widget."
-msgstr "Das ist der Standard Marker für das WP Geo Widget in der Sidebar."
+msgstr "Das ist der Standardmarker für das WP Geo Widget in der Sidebar."
 
 #  Settings - Label for Default Map Height field
 # @ wp-geo
 #: includes/markers.php:58
 msgid "Default Dot Marker"
-msgstr "Standardeinstellung Punkt Marker"
+msgstr "Standardmarker Punkt"
 
 #: includes/markers.php:59
 msgid "This marker image is not currently used but it is anticipated that it will be used to indicate less important locations in a future versions of WP Geo."
-msgstr "Dieses Marker Bild wird zur Zeit nicht verwendet, sondern es wird in zukünftigen Versionen von WP Geo eingesetzt, um weniger wichtige Standorte anzuzeigen."
+msgstr "Dieses Markerbild wird zur Zeit nicht verwendet, sondern es wird in zukünftigen Versionen von WP Geo eingesetzt, um weniger wichtige Standorte anzuzeigen."
 
 #  Admin - Google API Key Notice
 # @ wp-geo
@@ -174,80 +174,80 @@ msgstr "Google Maps API Schlüssel"
 # @ wp-geo
 #: includes/wp-geo.php:1104
 msgid "Map Type"
-msgstr "Karten Typ"
+msgstr "Kartentyp"
 
 #  Settings - Label for Show Post Map field
 # @ wp-geo
 #: includes/wp-geo.php:1108
 msgid "Show Post Map"
-msgstr "Map anzeigen"
+msgstr "Karte in Artikel anzeigen"
 
 # @ wp-geo
 #: includes/wp-geo.php:1112
 msgid "Default Map Location"
-msgstr "Standard Map Einstellungen"
+msgstr "Voreinstellung Kartenposition"
 
 #  Settings - Label for Default Map Width field
 # @ wp-geo
 #: includes/wp-geo.php:1119
 msgid "Default Map Width"
-msgstr "Standard Map Breite"
+msgstr "Voreinstellung Kartenbreite"
 
 #  Settings - Label for Default Map Height field
 # @ wp-geo
 #: includes/wp-geo.php:1123
 msgid "Default Map Height"
-msgstr "Standard Map Höhe"
+msgstr "Voreinstellung Kartenhöhe"
 
 #  Settings - Label for Default Map Zoom field
 # @ wp-geo
 #: includes/wp-geo.php:1127
 msgid "Default Map Zoom"
-msgstr "Standard Map Zoom"
+msgstr "Voreinstellung Kartenzoom"
 
 #  Settings - Label for Default Map Controls fields
 # @ wp-geo
 #: includes/wp-geo.php:1131
 msgid "Default Map Controls"
-msgstr "Standard Map Steuerung"
+msgstr "Voreinstellung Kartensteuerung"
 
 #  Settings - Label for Default Map Controls fields
 # @ wp-geo
 #: includes/wp-geo.php:1134
 msgid "Map Type Controls"
-msgstr "Karten Typ Steuerung"
+msgstr "Steuerung Kartentyp"
 
 #  Settings - Default Map Controls - Map Type - Message
 # @ wp-geo
 #: includes/wp-geo.php:1135
 msgid "You must select at least 2 map types for the control to show."
-msgstr "Sie müssen mindestens zwei Map Typen auswählen, um in der Ansicht den Karten Typ zu wechseln."
+msgstr "Sie müssen mindestens zwei Kartentypen auswählen, um in der Karte den Typ (z.B. Satellit, Hybrid etc.) zu wechseln."
 
 # @ wp-geo
 #: includes/wp-geo.php:1136
 msgid "Normal map"
-msgstr "Normale Map"
+msgstr "Standardkarte"
 
 #  Settings - Default Map Controls - Map Type - Satellite
 # @ wp-geo
 #: includes/wp-geo.php:1137
 #: includes/wp-geo.php:1313
 msgid "Satellite (photographic map)"
-msgstr "Satelliten Map (Satellitenbilder ohne Ortsbezeichnung)"
+msgstr "Satellitenkarte (Satellitenbilder ohne Ortsbezeichnung)"
 
 #  Settings - Default Map Controls - Map Type - Hybrid
 # @ wp-geo
 #: includes/wp-geo.php:1138
 #: includes/wp-geo.php:1314
 msgid "Hybrid (photographic map with normal features)"
-msgstr "Hybrid Map (Satellitenbilder mit Ortsbezeichnung)"
+msgstr "Hybridkarte (Satellitenbilder mit Ortsbezeichnung)"
 
 #  Settings - Default Map Controls - Map Type - Physical
 # @ wp-geo
 #: includes/wp-geo.php:1139
 #: includes/wp-geo.php:1315
 msgid "Physical (terrain map)"
-msgstr "Gelände Map"
+msgstr "Geländekarte (Terrain)"
 
 #  Settings - Default Map Controls - Other
 # @ wp-geo
@@ -501,13 +501,13 @@ msgstr "Lade Google Maps, bitte warten ..."
 # @ wp-geo
 #: includes/wp-geo.php:1556
 msgid "Latitude"
-msgstr "Latitude"
+msgstr "Breitengrad"
 
 #  Longitude
 # @ wp-geo
 #: includes/wp-geo.php:1556
 msgid "Longitude"
-msgstr "Longitude"
+msgstr "Längengrad"
 
 #  Clear location link in admin
 # @ wp-geo
@@ -534,22 +534,22 @@ msgstr "Optional"
 # @ wp-geo
 #: includes/wp-geo.php:1567
 msgid "Map Settings"
-msgstr "Karten Einstellungen"
+msgstr "Karteneinstellungen"
 
 # @ wp-geo
 #: includes/wp-geo.php:1569
 msgid "Save custom map zoom for this post"
-msgstr "Eigener Map Zoom für diesen Beitrag speichern"
+msgstr "Kartenzoom für diesen Artikel speichern"
 
 # @ wp-geo
 #: includes/wp-geo.php:1570
 msgid "Save custom map type for this post"
-msgstr "Eigener Map Typ für diesen Beitrag speichern"
+msgstr "Kartentyp für diesen Artikel speichern"
 
 # @ wp-geo
 #: includes/wp-geo.php:1571
 msgid "Save map centre point for this post"
-msgstr "Eigenes Map Zentrum für diesen Beitrag speichern"
+msgstr "Kartenzentrum für diesen Artikel speichern"
 
 #. Plugin Name of the plugin/theme
 msgid "WP Geo"
@@ -569,4 +569,27 @@ msgstr "Fügt Geocoding in WordPress hinzu."
 #. Author of the plugin/theme
 msgid "Ben Huson"
 msgstr "Ben Huson"
+
+#  Admin - Show Polylines
+# @ wp-geo
+#: includes/wp-geo.php:1174
+msgid "Show on excerpts"
+msgstr "nach Textausschnitt zeigen"
+
+# @ wp-geo
+#: includes/wp-geo.php:1212
+msgid "Default Post Options"
+msgstr "Voreinstellung Artikeloptionen"
+
+#  Admin - Marker Title
+# @ wp-geo
+#: includes/wp-geo.php:1673
+msgid "Marker Image"
+msgstr "Marker Bild"
+
+#  Settings - Label for Default Map Zoom field
+# @ wp-geo
+#: includes/wp-geo.php:1619
+msgid "Use Default"
+msgstr "Standard verwenden"
 
