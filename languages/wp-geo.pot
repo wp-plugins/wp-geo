@@ -451,29 +451,6 @@ msgstr ""
 msgid "Marker Image"
 msgstr ""
 
-#: includes/markers.php:36
-msgid "Default Large Marker"
+#: includes/wp-geo.php:1619
+msgid "Use Default"
 msgstr ""
-
-#: includes/markers.php:37
-msgid "This is the default marker used to indicate a location on most maps."
-msgstr ""
-
-#: includes/markers.php:46
-msgid "Default Small Marker"
-msgstr ""
-
-#: includes/markers.php:47
-msgid "This is the default marker used for the WP Geo sidebar widget."
-msgstr ""
-
-#: includes/markers.php:56
-msgid "Default Dot Marker"
-msgstr ""
-
-#: includes/markers.php:57
-msgid ""
-"This marker image is not currently used but it is anticipated that it will "
-"be used to indicate less important locations in a future versions of WP Geo."
-msgstr ""
-

@@ -1616,7 +1616,7 @@ class WPGeo {
 			'selected'          => $marker,
 			'echo'              => 0,
 			'name'              => 'wp_geo_marker',
-			'show_option_none'  => '(' . __( 'Use Default' ) . ')',
+			'show_option_none'  => '(' . __( 'Use Default', 'wp-geo' ) . ')',
 			'option_none_value' => ''
 		);
 		
