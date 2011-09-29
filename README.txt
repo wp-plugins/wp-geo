@@ -80,6 +80,10 @@ If upgrading from a previous version of the plugin:
 
 == Changelog ==
 
+= WP Geo 3.2.6.1 =
+
+* Fix filepath that causes broken HTML editor.
+
 = WP Geo 3.2.6 =
 
 * Added support for custom post type in Recent Locations widget.
