@@ -1,26 +1,26 @@
 <?php
 
 /**
- * WP Geo Contextual Widget
+ * WP Geo Category Widget
  * Adds a map widget to WordPress (requires WP Geo plugin).
- * The widget displays markers for posts on the current page.
+ * The widget displays markers for posts in the current category.
  *
  * @version 1.5
- * @author Marco Alionso Ramirez <marco@onemarco.com>
+ * @author David Keen
  *         updated by Ben Huson <ben@thewhiteroom.net>
  */
-class WPGeo_Contextual_Map_Widget extends WPGeo_Widget {
-	
+class WPGeo_Category_Map_Widget extends WPGeo_Widget {
+
 	/**
-	 * Widget Constuctor
+	 * Constuctor
 	 */
-	function WPGeo_Contextual_Map_Widget() {
+	function WPGeo_Category_Map_Widget() {
 		$this->WPGeo_Widget(
-			'wpgeo_contextual_map_widget',
-			__( 'WP Geo Contextual Map', 'wp-geo' ),
+			'wpgeo_category_map_widget',
+			__( 'WP Geo Category Map', 'wp-geo' ),
 			array(
-				'classname'   => 'wpgeo_contextual_map_widget',
-				'description' => __( 'Displays markers from the current page', 'wp-geo' )
+				'classname'   => 'wpgeo_category_map_widget',
+				'description' => __( 'Displays markers from the current category', 'wp-geo' )
 			)
 		);
 	}
@@ -28,18 +28,29 @@ class WPGeo_Contextual_Map_Widget extends WPGeo_Widget {
 	/**
 	 * Widget Output
 	 *
+	 * @todo Exclude current post?
+	 *
 	 * @param array $args
 	 * @param array $instance Widget values.
 	 */
 	function widget( $args, $instance ) {
-		global $wpgeo, $posts;
-		
+		global $wpgeo;
+
 		// If Google API Key...
 		if ( $wpgeo->checkGoogleAPIKey() ) {
 			$wp_geo_options = get_option( 'wp_geo_options' );
 			$instance = $this->validate_display_instance( $instance );
-			
+
 			// Start write widget
+			$post_cats = get_the_category();
+			$post_cat_id = $post_cats[0]->cat_ID;
+			$posts = get_posts( array(
+				'numberposts'  => -1,
+				'meta_key'     => WPGEO_LATITUDE_META,
+				'meta_value'   => 0,
+				'meta_compare' => '>',
+				'category'     => $post_cat_id
+			) );
 			$args = wp_parse_args( $instance, array(
 				'id'    => $args['widget_id'] . '-map',
 				'posts' => $posts
@@ -67,19 +78,19 @@ class WPGeo_Contextual_Map_Widget extends WPGeo_Widget {
 	 */
 	function form( $instance ) {
 		global $wpgeo;
-		
+
 		$wp_geo_options = get_option( 'wp_geo_options' );
 		$instance = $this->validate_instance( (array)$instance );
 		
 		// Message if API key not set
 		echo $this->check_api_key_message();
-		
+
 		do_action( 'wpgeo_widget_form_fields', $instance, $this );
 	}
-		
+	
 }
 
 // Widget Hook
-add_action( 'widgets_init', create_function( '', 'return register_widget( "WPGeo_Contextual_Map_Widget" );' ) );
+add_action( 'widgets_init', create_function( '', 'return register_widget( "WPGeo_Category_Map_Widget" );' ) );
 
 ?>

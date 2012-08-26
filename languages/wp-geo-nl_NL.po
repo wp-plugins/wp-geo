@@ -1,15 +1,10 @@
-# Translation of the WordPress plugin WP Geo 3.1.4 by Ben Huson.
-# Copyright (C) 2010 Ben Huson
-# This file is distributed under the same license as the WP Geo package.
-# Ben Huson <ben@thewhiteroom.net>, 2010.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Geo 3.1.4\n"
+"Project-Id-Version: WP Geo\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-geo\n"
 "POT-Creation-Date: 2010-06-29 20:42+0000\n"
-"PO-Revision-Date: 2011-09-15 20:42+0100\n"
-"Language-Team: be_BY antsar.info <iliamrv@ya.ru>\n"
+"PO-Revision-Date: 2012-08-25 10:57+0100\n"
+"Language-Team: Davey IJzermans <http://daveyyzermans.nl/>\n"
 "Language-Team: bg_BG\n"
 "Language-Team: da_DK Team Blogos <wordpress@blogos.dk>\n"
 "Language-Team: de_DE Ivan Graf <contact@bildergallery.com>\n"
@@ -23,7 +18,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Last-Translator: Davey IJzermans <ik@daveyyzermans.nl>\n"
+"Last-Translator: Ben Huson <ben@thewhiteroom.net>\n"
+"X-Poedit-Language: Dutch\n"
 
 #: admin/donate-links.php:17
 msgid "Support this plugin"
