@@ -3,8 +3,8 @@ Contributors: husobj
 Donate link: http://www.wpgeo.com/donate
 Tags: maps, map, geo, geocoding, google, location, georss
 Requires at least: 3.0
-Tested up to: 3.4.1
-Stable tag: 3.2.6.4
+Tested up to: 3.4.2
+Stable tag: 3.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,17 +49,17 @@ More information can be found at http://www.wpgeo.com/.
 
 WP Geo is currently available in the following languages:
 
-* Belorussian (by Ilyuha)
-* Bulgarian (by Roman Rachkov)
-* Chinese, Simplified (by Steen Chow)
-* Croatian (by Andrija Papec)
-* English (default)
-* Danish (by Georg)
+* Belorussian (by [Ilyuha](http://antsar.info/))
+* Bulgarian (by [Roman Rachkov](http://www.georss.biz/))
+* Chinese, Simplified (by [Steen Chow](http://twitter.com/imsteen))
+* Croatian (by [Andrija Papec](http://www.adriaindex.com/))
+* Danish (by [Georg](http://wordpress.blogos.dk/søg-efter-downloads/?did=91))
 * Dutch (by [Davey IJzermans](http://daveyyzermans.nl/))
+* English (default)
 * French (by Alain Messin)
-* German (by Ivan Graf)
+* German (by [Ivan Graf](http://blog.bildergallery.com/))
 * Italian (by Diego Pierotto)
-* Russian (by Fat Cower)
+* Russian (by [Fat Cower](http://www.fatcow.com/))
 * Spanish (by Alberto)
 
 == Installation ==
@@ -101,8 +101,10 @@ Not yet but a future version of WP Geo will support it.
 * Added category map widget. Props David Keen.
 * Added wpgeo_is_valid_geo_coord() function.
 * Added 'wpgeo_show_maps' filter.
+* Enable loading of maps on CPT archive page by checking the 'Show Maps On' CPT and 'Posts archive/home page' checkboxes.
 * Settings page now uses WordPress Settings API.
 * All styles now enqueued properly.
+* Only loads admin functionality when in admin.
 * Don't use global var $posts. Props pl.massard.
 * Fix WPGEO_DIR. Props Jghazally.
 * Fix post map type checkbox. Props RavanH.
@@ -375,7 +377,7 @@ NOTE: You will need to re-add your widgets after upgrading!
 == Upgrade Notice ==
 
 = 3.2.7 =
-Various bug fixes. Two new shortcodes. A new category widget. 'wpgeo_show_maps' filter.
+Various bug fixes. Two new shortcodes. A new category widget. 'wpgeo_show_maps' filter. Better CPT compatibility.
 
 = 3.2.5 =
 You will need to re-add your widgets after upgrading to 3.2.5!
