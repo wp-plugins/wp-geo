@@ -41,7 +41,7 @@ class WPGeo_Contextual_Map_Widget extends WPGeo_Widget {
 			
 			// Start write widget
 			$map_args = wp_parse_args( $instance, array(
-				'id'    => $args['widget_id'] . '-map',
+				'id'    => $args['widget_id'],
 				'posts' => $posts
 			) );
 			$map_content = $this->add_widget_map( $map_args );
@@ -81,5 +81,3 @@ class WPGeo_Contextual_Map_Widget extends WPGeo_Widget {
 
 // Widget Hook
 add_action( 'widgets_init', create_function( '', 'return register_widget( "WPGeo_Contextual_Map_Widget" );' ) );
-
-?>

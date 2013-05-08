@@ -84,7 +84,7 @@ class WPGeo_Feeds {
 		global $wpgeo;
 		
 		if ( $wpgeo->show_maps() ) {
-			echo 'xmlns:georss="http://www.georss.org/georss" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:ymaps="http://api.maps.yahoo.com/Maps/V2/AnnotatedMaps.xsd"';
+			echo 'xmlns:georss="http://www.georss.org/georss" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:ymaps="http://api.maps.yahoo.com/Maps/V2/AnnotatedMaps.xsd" ';
  		}
 	}
 	
@@ -96,19 +96,13 @@ class WPGeo_Feeds {
 		global $wpgeo, $post;
 		
 		if ( $wpgeo->show_maps() ) {
-			$id = $post->ID;
-			$latitude  = get_post_meta( $post->ID, WPGEO_LATITUDE_META, true );
-			$longitude = get_post_meta( $post->ID, WPGEO_LONGITUDE_META, true );
-			
-			// Need a map?
-			if ( wpgeo_is_valid_geo_coord( $latitude, $longitude ) ) {
-				echo '<georss:point>' . $latitude . ' ' . $longitude . '</georss:point>';
-				echo '<geo:lat>' . $latitude . '</geo:lat>';
-				echo '<geo:long>' . $longitude . '</geo:long>';
+			$coord = new WPGeo_Coord( get_post_meta( $post->ID, WPGEO_LATITUDE_META, true ), get_post_meta( $post->ID, WPGEO_LONGITUDE_META, true ) );
+			if ( $coord->is_valid_coord() ) {
+				echo '<georss:point>' . $coord->get_delimited( ' ' ) . '</georss:point>';
+				echo '<geo:lat>' . $coord->latitude() . '</geo:lat>';
+				echo '<geo:long>' . $coord->longitude() . '</geo:long>';
 			}
 		}
 	}
 	
 }
-
-?>

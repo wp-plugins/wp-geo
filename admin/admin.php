@@ -7,7 +7,8 @@ class WPGeo_Admin {
 
 	var $settings;
 	var $editor;
-	var $plugin_message = '';
+	var $map;
+	var $plugin_message = 'WP Geo 3.3 is a major upgrade which use Google Maps API v3. If you using a default installation of WP Geo hopefully things should just work. If you have used custom code or plugins which work with WP Geo you may need to update them to work with this version. Please <a href="https://github.com/benhuson/WP-Geo/issues">submit any bugs here...</a>';
 	
 	function WPGeo_Admin() {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
@@ -17,6 +18,7 @@ class WPGeo_Admin {
 		add_action( 'save_post', array( $this, 'wpgeo_location_save_postdata' ) );
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 		add_action( 'after_plugin_row', array( $this, 'after_plugin_row' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 	
 	/**
@@ -31,6 +33,8 @@ class WPGeo_Admin {
 		
 		// Register Settings
 		$this->settings = new WPGeo_Settings();
+		
+		$this->map = new WPGeo_Map( 'admin_post' );
 		
 		add_action( 'admin_enqueue_scripts', array( $wpgeo, 'includeGoogleMapsJavaScriptAPI' ) );
 		
@@ -72,38 +76,35 @@ class WPGeo_Admin {
 			}
 		}
 		// Version upgrade message
-		if ( in_array( $current_screen->id, array( 'settings_page_wp-geo', 'widgets' ) ) ) {
+		if ( in_array( $current_screen->id, array( 'settings_page_wp-geo', 'plugins' ) ) ) {
 			$wp_geo_show_version_msg = get_option( 'wp_geo_show_version_msg' );
 			if ( current_user_can( 'manage_options' ) && $wp_geo_show_version_msg == 'Y' ) {
 				echo '<div id="wpgeo_version_message" class="error below-h2" style="margin:5px 15px 2px 0px;">
-						<p>' . __( 'WP Geo has been updated to use the WordPress widgets API. You will need to re-add your widgets.', 'wp-geo' ) . ' <a href="' . wp_nonce_url( add_query_arg( 'wpgeo_action', 'dismiss-update-msg', $_SERVER['PHP_SELF'] ), 'wpgeo_dismiss_update_msg' ) . '">' . __( 'Dismiss', 'wp-geo' ) . '</a></p>
+						<p>' . __( 'WP Geo has been updated to use the Google Map API v3. You may need <a href="https://developers.google.com/maps/documentation/javascript/tutorial#api_key" target="_blank">create a new API key</a>, then update your WP Geo settings. If you have added custom code or plugins to work with WP Geo you may need to update them. Please <a href="https://github.com/benhuson/WP-Geo/issues">report bug issues here...</a>', 'wp-geo' ) . ' <a href="' . wp_nonce_url( add_query_arg( 'wpgeo_action', 'dismiss-update-msg', null ), 'wpgeo_dismiss_update_msg' ) . '">' . __( 'Dismiss', 'wp-geo' ) . '</a></p>
 					</div>';
 			}
 		}
 	}
 	
 	/**
+	 * Admin Enqueue Scripts & Styles
+	 */
+	function admin_enqueue_scripts() {
+		wp_enqueue_style( 'wpgeo_admin', WPGEO_URL . 'css/wp-geo.css' );
+	}
+	
+	/**
 	 * Admin Head
+	 * @todo Refactor mapScriptsInit()
 	 */
 	function admin_head() {
 		global $wpgeo, $post_ID;
 		
-		echo '<link rel="stylesheet" href="' . WPGEO_URL . 'css/wp-geo.css" type="text/css" />';
-		
 		// Only load if on a post or page
 		if ( $wpgeo->show_maps() ) {
-			
-			// Get post location
-			$latitude  = get_post_meta( $post_ID, WPGEO_LATITUDE_META, true );
-			$longitude = get_post_meta( $post_ID, WPGEO_LONGITUDE_META, true );
-			$default_latitude  = $latitude;
-			$default_longitude = $longitude;
-			$default_zoom = 13;
-			$panel_open   = false;
-			$hide_marker  = false;
-			
+			$coord = new WPGeo_Coord( get_post_meta( $post_ID, WPGEO_LATITUDE_META, true ), get_post_meta( $post_ID, WPGEO_LONGITUDE_META, true ) );
 			if ( ! $wpgeo->show_maps_external ) {
-				echo $wpgeo->mapScriptsInit( $default_latitude, $default_longitude, $default_zoom, $panel_open, $hide_marker );
+				echo $wpgeo->mapScriptsInit( $coord, 13, false, false );
 			}
 		}
 	}
@@ -159,8 +160,6 @@ class WPGeo_Admin {
 		if ( ! $wpgeo->checkGoogleAPIKey() )
 			return;
 		
-		$wp_geo_options = get_option( 'wp_geo_options' );
-		
 		add_meta_box( 'wpgeo_location', __( 'WP Geo Location', 'wpgeo' ), array( $this, 'wpgeo_location_inner_custom_box' ), 'post', 'advanced' );
 		add_meta_box( 'wpgeo_location', __( 'WP Geo Location', 'wpgeo' ), array( $this, 'wpgeo_location_inner_custom_box' ), 'page', 'advanced' );
 		
@@ -184,12 +183,11 @@ class WPGeo_Admin {
 		
 		$wp_geo_options = get_option('wp_geo_options');
 		
-		$search    = '';
-		$latitude  = get_post_meta( $post->ID, WPGEO_LATITUDE_META, true );
-		$longitude = get_post_meta( $post->ID, WPGEO_LONGITUDE_META, true );
-		$title     = get_post_meta( $post->ID, WPGEO_TITLE_META, true );
-		$marker    = get_post_meta( $post->ID, WPGEO_MARKER_META, true );
-		$settings  = wp_parse_args( get_post_meta( $post->ID, WPGEO_MAP_SETTINGS_META, true ), array(
+		$search   = '';
+		$coord    = new WPGeo_Coord( get_post_meta( $post->ID, WPGEO_LATITUDE_META, true ),get_post_meta( $post->ID, WPGEO_LONGITUDE_META, true ) );
+		$title    = get_post_meta( $post->ID, WPGEO_TITLE_META, true );
+		$marker   = get_post_meta( $post->ID, WPGEO_MARKER_META, true );
+		$settings = wp_parse_args( get_post_meta( $post->ID, WPGEO_MAP_SETTINGS_META, true ), array(
 			'zoom'   => '',
 			'type'   => '',
 			'centre' => ''
@@ -232,6 +230,17 @@ class WPGeo_Admin {
 			$wpgeo_map_settings_centre_checked = checked( true, true, false );
 		}
 		
+		$map_html = $this->map->get_map_html( array(
+			'classes' => array( 'wp_geo_map', 'wpgeo_map_admin_post' ),
+			'styles'  => array(
+				'width'   => '100%',
+				'height'  => 300,
+				'padding' => '0px',
+				'margin'  => '0px'
+			),
+			'content' => __( 'Loading Google map, please wait...', 'wp-geo' )
+		) );
+		
 		// Use nonce for verification
 		echo '<input type="hidden" name="wpgeo_location_noncename" id="wpgeo_location_noncename" value="' . wp_create_nonce( 'wpgeo_edit_post' ) . '" />';
 		
@@ -244,16 +253,12 @@ class WPGeo_Admin {
 					<span class="submit"><input type="button" id="wp_geo_search_button" name="wp_geo_search_button" value="' . __( 'Search', 'wp-geo' ) . '" /></span></td>
 			</tr>
 			<tr>
-				<td colspan="2">
-				<div id="wp_geo_map" style="height:300px; width:100%; padding:0px; margin:0px;">
-					' . __( 'Loading Google map, please wait...', 'wp-geo' ) . '
-				</div>
-				</td>
+				<td colspan="2">' . $map_html . '</td>
 			</tr>
 			<tr>
 				<th scope="row">' . __( 'Latitude', 'wp-geo' ) . ', ' . __( 'Longitude', 'wp-geo' ) . '</th>
-				<td><input name="wp_geo_latitude" type="text" size="25" id="wp_geo_latitude" value="' . $latitude . '" /><br />
-					<input name="wp_geo_longitude" type="text" size="25" id="wp_geo_longitude" value="' . $longitude . '" /><br />
+				<td><input name="wp_geo_latitude" type="text" size="25" id="wp_geo_latitude" value="' . $coord->latitude() . '" /><br />
+					<input name="wp_geo_longitude" type="text" size="25" id="wp_geo_longitude" value="' . $coord->longitude() . '" /><br />
 					<a href="#" class="wpgeo-clear-location-fields">' . __( 'clear location', 'wp-geo' ) . '</a> | <a href="#" class="wpgeo-centre-location">' . __( 'centre location', 'wp-geo' ) . '</a>
 				</td>
 			</tr>
@@ -320,11 +325,12 @@ class WPGeo_Admin {
 			delete_post_meta( $post_id, WPGEO_LATITUDE_META );
 			delete_post_meta( $post_id, WPGEO_LONGITUDE_META );
 			
-			if ( wpgeo_is_valid_geo_coord( $_POST['wp_geo_latitude'], $_POST['wp_geo_longitude'] ) ) {
-				add_post_meta( $post_id, WPGEO_LATITUDE_META, $_POST['wp_geo_latitude'] );
-				add_post_meta( $post_id, WPGEO_LONGITUDE_META, $_POST['wp_geo_longitude'] );
-				$mydata[WPGEO_LATITUDE_META]  = $_POST['wp_geo_latitude'];
-				$mydata[WPGEO_LONGITUDE_META] = $_POST['wp_geo_longitude'];
+			$coord = new WPGeo_Coord( $_POST['wp_geo_latitude'], $_POST['wp_geo_longitude'] );
+			if ( $coord->is_valid_coord() ) {
+				add_post_meta( $post_id, WPGEO_LATITUDE_META, $coord->latitude() );
+				add_post_meta( $post_id, WPGEO_LONGITUDE_META, $coord->longitude() );
+				$mydata[WPGEO_LATITUDE_META]  = $coord->latitude();
+				$mydata[WPGEO_LONGITUDE_META] = $coord->longitude();
 			}
 		}
 		
@@ -354,7 +360,7 @@ class WPGeo_Admin {
 			$settings['zoom'] = $_POST['wpgeo_map_settings_zoom'];
 		}
 		if ( isset( $_POST['wpgeo_map_settings_type'] ) && ! empty( $_POST['wpgeo_map_settings_type'] ) ) {
-			$settings['type'] = $_POST['wpgeo_map_settings_type'];
+			$settings['type'] = $wpgeo->decode_api_string( $_POST['wpgeo_map_settings_type'], 'maptype' );
 		}
 		if ( isset( $_POST['wpgeo_map_settings_centre'] ) && ! empty( $_POST['wpgeo_map_settings_centre'] ) ) {
 			$settings['centre'] = $_POST['wpgeo_map_settings_centre'];
@@ -374,11 +380,9 @@ class WPGeo_Admin {
 	 */
 	function after_plugin_row( $plugin ) {
 		if ( 'wp-geo/wp-geo.php' == $plugin && ! empty( $this->plugin_message ) ) {
-			//echo '<td colspan="5" class="plugin-update" style="line-height:1.2em;">' . $this->plugin_message . '</td>';
+			echo '<td colspan="3" class="plugin-update colspanchange" style="line-height:1.2em;"><div class="update-message" style="color:#CC0000;padding-top:3px;">' . $this->plugin_message . '</div></td>';
 			return;
 		}
 	}
 	
 }
-
-?>

@@ -3,15 +3,15 @@
 /**
  * Is Valid Geo Coord
  *
+ * @todo This function can be deprecated.
+ *
  * @param float $lat Latitude.
  * @param float $long Longitude.
  * @return bool
  */
 function wpgeo_is_valid_geo_coord( $lat, $lng ) {
-	if ( is_numeric( $lat ) && is_numeric( $lng ) ) {
-		return true;
-	}
-	return false;
+	$coord = new WPGeo_Coord( $lat, $lng );
+	return $coord->is_valid_coord();
 }
 
 /**
@@ -86,7 +86,7 @@ function wpgeo_check_db_version( $version ) {
  * @return array|string Array or HTML select menu.
  */
 function wpgeo_show_polylines_options( $args = null ) {
-	$args = wp_parse_args( (array)$args, array(
+	$args = wp_parse_args( $args, array(
 		'id'       => 'show_polylines',
 		'name'     => 'show_polylines',
 		'return'   => 'array',
@@ -112,5 +112,3 @@ function wpgeo_show_polylines_options( $args = null ) {
 	
 	return $map_type_array;
 }
-
-?>

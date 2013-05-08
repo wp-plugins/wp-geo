@@ -137,17 +137,22 @@ if ( ! function_exists( 'shortcode_wpgeo_map' ) ) {
 				return '[wpgeo_map]';
 		
 			// To Do: Add in lon/lat check and output map if needed
-			
-			$map_width  = wpgeo_css_dimension( $atts['width'] );
-			$map_height = wpgeo_css_dimension( $atts['height'] );
-			$float = in_array( strtolower( $atts['align'] ), array( 'left', 'right' ) ) ? 'float:' . strtolower( $atts['align'] ) . ';' : '';
-			
-			return '<div class="wp_geo_map" id="wp_geo_map_' . $post->ID . '" style="' . $float . 'width:' . $map_width . '; height:' . $map_height . ';">' . $content . '</div>';
+			$styles = array();
+			if ( in_array( strtolower( $atts['align'] ), array( 'left', 'right' ) ) ) {
+				$styles['float'] = strtolower( $atts['align'] );
+			}
+			return get_wpgeo_post_map( $post->ID, array(
+				'width'   => $atts['width'],
+				'height'  => $atts['height'],
+				'styles'  => $styles,
+				'content' => $content
+			) );
 		}
 		return '';
 	}
 	add_shortcode( 'wpgeo_map', 'shortcode_wpgeo_map' );
 	// Deprecate this shortcode - standardised to the above.
+	// Requires changing editor button
 	add_shortcode( 'wp_geo_map', 'shortcode_wpgeo_map' );
 }
 
@@ -190,4 +195,38 @@ if ( ! function_exists( 'shortcode_wpgeo_mashup' ) ) {
 	add_shortcode( 'wpgeo_mashup', 'shortcode_wpgeo_mashup' );
 }
 
-?>
+/**
+ * Shortcode [wpgeo]
+ * Used to manually display a map in a post.
+ *
+ * @param array $atts Array of attributes.
+ * @param array $content Content between tags.
+ * @return string HTML Output.
+ */
+if ( ! function_exists( 'shortcode_wpgeo' ) ) {
+	function shortcode_wpgeo( $atts, $content = null ) {
+		global $wpgeo;
+		$allowed_atts = array(
+			'rss' => null,
+			'kml' => null
+		);
+		extract( shortcode_atts( $allowed_atts, $atts ) );
+		
+		if ( $kml != null ) {
+			$rss = $kml;
+		}
+		if ( $rss != null ) {
+			$map = new WPGeo_Map( 'shortcode' );
+			$map->add_feed( $rss );
+			$wpgeo->maps2->add_map( $map );
+			$wp_geo_options = get_option( 'wp_geo_options' );
+			
+			return $map->get_map_html( array(
+				'classes' => array( 'wpgeo', 'wpgeo-rss' ),
+				'content' => $rss
+			) );
+		}
+		return '';
+	}
+	add_shortcode( 'wpgeo', 'shortcode_wpgeo' );
+}
