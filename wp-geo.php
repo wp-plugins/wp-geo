@@ -4,11 +4,11 @@
 Plugin Name: WP Geo
 Plugin URI: http://www.wpgeo.com/
 Description: Adds location maps to your posts, pages and custom post types.
-Version: 3.3
+Version: 3.3.1
 Author: Ben Huson
 Author URI: http://www.benhuson.co.uk/
 Minimum WordPress Version Required: 3.1
-Tested up to: 3.5.1
+Tested up to: 3.5.2
 */
 
 // WP Geo plugin directory and url paths. props Alain (alm)
@@ -17,8 +17,10 @@ define( 'WPGEO_URL', plugins_url( WPGEO_SUBDIR ) );
 define( 'WPGEO_DIR', plugin_dir_path( __FILE__ ) );
 
 // Constants
-define( 'WPGEO_LATITUDE_META',     '_wp_geo_latitude' );
-define( 'WPGEO_LONGITUDE_META',    '_wp_geo_longitude' );
+if ( ! defined( 'WPGEO_LATITUDE_META' ) )
+	define( 'WPGEO_LATITUDE_META', '_wp_geo_latitude' );
+if ( ! defined( 'WPGEO_LONGITUDE_META' ) )
+	define( 'WPGEO_LONGITUDE_META', '_wp_geo_longitude' );
 define( 'WPGEO_TITLE_META',        '_wp_geo_title' );
 define( 'WPGEO_MARKER_META',       '_wp_geo_marker' );
 define( 'WPGEO_MAP_SETTINGS_META', '_wp_geo_map_settings' );
@@ -29,6 +31,7 @@ load_plugin_textdomain( 'wp-geo', false, dirname( plugin_basename( __FILE__ ) ) 
 // Includes
 include_once( WPGEO_DIR . 'includes/wp-geo.php' );
 include_once( WPGEO_DIR . 'includes/query.php' );
+include_once( WPGEO_DIR . 'includes/api.php' );
 include_once( WPGEO_DIR . 'includes/marker.php' );
 include_once( WPGEO_DIR . 'includes/markers.php' );
 include_once( WPGEO_DIR . 'includes/maps.php' );

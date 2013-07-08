@@ -111,7 +111,7 @@ class WPGeo_Map {
 	function validate_map_id( $id ) {
 		global $wpgeo;
 		$id = str_replace( '-', '_', sanitize_html_class( $id ) );
-		return $wpgeo->maps2->get_unique_map_id( $id );
+		return $wpgeo->maps->get_unique_map_id( $id );
 	}
 	
 	/**
@@ -130,6 +130,7 @@ class WPGeo_Map {
 	 */
 	function renderMapJS( $map_id = false ) {
 		global $wpgeo;
+
 		$wp_geo_options = get_option( 'wp_geo_options' );
 		
 		// ID of div for map output
@@ -142,14 +143,11 @@ class WPGeo_Map {
 		$maptypes = array_unique( $maptypes );
 		$js_maptypes = '';
 		if ( is_array( $maptypes ) ) {
-			if ( in_array( 'G_PHYSICAL_MAP', $maptypes ) )
-				$js_maptypes .= 'map_' . $map_id . '.addMapType(G_PHYSICAL_MAP);';
-			if ( ! in_array( 'G_NORMAL_MAP', $maptypes ) )
-				$js_maptypes .= 'map_' . $map_id . '.removeMapType(G_NORMAL_MAP);';
-			if ( ! in_array( 'G_SATELLITE_MAP', $maptypes ) )
-				$js_maptypes .= 'map_' . $map_id . '.removeMapType(G_SATELLITE_MAP);';
-			if ( ! in_array( 'G_HYBRID_MAP', $maptypes ) )
-				$js_maptypes .= 'map_' . $map_id . '.removeMapType(G_HYBRID_MAP);';
+			$types = $wpgeo->api->map_types();
+			foreach ( $types as $key => $val ) {
+				if ( in_array( $key, $maptypes ) )
+					$js_maptypes .= 'map_' . $map_id . '.addMapType(' . $key . ');';
+			}
 		}
 		
 		// Markers
@@ -314,7 +312,15 @@ class WPGeo_Map {
 	function set_height( $h ) {
 		$this->height = $h;
 	}
-	
+
+	function get_width() {
+		return $this->width;
+	}
+
+	function get_height() {
+		return $this->height;
+	}
+
 	function get_dom_id() {
 		return 'wpgeo_map_' . $this->id;
 	}
@@ -387,7 +393,19 @@ class WPGeo_Map {
 			'link'  => $link
 		) );
 	}
-	
+
+	/**
+	 * Get Point
+	 *
+	 * @param   int  $n  N-th point.
+	 * @return  object   WPGeo_Point.
+	 */
+	function get_point( $n = 0 ) {
+		if ( count( $this->points ) >= $n + 1 )
+			return $this->points[$n];
+		return false;
+	}
+
 	/**
 	 * Show polylines on this map?
 	 *
@@ -482,12 +500,9 @@ class WPGeo_Map {
 	 * @param string $maptype Type of map.
 	 */
 	function is_valid_map_type( $maptype ) {
-		$types = array(
-			'G_PHYSICAL_MAP',
-			'G_NORMAL_MAP',
-			'G_SATELLITE_MAP',
-			'G_HYBRID_MAP'
-		);
+		global $wpgeo;
+
+		$types = array_keys( $wpgeo->api->map_types() );
 		return in_array( $maptype, $types );
 	}
 	
@@ -632,8 +647,8 @@ class WPGeo_Coord {
 		$this->latitude  = $latitude;
 		$this->longitude = $longitude;
 		if ( $this->is_valid_coord() ) {
-			$this->latitude  = floatval( $this->latitude );
-			$this->longitude = floatval( $this->longitude );
+			$this->latitude  = $this->sanitize_latlng( $this->latitude );
+			$this->longitude = $this->sanitize_latlng( $this->longitude );
 		}
 	}
 
@@ -648,6 +663,23 @@ class WPGeo_Coord {
 		if ( is_numeric( $this->latitude ) && is_numeric( $this->longitude ) )
 			return true;
 		return false;
+	}
+
+	/**
+	 * Sanitize Lat/Lng
+	 * Ensures the latitude or longitude is a floating number and that the decimal
+	 * point is a full stop rather than a comma created by floatval() in some locales.
+	 *
+	 * @param number $n Latitude or Longitude.
+	 * @return number
+	 */
+	function sanitize_latlng( $n ) {
+		$n = floatval( $n );
+		if ( defined( 'DECIMAL_POINT' ) ) {
+			$pt = nl_langinfo( DECIMAL_POINT );
+			$n = str_replace( $pt, '.', $n );
+		}
+		return $n;
 	}
 
 	/**

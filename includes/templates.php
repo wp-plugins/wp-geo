@@ -68,6 +68,17 @@ function get_wpgeo_longitude( $post_id = 0 ) {
 }
 
 /**
+ * Get WP Geo Post Coord
+ * Gets the post coordinates.
+ *
+ * @param int $post_id (optional) Post ID.
+ * @return object WPGeo_Coord.
+ */
+function get_wpgeo_post_coord( $post_id = 0 ) {
+	return new WPGeo_Coord( get_wpgeo_latitude( $post_id ), get_wpgeo_longitude( $post_id ) );
+}
+
+/**
  * Get WP Geo Title
  *
  * @param int $post_id (optional) Post ID.
@@ -102,41 +113,49 @@ function get_wpgeo_title( $post_id = 0, $default_to_post_title = true ) {
  *
  * @todo This should probably use API but fallback to Google Maps.
  *
- * @param array $args (optional) Array of arguments.
- * @return string Map URL.
+ * @param   array   $args  (optional) Array of arguments.
+ * @return  string         Map URL.
  */
 function wpgeo_map_link( $args = null ) {
-	global $post;
-	
+	global $wpgeo, $post;
+
 	// Validate Args
 	$r = wp_parse_args( $args, array(
 		'post_id'   => $post->ID,
 		'latitude'  => null,
 		'longitude' => null,
-		'zoom'      => 5,
+		'zoom'      => null,
 		'echo'      => 1
 	) );
 	$r['post_id'] = absint( $r['post_id'] );
-	$r['zoom']    = absint( $r['zoom'] );
 	$r['echo']    = absint( $r['echo'] );
-	
+
+	// Coord
 	$coord = new WPGeo_Coord( $r['latitude'], $r['longitude'] );
-	
-	// If a post is specified override lat/lng...
 	if ( ! $coord->is_valid_coord() ) {
-		$coord = new WPGeo_Coord( get_wpgeo_latitude( $r['post_id'] ), get_wpgeo_longitude( $r['post_id'] ) );
+		$coord = get_wpgeo_post_coord( $r['post_id'] );
+		if ( ! $coord->is_valid_coord() )
+			return '';
 	}
-	
-	// If lat/lng...
-	$url = '';
-	if ( $coord->is_valid_coord() ) {
-		$url = 'http://maps.google.co.uk/maps';
-		$url = add_query_arg( 'q', $coord->get_delimited(), $url );
-		if ( $r['zoom'] )
-			$url = add_query_arg( 'z', $r['zoom'], $url );
-		$url = apply_filters( 'wpgeo_map_link', $url, $r );
+
+	// Fetch wp geo options & post settings
+	$wp_geo_options = get_option( 'wp_geo_options' );
+	$settings = get_post_meta( $r['post_id'], WPGEO_MAP_SETTINGS_META, true );
+
+	// Map Options
+	if ( is_null( $r['zoom'] ) || ! is_numeric( $r['zoom'] ) ) {
+		$r['zoom'] = isset( $settings['zoom'] ) && is_numeric( $settings['zoom'] ) ? $settings['zoom'] : $wp_geo_options['default_map_zoom'];
 	}
-	
+	$zoom = absint( $r['zoom'] );
+
+	// Map
+	$map = new WPGeo_Map();
+	$map->set_map_zoom( $zoom );
+	$map->add_point( $coord );
+
+	$url = $wpgeo->api->map_url( $map );
+	$url = apply_filters( 'wpgeo_map_link', $url, $r );
+
 	// Output
 	if ( $r['echo'] == 0 )
 		return $url;
@@ -182,7 +201,7 @@ function get_wpgeo_post_map( $post_id = 0, $args = null ) {
 	
 	$show_post_map = apply_filters( 'wpgeo_show_post_map', $wp_geo_options['show_post_map'], $post_id );
 	
-	$coord = new WPGeo_Coord( get_post_meta( $post_id, WPGEO_LATITUDE_META, true ), get_post_meta( $post_id, WPGEO_LONGITUDE_META, true ) );
+	$coord = get_wpgeo_post_coord( $post_id );
 	if ( ! $coord->is_valid_coord() )
 		return '';
 	
@@ -219,7 +238,7 @@ function get_wpgeo_post_map( $post_id = 0, $args = null ) {
 			if ( ! empty( $args['height'] ) )
 				$map->set_height( $args['height'] );
 			
-			$map = $wpgeo->maps2->add_map( $map );
+			$map = $wpgeo->maps->add_map( $map );
 			return $map->get_map_html( $args );
 		}
 	}
@@ -270,7 +289,7 @@ function wpgeo_create_input_map( $options = null ) {
 		'icon'  => apply_filters( 'wpgeo_marker_icon', $r['markers'], 0, 'input' )
 	) );
 	
-	$wpgeo->maps2->add_map( $map );
+	$wpgeo->maps->add_map( $map );
 	return $map;
 }
 
@@ -288,7 +307,7 @@ function get_wpgeo_map( $query, $options = null ) {
 	$id = 'wpgeo_map_id_' . $wpgeo_map_id;
 	$wp_geo_options = get_option('wp_geo_options');
 	
-	$defaults = array(
+	$defaults = apply_filters( 'wpgeo_map_default_query_args', array(
 		'width'           => $wp_geo_options['default_map_width'],
 		'height'          => $wp_geo_options['default_map_height'],
 		'type'            => $wp_geo_options['google_map_type'],
@@ -302,7 +321,6 @@ function get_wpgeo_map( $query, $options = null ) {
 		'orderby'         => 'post_date',
 		'order'           => 'DESC',
 		'markers'         => 'large',
-        'markers'         => 'large',
         'offset'          => 0,
         'category'        => null,
         'include'         => null,
@@ -311,7 +329,7 @@ function get_wpgeo_map( $query, $options = null ) {
         'meta_value'      => null,
         'post_mime_type'  => null,
         'post_parent'     => null
-	);
+	) );
 	
 	// Validate Args
 	$r = wp_parse_args( $query, $defaults );
@@ -334,7 +352,7 @@ function get_wpgeo_map( $query, $options = null ) {
 	// Points
 	if ( $posts ) {
 		foreach ( $posts as $post ) {
-			$coord = new WPGeo_Coord( get_post_meta( $post->ID, WPGEO_LATITUDE_META, true ), get_post_meta( $post->ID, WPGEO_LONGITUDE_META, true ) );
+			$coord = get_wpgeo_post_coord( $post->ID );
 			if ( $coord->is_valid_coord() ) {
 				$marker = get_post_meta( $post->ID, WPGEO_MARKER_META, true );
 				if ( empty( $marker ) )
@@ -364,7 +382,7 @@ function get_wpgeo_map( $query, $options = null ) {
 	
 	$center_coord = $map->get_map_centre();
 	
-	$wpgeo->maps2->add_map( $map );
+	$wpgeo->maps->add_map( $map );
 	return $map->get_map_html( array( 'styles' => array( 'float' => $r['align'] ) ) );
 }
 
@@ -383,8 +401,8 @@ function wpgeo_map( $query, $options = null ) {
  * WP Geo Post Static Map
  * Outputs the HTML for a static post map.
  *
- * @param int $post_id (optional) Post ID.
- * @param array $query (optional) Parameters.
+ * @param  int    $post_id  (optional) Post ID.
+ * @param  array  $query    (optional) Parameters.
  */
 function wpgeo_post_static_map( $post_id = 0, $query = null ) {
 	echo get_wpgeo_post_static_map( $post_id, $query );
@@ -394,60 +412,44 @@ function wpgeo_post_static_map( $post_id = 0, $query = null ) {
  * Get WP Geo Post Static Map
  * Gets the HTML for a static post map.
  *
- * @todo Should be implemented via API but fallback to Google Static Maps.
- *
- * @param int $post_id (optional) Post ID.
- * @param array $query (optional) Parameters.
- * @return string HTML.
+ * @param   int    $post_id  (optional) Post ID.
+ * @param   array  $query    (optional) Parameters.
+ * @return  string           HTML.
  */
 function get_wpgeo_post_static_map( $post_id = 0, $query = null ) {
 	global $post, $wpgeo;
-	
+
 	$post_id = absint( $post_id );
 	$post_id = $post_id > 0 ? $post_id : $post->ID;
 
+	// Show Map?
 	if ( ! $post_id || is_feed() || ! $wpgeo->show_maps() || ! $wpgeo->checkGoogleAPIKey() )
 		return '';
-	
-	$coord = new WPGeo_Coord( get_post_meta( $post_id, WPGEO_LATITUDE_META, true ), get_post_meta( $post_id, WPGEO_LONGITUDE_META, true ) );
+
+	$coord = get_wpgeo_post_coord( $post_id );
 	if ( ! $coord->is_valid_coord() )
 		return '';
-	
+
 	// Fetch wp geo options & post settings
 	$wp_geo_options = get_option( 'wp_geo_options' );
-	$settings  = get_post_meta( $post_id, WPGEO_MAP_SETTINGS_META, true );
-	
+	$settings = get_post_meta( $post_id, WPGEO_MAP_SETTINGS_META, true );
+
 	// Options
-	$defaults = array(
+	$options = wp_parse_args( $query, array(
 		'width'   => trim( $wp_geo_options['default_map_width'], 'px' ),
 		'height'  => trim( $wp_geo_options['default_map_height'], 'px' ),
 		'maptype' => $wp_geo_options['google_map_type'],
 		'zoom'    => $wp_geo_options['default_map_zoom'],
-	);
-	$options = wp_parse_args( $query, $defaults );
-	
-	// Can't do percentage sizes to abort
+	) );
+
+	// Can't do percentage sizes so abort
 	if ( strpos( $options['width'], '%' ) !== false || strpos( $options['height'], '%' ) !== false )
 		return '';
 
-	// Convert WP Geo map types to static map type url param
-	$types = array(
-		'G_NORMAL_MAP'    => 'roadmap',
-		'G_SATELLITE_MAP' => 'satellite',
-		'G_PHYSICAL_MAP'  => 'terrain',
-		'G_HYBRID_MAP'    => 'hybrid'
-	);	
-
-	// Center on location marker by default
+	// Map Options
+	$zoom = isset( $settings['zoom'] ) && is_numeric( $settings['zoom'] ) ? $settings['zoom'] : $options['zoom'];
+	$map_type = ! empty( $settings['type'] ) ? $settings['type'] : $options['maptype'];
 	$center_coord = new WPGeo_Coord( $coord->latitude(), $coord->longitude() );
-
-	// Custom map settings?
-	if ( isset( $settings['zoom'] ) && is_numeric( $settings['zoom'] ) ) {
-		$options['zoom'] = $settings['zoom'];
-	}
-	if ( ! empty( $settings['type'] ) ) {
-		$options['maptype'] = $settings['type'];
-	}
 	if ( ! empty( $settings['centre'] ) ) {
 		$center = explode( ',', $settings['centre'] );
 		$maybe_center_coord = new WPGeo_Coord( $center[0], $center[1] );
@@ -455,15 +457,16 @@ function get_wpgeo_post_static_map( $post_id = 0, $query = null ) {
 			$center_coord = $maybe_center_coord;
 		}
 	}
-	
-	$url = add_query_arg( array(
-		'center'  => $center_coord->get_delimited(),
-		'zoom'    => $options['zoom'],
-		'size'    => $options['width'] . 'x' . $options['height'],
-		'maptype' => $types[$options['maptype']],
-		'markers' => 'color:red%7C' . $coord->get_delimited(),
-		'sensor'  => 'false'
-	), 'http://maps.googleapis.com/maps/api/staticmap' );
-	
-	return '<img id="wp_geo_static_map_' . $post_id . '" src="' . $url . '" class="wp_geo_static_map" />';
+
+	// Map
+	$map = new WPGeo_Map();
+	$map->set_map_centre( $center_coord );
+	$map->set_map_zoom( $zoom );
+	$map->set_map_type( $map_type );
+	$map->set_size( $options['width'], $options['height'] );
+	$map->add_point( $coord );
+
+	$url = $wpgeo->api->static_map_url( $map );
+
+	return sprintf( '<img id="wp_geo_static_map_%s" src="%s" class="wp_geo_static_map" />', $post_id, esc_attr( $url ) );
 }
