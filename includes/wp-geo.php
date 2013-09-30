@@ -7,7 +7,7 @@
 class WPGeo {
 	
 	// Version Information
-	var $version    = '3.3.1';
+	var $version    = '3.3.2';
 	var $db_version = 1;
 	
 	var $api;
@@ -376,9 +376,9 @@ class WPGeo {
 		wp_register_script( 'wpgeo_admin_post', WPGEO_URL . 'js/admin-post.js', array( 'jquery', 'wpgeo' ), $this->version );
 		if ( 'googlemapsv3' == $this->get_api_string() ) {
 			$googlemaps_js = add_query_arg( array(
-				'region' => $wpgeo->get_googlemaps_locale(),
-				'key'    => $wpgeo->get_google_api_key(),
-				'sensor' => 'false'
+				'language' => $wpgeo->get_googlemaps_locale(),
+				'key'      => $wpgeo->get_google_api_key(),
+				'sensor'   => 'false'
 			), $http . '://maps.googleapis.com/maps/api/js' );
 			wp_register_script( 'googlemaps3', $googlemaps_js, false, $this->version );
 			wp_register_script( 'wpgeo', WPGEO_URL . 'js/wp-geo.v3.js', array( 'jquery', 'wpgeo_tooltip' ), $this->version );
@@ -422,6 +422,7 @@ class WPGeo {
 	/**
 	 * Get Google Maps Locale
 	 * See http://code.google.com/apis/maps/faq.html#languagesupport for link to updated languages codes.
+	 * https://spreadsheets.google.com/pub?key=p9pdwsai2hDMsLkXsoM05KQ&gid=1
 	 *
 	 * @author Alain Messin, tweaked by Ben :)
 	 *
@@ -501,8 +502,8 @@ class WPGeo {
 		}
 		$map_center_coord = new WPGeo_Coord( $coord->latitude(), $coord->longitude() );
 		
-		if ( is_numeric( $post->ID ) && $post->ID > 0 ) {
-			$settings = get_post_meta( $post->ID, WPGEO_MAP_SETTINGS_META, true );
+		if ( isset( $post ) && is_numeric( $post->ID ) && $post->ID > 0 ) {
+			$settings = WPGeo::get_post_map_settings( $post->ID );
 			if ( isset( $settings['zoom'] ) && is_numeric( $settings['zoom'] ) ) {
 				$zoom = $settings['zoom'];
 			}
@@ -567,7 +568,24 @@ class WPGeo {
 		}
 		return $content;
 	}
-	
+
+	/**
+	 * Get Post Map Settings
+	 *
+	 * @since  3.3.2
+	 *
+	 * @param   int   $post_id  Post ID.
+	 * @return  array           Post map settings array.
+	 */
+	function get_post_map_settings( $post_id ) {
+		$settings = wp_parse_args( get_post_meta( $post_id, WPGEO_MAP_SETTINGS_META, true ), array(
+			'zoom'   => '',
+			'type'   => '',
+			'centre' => ''
+		) );
+		return $settings;
+	}
+
 	/**
 	 * Get API String
 	 */
@@ -604,7 +622,7 @@ class WPGeo {
 			$coord    = get_wpgeo_post_coord( $post->ID );
 			$title    = get_wpgeo_title( $post->ID );
 			$marker   = get_post_meta( $post->ID, WPGEO_MARKER_META, true );
-			$settings = get_post_meta( $post->ID, WPGEO_MAP_SETTINGS_META, true );
+			$settings = WPGeo::get_post_map_settings( $post->ID );
 
 			$mymaptype = $maptype;
 			if ( isset( $settings['type'] ) && ! empty( $settings['type'] ) ) {
