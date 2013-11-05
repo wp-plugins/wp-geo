@@ -98,6 +98,7 @@ class WPGeo {
 			'show_map_type_physical'        => 'Y',
 			'show_map_scale'                => 'N',
 			'show_map_overview'             => 'N',
+			'show_streetview_control'       => 'N',
 			'save_post_zoom'                => 'N',
 			'save_post_map_type'            => 'N',
 			'save_post_centre_point'        => 'N',
@@ -577,7 +578,7 @@ class WPGeo {
 	 * @param   int   $post_id  Post ID.
 	 * @return  array           Post map settings array.
 	 */
-	function get_post_map_settings( $post_id ) {
+	static function get_post_map_settings( $post_id ) {
 		$settings = wp_parse_args( get_post_meta( $post_id, WPGEO_MAP_SETTINGS_META, true ), array(
 			'zoom'   => '',
 			'type'   => '',
@@ -668,6 +669,8 @@ class WPGeo {
 					$map->showMapScale( true );
 				if ( $wp_geo_options['show_map_overview'] == 'Y' )
 					$map->showMapOverview( true );
+				if ( $wp_geo_options['show_streetview_control'] == 'Y' )
+					$map->show_streetview_control( true );
 				
 				$map->setMapControl( $wp_geo_options['default_map_control'] );
 

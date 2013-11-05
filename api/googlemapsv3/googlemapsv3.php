@@ -148,15 +148,36 @@ class WPGeo_API_GoogleMapsV3 extends WPGeo_API {
 					';
 			foreach ( $maps as $map ) {
 				$center_coord = $map->get_map_centre();
+				$map_types = $map->get_map_types();
+				$map_types[] = $map->get_map_type();
+				foreach ( $map_types as $key => $type ) {
+					$map_types[$key] = apply_filters( 'wpgeo_api_string', 'google.maps.MapTypeId.ROADMAP', $type, 'maptype' );
+				}
+				$map_types = array_unique( $map_types );
+				$map_type_control = count( $map_types ) > 1 ? 1 : 0;
 				echo '
 					if (document.getElementById("' . $map->get_dom_id() . '")) {
 						var bounds = new google.maps.LatLngBounds();
 						var mapOptions = {
-							center            : new google.maps.LatLng(' . $center_coord->get_delimited() . '),
-							zoom              : ' . $map->get_map_zoom() . ',
-							mapTypeId         : ' . apply_filters( 'wpgeo_api_string', 'google.maps.MapTypeId.ROADMAP', $map->get_map_type(), 'maptype' ) . ',
-							mapTypeControl    : false, // @todo
-							streetViewControl : false // @todo
+							center             : new google.maps.LatLng(' . $center_coord->get_delimited() . '),
+							zoom               : ' . $map->get_map_zoom() . ',
+							mapTypeId          : ' . apply_filters( 'wpgeo_api_string', 'google.maps.MapTypeId.ROADMAP', $map->get_map_type(), 'maptype' ) . ',
+							mapTypeControl     : ' . $map_type_control . ',
+							mapTypeControlOptions : {
+								mapTypeIds : [' . implode( ', ', $map_types ) . ']
+							},
+							streetViewControl  : ' . (int) $map->show_control( 'streetview' ) . ',
+							scaleControl       : ' . (int) $map->show_control( 'scale' ) . ',
+							overviewMapControl : ' . (int) $map->show_control( 'overview' ) . ',
+							overviewMapControlOptions : {
+								opened : ' . (int) $map->show_control( 'overview' ) . '
+							},
+							panControl         : ' . (int) $map->show_control( 'pan' ) . ',
+							zoomControl        : ' . (int) $map->show_control( 'zoom' ) . ',
+							zoomControlOptions : {
+								' . $this->zoom_control_options_js( $map->mapcontrol ) . '
+							},
+							scrollwheel        : false
 						};
 						' . $map->get_js_id() . ' = new google.maps.Map(document.getElementById("' . $map->get_dom_id() . '"), mapOptions);
 						
@@ -190,5 +211,15 @@ class WPGeo_API_GoogleMapsV3 extends WPGeo_API {
 				</script>';
 		}
 	}
-	
+
+	/**
+	 * Zoom Control Options JS
+	 */
+	function zoom_control_options_js( $mapcontrol ) {
+		if ( in_array( $mapcontrol, array( 'GSmallMapControl', 'GSmallZoomControl3D', 'GSmallZoomControl' ) ) ) {
+			return 'style: google.maps.ZoomControlStyle.SMALL';
+		}
+		return '';
+	}
+
 }

@@ -8,7 +8,7 @@ class WPGeo_Admin {
 	var $settings;
 	var $editor;
 	var $map;
-	var $plugin_message = 'WP Geo 3.3 is a major upgrade which use Google Maps API v3. If you using a default installation of WP Geo hopefully things should just work. If you have used custom code or plugins which work with WP Geo you may need to update them to work with this version. Please <a href="https://github.com/benhuson/WP-Geo/issues">submit any bugs here...</a>';
+	var $plugin_message = '';
 	
 	function WPGeo_Admin() {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
@@ -17,6 +17,7 @@ class WPGeo_Admin {
 		add_action( 'admin_menu', array( $this, 'add_custom_boxes' ) );
 		add_action( 'save_post', array( $this, 'wpgeo_location_save_postdata' ) );
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
+		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 4 );
 		add_action( 'after_plugin_row', array( $this, 'after_plugin_row' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
@@ -80,7 +81,7 @@ class WPGeo_Admin {
 			$wp_geo_show_version_msg = get_option( 'wp_geo_show_version_msg' );
 			if ( current_user_can( 'manage_options' ) && $wp_geo_show_version_msg == 'Y' ) {
 				echo '<div id="wpgeo_version_message" class="error below-h2" style="margin:5px 15px 2px 0px;">
-						<p>' . __( 'WP Geo has been updated to use the Google Map API v3. You may need <a href="https://developers.google.com/maps/documentation/javascript/tutorial#api_key" target="_blank">create a new API key</a>, then update your WP Geo settings. If you have added custom code or plugins to work with WP Geo you may need to update them. Please <a href="https://github.com/benhuson/WP-Geo/issues">report bug issues here...</a>', 'wp-geo' ) . ' <a href="' . wp_nonce_url( add_query_arg( 'wpgeo_action', 'dismiss-update-msg', null ), 'wpgeo_dismiss_update_msg' ) . '">' . __( 'Dismiss', 'wp-geo' ) . '</a></p>
+						<p><strong style="color: #C00;">' . __( 'Important Notice: <a href="https://developers.google.com/maps/documentation/javascript/v2/reference">Version 2 of the Google Maps API will no longer be available from November 19, 2013</a>', 'wp-geo' ) . '</strong><br />' . __( 'WP Geo has been updated to support Google Map API v3. Future versions of WP Geo will no longer support the v2 API. You may need <a href="https://developers.google.com/maps/documentation/javascript/tutorial#api_key" target="_blank">create a new API key</a>, then update your WP Geo settings to use the Google Map API v3. If you have added custom code or plugins to work with WP Geo you may need to update them. Please <a href="https://github.com/benhuson/WP-Geo/issues">report bug issues here...</a>', 'wp-geo' ) . ' <a href="' . wp_nonce_url( add_query_arg( 'wpgeo_action', 'dismiss-update-msg', null ), 'wpgeo_dismiss_update_msg' ) . '">' . __( 'Dismiss', 'wp-geo' ) . '</a></p>
 					</div>';
 			}
 		}
@@ -366,19 +367,39 @@ class WPGeo_Admin {
 		
 		return $mydata;
 	}
-	
+
+	/**
+	 * Plugin Row Meta
+	 *
+	 * Adds documentation, support and issue links below the plugin description on the plugins page.
+	 *
+	 * @param   array   $plugin_meta  Plugin meta display array.
+	 * @param   string  $plugin_file  Plugin reference.
+	 * @param   array   $plugin_data  Plugin data.
+	 * @param   string  $status       Plugin status.
+	 * @return  array                 Plugin meta array.
+	 */
+	function plugin_row_meta( $plugin_meta, $plugin_file, $plugin_data, $status ) {
+		if ( 'wp-geo/wp-geo.php' == $plugin_file ) {
+			$plugin_meta[] = sprintf( '<a href="%s">%s</a>', __( 'http://github.com/benhuson/wp-geo/wiki', 'wp-geo' ), __( 'Documentation', 'wp-geo' ) );
+			$plugin_meta[] = sprintf( '<a href="%s">%s</a>', __( 'http://wordpress.org/support/plugin/wp-geo', 'wp-geo' ), __( 'Support Forum', 'wp-geo' ) );
+			$plugin_meta[] = sprintf( '<a href="%s">%s</a>', __( 'http://github.com/benhuson/wp-geo/issues', 'wp-geo' ), __( 'Submit an Issue', 'wp-geo' ) );
+		}
+		return $plugin_meta;
+	}
+
 	/**
 	 * After Plugin Row
+	 *
 	 * This function can be used to insert text after the WP Geo plugin row on the plugins page.
 	 * Useful if you need to tell people something important before they upgrade.
 	 *
-	 * @param string $plugin Plugin reference.
+	 * @param  string  $plugin  Plugin reference.
 	 */
 	function after_plugin_row( $plugin ) {
 		if ( 'wp-geo/wp-geo.php' == $plugin && ! empty( $this->plugin_message ) ) {
-			echo '<td colspan="3" class="plugin-update colspanchange" style="line-height:1.2em;"><div class="update-message" style="color:#CC0000;padding-top:3px;">' . $this->plugin_message . '</div></td>';
-			return;
+			echo '<tr><td colspan="3" class="plugin-update colspanchange" style="line-height:1.2em;"><div class="update-message" style="color:#CC0000;padding-top:3px;">' . $this->plugin_message . '</div></td></tr>';
 		}
 	}
-	
+
 }
