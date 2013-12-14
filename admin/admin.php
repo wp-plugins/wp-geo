@@ -14,7 +14,8 @@ class WPGeo_Admin {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_head', array( $this, 'admin_head' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'admin_menu', array( $this, 'add_custom_boxes' ) );
+		add_action( 'admin_menu', array( $this, 'add_meta_boxes' ) );
+		add_action( 'edit_attachment', array( $this, 'wpgeo_location_save_postdata' ) );
 		add_action( 'save_post', array( $this, 'wpgeo_location_save_postdata' ) );
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 4 );
@@ -37,7 +38,7 @@ class WPGeo_Admin {
 		
 		$this->map = new WPGeo_Map( 'admin_post' );
 		
-		add_action( 'admin_enqueue_scripts', array( $wpgeo, 'includeGoogleMapsJavaScriptAPI' ) );
+		add_action( 'admin_enqueue_scripts', array( $wpgeo, 'enqueue_scripts' ) );
 		
 		// Only show editor if Google API Key valid
 		if ( $wpgeo->checkGoogleAPIKey() ) {
@@ -77,11 +78,11 @@ class WPGeo_Admin {
 			}
 		}
 		// Version upgrade message
-		if ( in_array( $current_screen->id, array( 'settings_page_wp-geo', 'plugins' ) ) ) {
+		if ( in_array( $current_screen->id, array( 'settings_page_wp-geo' ) ) ) {
 			$wp_geo_show_version_msg = get_option( 'wp_geo_show_version_msg' );
 			if ( current_user_can( 'manage_options' ) && $wp_geo_show_version_msg == 'Y' ) {
 				echo '<div id="wpgeo_version_message" class="error below-h2" style="margin:5px 15px 2px 0px;">
-						<p><strong style="color: #C00;">' . __( 'Important Notice: <a href="https://developers.google.com/maps/documentation/javascript/v2/reference">Version 2 of the Google Maps API will no longer be available from November 19, 2013</a>', 'wp-geo' ) . '</strong><br />' . __( 'WP Geo has been updated to support Google Map API v3. Future versions of WP Geo will no longer support the v2 API. You may need <a href="https://developers.google.com/maps/documentation/javascript/tutorial#api_key" target="_blank">create a new API key</a>, then update your WP Geo settings to use the Google Map API v3. If you have added custom code or plugins to work with WP Geo you may need to update them. Please <a href="https://github.com/benhuson/WP-Geo/issues">report bug issues here...</a>', 'wp-geo' ) . ' <a href="' . wp_nonce_url( add_query_arg( 'wpgeo_action', 'dismiss-update-msg', null ), 'wpgeo_dismiss_update_msg' ) . '">' . __( 'Dismiss', 'wp-geo' ) . '</a></p>
+						<p><strong style="color: #C00;">' . __( 'Important Notice: <a href="https://developers.google.com/maps/documentation/javascript/v2/reference">Version 2 of the Google Maps API is no longer available</a>', 'wp-geo' ) . '</strong><br />' . __( 'WP Geo has been updated to support Google Map API v3. The v2 API will be completed removed from future versions of WP Geo. You may need <a href="https://developers.google.com/maps/documentation/javascript/tutorial#api_key" target="_blank">create a new API key</a>, then update your WP Geo settings to use the Google Map API v3. If you have added custom code or plugins to work with WP Geo you may need to update them. Please <a href="https://github.com/benhuson/WP-Geo/issues">report bug issues here...</a>', 'wp-geo' ) . ' <a href="' . wp_nonce_url( add_query_arg( 'wpgeo_action', 'dismiss-update-msg', null ), 'wpgeo_dismiss_update_msg' ) . '">' . __( 'Dismiss', 'wp-geo' ) . '</a></p>
 					</div>';
 			}
 		}
@@ -126,7 +127,7 @@ class WPGeo_Admin {
 	function options_page() {
 		global $wpgeo;
 		$wp_geo_options = get_option( 'wp_geo_options' );
-		
+
 		echo '<div class="wrap">
 			<div id="icon-options-wpgeo" class="icon32" style="background: url(' . WPGEO_URL . 'img/logo/icon32.png) 2px 1px no-repeat;"><br></div>
 			<h2>' . __( 'WP Geo Settings', 'wp-geo' ) . '</h2>
@@ -143,39 +144,31 @@ class WPGeo_Admin {
 				' . $wpgeo->markers->get_admin_display();
 		echo '<h2 style="margin-top:30px;">' . __( 'Documentation', 'wp-geo' ) . '</h2>'
 			. __( '<p>If you set the Show Post Map setting to &quot;Manual&quot;, you can use the Shortcode <code>[wp_geo_map]</code> in a post to display a map (if a location has been set for the post). You can only include the Shortcode once within a post. If you select another Show Post Map option then the Shortcode will be ignored and the map will be positioned automatically.</p>', 'wp-geo' )
-			. '<h2 style="margin-top:30px;">' . __( 'Feedback', 'wp-geo' ) . '</h2>'
-			. '<p>' . sprintf( __( "If you require help or support with WP Geo, please visit the <a %s>WordPress Support Forums</a>.", 'wp-geo' ), 'href="http://wordpress.org/support/plugin/wp-geo" target="_blank"' ) . '</p>'
-			. '<p>' . sprintf( __( "If you experience any problems or bugs with the plugin, or want to suggest an improvement, please visit the new <a %s>GitHib Issues</a> page to log your issue.", 'wp-geo' ), 'href="https://github.com/benhuson/WP-Geo/issues" target="_blank"' ) . '</p>'
-			. '<p>' . sprintf( __( "If you like WP Geo and would like to make a donation, please do so on the <a %s>WP Geo website</a>. Your contributions help to ensure that I can dedicate more time to the support and development of the plugin.", 'wp-geo' ), 'href="http://www.wpgeo.com/donate" target="_blank"' ) . '</p>
-		</div>';
+			. '</div>';
 	}
-	
+
 	/**
-	 * Add Custom Meta Boxes
+	 * Add WP Geo Meta Boxes
 	 *
-	 * @todo Check if should be added to pages/posts.
+	 * Adds meta boxes to all supported post types which have been regsitered using add_post_type_support().
+	 * Use the wpgeo_add_post_type_support action to add/remove post type support.
 	 */
-	function add_custom_boxes() {
-		global $wpgeo, $post;
-		
+	function add_meta_boxes() {
+		global $wpgeo;
+
+		// Check we can display a map
 		if ( ! $wpgeo->checkGoogleAPIKey() )
 			return;
-		
-		add_meta_box( 'wpgeo_location', __( 'WP Geo Location', 'wpgeo' ), array( $this, 'wpgeo_location_inner_custom_box' ), 'post', 'advanced' );
-		add_meta_box( 'wpgeo_location', __( 'WP Geo Location', 'wpgeo' ), array( $this, 'wpgeo_location_inner_custom_box' ), 'page', 'advanced' );
-		
-		// Support for custom post types
-		if ( function_exists( 'get_post_types' ) && function_exists( 'post_type_supports' ) ) {
-			$post_types = get_post_types();
-			foreach ( $post_types as $post_type ) {
-				$post_type_object = get_post_type_object( $post_type );
-				if ( post_type_supports( $post_type, 'wpgeo' ) ) {
-					add_meta_box( 'wpgeo_location', __( 'WP Geo Location', 'wpgeo' ), array( $this, 'wpgeo_location_inner_custom_box' ), $post_type, 'advanced' );
-				}
+
+		// Only add for supported post types
+		$post_types = get_post_types();
+		foreach ( $post_types as $post_type ) {
+			if ( $wpgeo->post_type_supports( $post_type ) ) {
+				add_meta_box( 'wpgeo_location', __( 'WP Geo Location', 'wpgeo' ), array( $this, 'wpgeo_location_inner_custom_box' ), $post_type, 'advanced' );
 			}
 		}
 	}
-	
+
 	/**
 	 * WP Geo Location Inner Custom Box
 	 */
@@ -289,7 +282,7 @@ class WPGeo_Admin {
 	 */
 	function wpgeo_location_save_postdata( $post_id ) {
 		global $wpgeo;
-		
+
 		if ( ! $wpgeo->checkGoogleAPIKey() )
 			return;
 		
@@ -362,6 +355,7 @@ class WPGeo_Admin {
 		if ( isset( $_POST['wpgeo_map_settings_centre'] ) && ! empty( $_POST['wpgeo_map_settings_centre'] ) ) {
 			$settings['centre'] = $_POST['wpgeo_map_settings_centre'];
 		}
+
 		add_post_meta( $post_id, WPGEO_MAP_SETTINGS_META, $settings );
 		$mydata[WPGEO_MAP_SETTINGS_META] = $settings;
 		
