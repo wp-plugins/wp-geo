@@ -134,8 +134,9 @@ function wpgeo_map_link( $args = null ) {
 	$coord = new WPGeo_Coord( $r['latitude'], $r['longitude'] );
 	if ( ! $coord->is_valid_coord() ) {
 		$coord = get_wpgeo_post_coord( $r['post_id'] );
-		if ( ! $coord->is_valid_coord() )
+		if ( ! $coord->is_valid_coord() ) {
 			return '';
+		}
 	}
 
 	// Fetch wp geo options & post settings
@@ -157,8 +158,9 @@ function wpgeo_map_link( $args = null ) {
 	$url = apply_filters( 'wpgeo_map_link', $url, $r );
 
 	// Output
-	if ( $r['echo'] == 0 )
+	if ( $r['echo'] == 0 ) {
 		return $url;
+	}
 	echo $url;
 }
 
@@ -202,8 +204,9 @@ function get_wpgeo_post_map( $post_id = 0, $args = null ) {
 	$show_post_map = apply_filters( 'wpgeo_show_post_map', $wp_geo_options['show_post_map'], $post_id );
 	
 	$coord = get_wpgeo_post_coord( $post_id );
-	if ( ! $coord->is_valid_coord() )
+	if ( ! $coord->is_valid_coord() ) {
 		return '';
+	}
 	
 	if ( $post_id > 0 && ! is_feed() ) {
 		if ( $wpgeo->show_maps() && $show_post_map != 'TOP' && $show_post_map != 'BOTTOM' && $wpgeo->checkGoogleAPIKey() ) {
@@ -212,10 +215,12 @@ function get_wpgeo_post_map( $post_id = 0, $args = null ) {
 			$marker_meta = empty( $marker_meta ) ? 'large' : $marker_meta;
 			$title_meta = get_post_meta( $post_id, WPGEO_TITLE_META, true );
 			$title_meta = empty( $title_meta ) ? get_the_title( $post_id ) : $title_meta;
-			if ( is_numeric( $meta['zoom'] ) )
+			if ( is_numeric( $meta['zoom'] ) ) {
 				$args['zoom'] = $meta['zoom'];
-			if ( ! empty( $meta['type'] ) )
+			}
+			if ( ! empty( $meta['type'] ) ) {
 				$args['maptype'] = $meta['type'];
+			}
 			$center_coord = $coord;
 			if ( ! empty( $meta['centre'] ) ) {
 				$center = explode( ',', $meta['centre'] );
@@ -223,20 +228,23 @@ function get_wpgeo_post_map( $post_id = 0, $args = null ) {
 			}
 			
 			$map = new WPGeo_Map( $post_id );
-			if ( $center_coord->is_valid_coord() )
+			if ( $center_coord->is_valid_coord() ) {
 				$map->set_map_centre( $center_coord );
+			}
 			$map->set_map_zoom( $args['zoom'] );
 			$map->set_map_type( $args['maptype'] );
 			$map->add_point( $coord, array(
 				'icon'  => apply_filters( 'wpgeo_marker_icon', $marker_meta, $this_post, 'post' ),
 				'title' => $title_meta,
-				'link'  => get_permalink( $this_post ),
+				'link'  => apply_filters( 'wpgeo_marker_link', get_permalink( $this_post ), $this_post ),
 				'post'  => $this_post
 			) );
-			if ( ! empty( $args['width'] ) )
+			if ( ! empty( $args['width'] ) ) {
 				$map->set_width( $args['width'] );
-			if ( ! empty( $args['height'] ) )
+			}
+			if ( ! empty( $args['height'] ) ) {
 				$map->set_height( $args['height'] );
+			}
 			
 			$map = $wpgeo->maps->add_map( $map );
 			return $map->get_map_html( $args );
@@ -312,6 +320,7 @@ function get_wpgeo_map( $query, $options = null ) {
 		'type'            => $wp_geo_options['google_map_type'],
 		'polylines'       => $wp_geo_options['show_polylines'],
 		'polyline_colour' => $wp_geo_options['polyline_colour'],
+		'zoom'            => $wp_geo_options['default_map_zoom'],
 		'align'           => 'none',
 		'numberposts'     => -1,
 		'posts_per_page'  => -1,
@@ -326,6 +335,7 @@ function get_wpgeo_map( $query, $options = null ) {
         'exclude'         => null,
         'meta_key'        => null,
         'meta_value'      => null,
+        'post_ids'        => '',
         'post_mime_type'  => null,
         'post_parent'     => null
 	) );
@@ -338,14 +348,23 @@ function get_wpgeo_map( $query, $options = null ) {
 	if ( $r['posts_per_page'] < $r['numberposts'] ) {
 		$r['posts_per_page'] = $r['numberposts'];
 	}
-	
+
+	// Set 'post__in' if 'post_ids' set, but don't overwrite.
+	if ( ! empty( $r['post_ids'] ) && empty( $r['post__in'] ) ) {
+		if ( is_array( $r['post_ids'] ) ) {
+			$r['post__in'] = $r['post_ids'];
+		} else {
+			$r['post__in'] = explode( ',', $r['post_ids'] );
+		}
+	}
+
 	$posts = get_posts( $r );
 	
 	// Map
 	$map = new WPGeo_Map( 'id_' . $wpgeo_map_id );
 	$map->set_size( $r['width'], $r['height'] );
 	$map->set_map_centre( new WPGeo_Coord( $wp_geo_options['default_map_latitude'], $wp_geo_options['default_map_longitude'] ) );
-	$map->set_map_zoom( $wp_geo_options['default_map_zoom'] );
+	$map->set_map_zoom( $r['zoom'] );
 	$map->set_map_type( $r['type'] );
 	
 	// Points
@@ -354,12 +373,13 @@ function get_wpgeo_map( $query, $options = null ) {
 			$coord = get_wpgeo_post_coord( $post->ID );
 			if ( $coord->is_valid_coord() ) {
 				$marker = get_post_meta( $post->ID, WPGEO_MARKER_META, true );
-				if ( empty( $marker ) )
+				if ( empty( $marker ) ) {
 					$marker = $r['markers'];
+				}
 				$map->add_point( $coord, array(
 					'icon'  => apply_filters( 'wpgeo_marker_icon', $marker, $post, 'template' ),
 					'title' => get_wpgeo_title( $post->ID ),
-					'link'  => get_permalink( $post ),
+					'link'  => apply_filters( 'wpgeo_marker_link', get_permalink( $post ), $post ),
 					'post'  => $post
 				) );
 			}
@@ -373,7 +393,7 @@ function get_wpgeo_map( $query, $options = null ) {
 				'color' => $r['polyline_colour']
 			) );
 			foreach ( $map->points as $point ) {
-				$polyline->add_coord( $point->coord );
+				$polyline->add_coord( $point->get_coord() );
 			}
 			$map->add_polyline( $polyline );
 		}
@@ -422,12 +442,14 @@ function get_wpgeo_post_static_map( $post_id = 0, $query = null ) {
 	$post_id = $post_id > 0 ? $post_id : $post->ID;
 
 	// Show Map?
-	if ( ! $post_id || is_feed() || ! $wpgeo->show_maps() || ! $wpgeo->checkGoogleAPIKey() )
+	if ( ! $post_id || is_feed() || ! $wpgeo->show_maps() || ! $wpgeo->checkGoogleAPIKey() ) {
 		return '';
+	}
 
 	$coord = get_wpgeo_post_coord( $post_id );
-	if ( ! $coord->is_valid_coord() )
+	if ( ! $coord->is_valid_coord() ) {
 		return '';
+	}
 
 	// Fetch wp geo options & post settings
 	$wp_geo_options = get_option( 'wp_geo_options' );
@@ -442,8 +464,9 @@ function get_wpgeo_post_static_map( $post_id = 0, $query = null ) {
 	) );
 
 	// Can't do percentage sizes so abort
-	if ( strpos( $options['width'], '%' ) !== false || strpos( $options['height'], '%' ) !== false )
+	if ( strpos( $options['width'], '%' ) !== false || strpos( $options['height'], '%' ) !== false ) {
 		return '';
+	}
 
 	// Map Options
 	$zoom = isset( $settings['zoom'] ) && is_numeric( $settings['zoom'] ) ? $settings['zoom'] : $options['zoom'];

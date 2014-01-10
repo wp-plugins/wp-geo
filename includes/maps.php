@@ -224,8 +224,9 @@ class WPGeo_Map {
 	 * @return  object   WPGeo_Point.
 	 */
 	function get_point( $n = 0 ) {
-		if ( count( $this->points ) >= $n + 1 )
+		if ( count( $this->points ) >= $n + 1 ) {
 			return $this->points[$n];
+		}
 		return false;
 	}
 
@@ -423,13 +424,13 @@ class WPGeo_Map {
  * Polyline Class
  */
 class WPGeo_Polyline {
-	
+
 	var $coords    = array();
 	var $geodesic  = true;
 	var $color     = '#FFFFFF';
 	var $thickness = 2;
 	var $opacity   = 0.5;
-	
+
 	/**
 	 * Constructor
 	 *
@@ -449,7 +450,7 @@ class WPGeo_Polyline {
 		$this->thickness = $args['thickness'];
 		$this->opacity   = $args['opacity'];
 	}
-	
+
 	/**
 	 * Add Coord
 	 *
@@ -463,25 +464,82 @@ class WPGeo_Polyline {
 			$this->coords[] = new WPGeo_Coord( $coord, $longitude );
 		}
 	}
-	
+
+	/**
+	 * Get Coords
+	 *
+	 * @return  array  Array of WPGeo_Coord objects.
+	 */
+	function get_coords() {
+		return $this->coords;
+	}
+
+	/**
+	 * Get Geodesic
+	 *
+	 * @return  string  Geodesic.
+	 */
+	function get_geodesic() {
+		return $this->geodesic;
+	}
+
+	/**
+	 * Is Geodesic?
+	 *
+	 * @return  bool  Is geodesic display.
+	 */
+	function is_geodesic() {
+		if ( $this->geodesic ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Get Color
+	 *
+	 * @return  string  Color.
+	 */
+	function get_color() {
+		return $this->color;
+	}
+
+	/**
+	 * Get Thickness
+	 *
+	 * @return  string  Thickness.
+	 */
+	function get_thickness() {
+		return $this->thickness;
+	}
+
+	/**
+	 * Get Opacity
+	 *
+	 * @return  string  Opacity.
+	 */
+	function get_opacity() {
+		return $this->opacity;
+	}
+
 }
 
 /**
  * Point Class
  */
 class WPGeo_Point {
-	
+
 	var $coord = null;
 	var $args  = null;
 	var $icon  = 'large';
 	var $title = '';
 	var $link  = '';
-	
+
 	/**
 	 * Constructor
 	 *
-	 * @param float $latitude Latitude.
-	 * @param float $longitude Longitude.
+	 * @param  object  $coord  WPGeo_Coord object.
+	 * @param  array   $args   Point arguments.
 	 */
 	function WPGeo_Point( $coord, $args = null ) {
 		$args = wp_parse_args( $args, array(
@@ -495,7 +553,55 @@ class WPGeo_Point {
 		$this->title = $args['title'];
 		$this->link  = $args['link'];
 	}
-	
+
+	/**
+	 * Get Coord
+	 *
+	 * @return  object  WPGeo_Coord.
+	 */
+	function get_coord() {
+		return $this->coord;
+	}
+
+	/**
+	 * Get Arg
+	 *
+	 * @return  mixed  Argument value.
+	 */
+	function get_arg( $key ) {
+		if ( is_array( $this->args ) && isset( $this->args[$key] ) ) {
+			return $this->args[$key];
+		}
+		return null;
+	}
+
+	/**
+	 * Get Icon
+	 *
+	 * @return  string  Icon string.
+	 */
+	function get_icon() {
+		return $this->icon;
+	}
+
+	/**
+	 * Get Title
+	 *
+	 * @return  string  Title string.
+	 */
+	function get_title() {
+		return $this->icon;
+	}
+
+	/**
+	 * Get Link
+	 *
+	 * @return  string  URL.
+	 */
+	function get_link() {
+		return $this->link;
+	}
+
 }
 
 /**
@@ -529,8 +635,9 @@ class WPGeo_Coord {
 	 * @return bool
 	 */
 	function is_valid_coord() {
-		if ( is_numeric( $this->latitude ) && is_numeric( $this->longitude ) )
+		if ( is_numeric( $this->latitude ) && is_numeric( $this->longitude ) ) {
 			return true;
+		}
 		return false;
 	}
 

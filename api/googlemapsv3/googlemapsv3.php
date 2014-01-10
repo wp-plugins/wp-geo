@@ -101,21 +101,25 @@ class WPGeo_API_GoogleMapsV3 extends WPGeo_API {
 	function get_markers_js( $map ) {
 		$markers = '';
 		for ( $i = 0; $i < count( $map->points ); $i++ ) {
-			$post_icon = isset( $map->points[$i]->icon ) ? $map->points[$i]->icon : 'small';
+			$coord     = $map->points[$i]->get_coord();
+			$post      = $map->points[$i]->get_arg( 'post' );
+			$post_icon = $map->points[$i]->get_icon();
+			$link      = $map->points[$i]->get_link();
+			$title     = $map->points[$i]->get_title();
 			$icon = 'wpgeo_icon_' . $post_icon;
-			if ( isset( $map->points[$i]->args['post'] ) ) {
-				$icon = 'wpgeo_icon_' . apply_filters( 'wpgeo_marker_icon', $post_icon, $map->points[$i]->args['post'], 'widget' );
+			if ( ! is_null( $post ) ) {
+				$icon = 'wpgeo_icon_' . apply_filters( 'wpgeo_marker_icon', $post_icon, $post, 'widget' );
 			}
-			$markers .= 'var marker_' . $i . '_' . $map->get_js_id() . ' = new google.maps.Marker({ position:new google.maps.LatLng(' . $map->points[$i]->coord->get_delimited() . '), map:' . $map->get_js_id() . ', icon: ' . $icon . ' });' . "\n";
-			if ( ! empty( $map->points[$i]->link ) ) {
+			$markers .= 'var marker_' . $i . '_' . $map->get_js_id() . ' = new google.maps.Marker({ position:new google.maps.LatLng(' . $coord->get_delimited() . '), map:' . $map->get_js_id() . ', icon: ' . $icon . ' });' . "\n";
+			if ( ! empty( $link ) ) {
 				$markers .= 'google.maps.event.addListener(marker_' . $i . '_' . $map->get_js_id() . ', "click", function() {
-						window.location.href = "' . $map->points[$i]->link . '";
+						window.location.href = "' . $link . '";
 					});
 					';
 			}
-			if ( ! empty( $map->points[$i]->title ) ) {
+			if ( ! empty( $title ) ) {
 				$markers .= '
-					var tooltip_' . $i . '_' . $map->get_js_id() . ' = new Tooltip(marker_' . $i . '_' . $map->get_js_id() . ', \'' . esc_js( $map->points[$i]->title ) . '\');
+					var tooltip_' . $i . '_' . $map->get_js_id() . ' = new Tooltip(marker_' . $i . '_' . $map->get_js_id() . ', \'' . esc_js( $title ) . '\');
 					google.maps.event.addListener(marker_' . $i . '_' . $map->get_js_id() . ', "mouseover", function() {
 						tooltip_' . $i . '_' . $map->get_js_id() . '.show();
 					});
@@ -124,7 +128,7 @@ class WPGeo_API_GoogleMapsV3 extends WPGeo_API {
 					});
 					';
 			}
-			$markers .= 'bounds.extend(new google.maps.LatLng(' . $map->points[$i]->coord->get_delimited() . '));' . "\n";
+			$markers .= 'bounds.extend(new google.maps.LatLng(' . $coord->get_delimited() . '));' . "\n";
 		}
 		return $markers;
 	}
@@ -135,15 +139,16 @@ class WPGeo_API_GoogleMapsV3 extends WPGeo_API {
 			$count = 1;
 			foreach ( $map->polylines as $polyline ) {
 				$polyline_js_3_coords = array();
-				foreach ( $polyline->coords as $c ) {
+				$coords = $polyline->get_coords();
+				foreach ( $coords as $c ) {
 					$polyline_js_3_coords[] = 'new google.maps.LatLng(' . $c->get_delimited() . ')';
 				}
 				$polylines = 'var polyline_' . $count . '_' . $map->get_js_id() . ' = new google.maps.Polyline({
 						path          : [' . implode( ',', $polyline_js_3_coords ) . '],
-						strokeColor   : "' . $polyline->color . '",
-						strokeOpacity : ' . $polyline->opacity . ',
-						strokeWeight  : ' . $polyline->thickness . ',
-						geodesic      : ' . $polyline->geodesic . ',
+						strokeColor   : "' . $polyline->get_color() . '",
+						strokeOpacity : ' . $polyline->get_opacity() . ',
+						strokeWeight  : ' . $polyline->get_thickness() . ',
+						geodesic      : ' . $polyline->get_geodesic() . ',
 						map           : ' . $map->get_js_id() . '
 					});';
 				$count++;
