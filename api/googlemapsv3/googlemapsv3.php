@@ -15,6 +15,7 @@ class WPGeo_API_GoogleMapsV3 extends WPGeo_API {
 		add_filter( 'wpgeo_decode_api_string', array( $this, 'wpgeo_decode_api_string' ), 10, 3 );
 		add_action( 'wpgeo_api_googlemapsv3_js', array( $this, 'wpgeo_js' ) );
 		add_filter( 'wpgeo_api_googlemapsv3_markericon', array( $this, 'wpgeo_api_googlemapsv3_markericon' ), 10, 2 );
+		add_filter( 'wpgeo_check_google_api_key', array( $this, 'check_google_api_key' ) );
 	}
 
 	/**
@@ -26,14 +27,39 @@ class WPGeo_API_GoogleMapsV3 extends WPGeo_API {
 	 */
 	function wpgeo_register_scripts() {
 		global $wpgeo;
-		$googlemaps_js = add_query_arg( array(
-			'language' => $wpgeo->get_googlemaps_locale(),
-			'key'      => $wpgeo->get_google_api_key(),
-			'sensor'   => 'false'
-		), '//maps.googleapis.com/maps/api/js' );
-		wp_register_script( 'googlemaps3', $googlemaps_js, false, $wpgeo->version );
+		wp_register_script( 'googlemaps3', $this->get_googlemaps3_script_url(), false, $wpgeo->version );
 		wp_register_script( 'wpgeo', WPGEO_URL . 'js/wp-geo.v3.js', array( 'jquery', 'wpgeo_tooltip' ), $wpgeo->version );
 		wp_register_script( 'wpgeo_admin_post_googlemaps3', WPGEO_URL . 'api/googlemapsv3/js/admin-post.js', array( 'jquery', 'wpgeo_admin_post', 'googlemaps3' ), $wpgeo->version );
+	}
+
+	/**
+	 * Check Google API Key
+	 *
+	 * Always return true as Google Maps API v3 does not require the API key.
+	 *
+	 * @param   bool  $bool  Is an API key set?
+	 * @return  bool
+	 */
+	public function check_google_api_key( $bool ) {
+		return true;
+	}
+
+	/**
+	 * Get Google Maps v3 Script URL
+	 *
+	 * @return  string  Google Maps API v3 URL.
+	 */
+	function get_googlemaps3_script_url() {
+		global $wpgeo;
+		$googlemaps_js_args = array(
+			'language' => $wpgeo->get_googlemaps_locale(),
+			'sensor'   => 'false'
+		);
+		$api_key = $wpgeo->get_google_api_key();
+		if ( ! empty( $api_key ) ) {
+			$googlemaps_js_args['key'] = $api_key;
+		}
+		return add_query_arg( $googlemaps_js_args, '//maps.googleapis.com/maps/api/js' );
 	}
 
 	/**

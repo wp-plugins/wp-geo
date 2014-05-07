@@ -7,7 +7,7 @@
 class WPGeo {
 	
 	// Version Information
-	var $version    = '3.3.7';
+	var $version    = '3.3.8';
 	var $db_version = 1;
 	
 	var $api;
@@ -158,32 +158,32 @@ class WPGeo {
 
 	/**
 	 * Check Google API Key
-	 * Check that a Google API Key has been entered.
 	 *
-	 * @return boolean
+	 * Check that a Google API Key has been entered.
+	 * Can be overridden by the filter if it is not required.
+	 *
+	 * @return  boolean
 	 */
 	function checkGoogleAPIKey() {
-		global $wpgeo;
-		
-		$wp_geo_options = get_option( 'wp_geo_options' );
-		$api_key = $wpgeo->get_google_api_key();
-		if ( empty( $api_key ) || ! isset( $api_key ) ) {
-			return false;
-		}
-		return true;
+		$api_key = $this->get_google_api_key();
+		return apply_filters( 'wpgeo_check_google_api_key', ! empty( $api_key ) );
 	}
-	
+
 	/**
 	 * Get Google API Key
-	 * Gets the Google API Key. Passes it through a filter so it can be overriden by another plugin.
 	 *
-	 * @return string API Key.
+	 * Gets the Google API Key. Passes it through a filter so it can be overriden by API or another plugin.
+	 *
+	 * @return  string  API Key.
 	 */
 	function get_google_api_key() {
 		$wp_geo_options = get_option( 'wp_geo_options' );
+		if ( ! isset( $wp_geo_options['google_api_key'] ) ) {
+			$wp_geo_options['google_api_key'] = '';
+		}
 		return apply_filters( 'wpgeo_google_api_key', $wp_geo_options['google_api_key'] );
 	}
-	
+
 	/**
 	 * Category Map
 	 * Outputs the HTML for a category map.
@@ -522,7 +522,6 @@ class WPGeo {
 		}
 		
 		// Vars
-		$google_maps_api_key = $wpgeo->get_google_api_key();
 		$panel_open = ! $hide_marker || $panel_open ? '.removeClass("closed")' : '';
 		
 		$wpgeo_admin_vars = array(
