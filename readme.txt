@@ -1,12 +1,12 @@
 === WP Geo  ===
 Contributors: husobj
-Donate link: http://www.wpgeo.com/donate
 Tags: maps, map, geo, geocoding, google, location, georss
-Requires at least: 3.5
-Tested up to: 3.9
-Stable tag: 3.3.8
+Donate link: http://www.benhuson.co.uk/donate/
+Requires at least: 3.7
+Tested up to: 4.2
+Stable tag: 3.3.9
 License: GPLv3
-License URI: http://www.gnu.org/licenses/gpl.html
+License URI: http://www.opensource.org/licenses/gpl-license.php
 
 Adds location maps to your posts, pages and custom post types.
 
@@ -63,6 +63,7 @@ WP Geo is currently available in the following languages:
 * German (by [Ivan Graf](http://blog.bildergallery.com/))
 * Italian (by Diego Pierotto)
 * Russian (by [Fat Cower](http://www.fatcow.com/))
+* Serbian (by Borisa Djuraskovic - [Web Hosting Hub](http://www.webhostinghub.com/))
 * Spanish (by Alberto)
 
 == Installation ==
@@ -95,6 +96,14 @@ None at the moment.
 4. Widget Settings
 
 == Changelog ==
+
+= WP Geo 3.3.9 =
+
+* Security fix: Escape URLs that use add_query_arg() or remove_query_arg().
+* Only load admin scripts for post types that support WP Geo.
+* Prevent widgets from overwriting global $post variable.
+* Added Serbian translation. Props Borisa Djuraskovic.
+* Tested up to WordPress 4.2
 
 = WP Geo 3.3.8 =
 
@@ -443,8 +452,11 @@ NOTE: You will need to re-add your widgets after upgrading!
 
 == Upgrade Notice ==
 
+= 3.3.9 =
+Security fix: Escape URLs that use add_query_arg() or remove_query_arg(). Also prevent widgets from overwriting global $post variable.
+
 = 3.3.8 =
-* Fixed a JavaScript error that was breaking other scripts and Google Maps API v3 URL does not require API key.
+Fixed a JavaScript error that was breaking other scripts and Google Maps API v3 URL does not require API key.
 
 = 3.3.7 =
 Only load admin JavaScript on edit post pages - fixes Jetpack plugin conflict.

@@ -59,21 +59,28 @@ class WPGeo_API_GoogleMapsV3 extends WPGeo_API {
 		if ( ! empty( $api_key ) ) {
 			$googlemaps_js_args['key'] = $api_key;
 		}
-		return add_query_arg( $googlemaps_js_args, '//maps.googleapis.com/maps/api/js' );
+		return esc_url_raw( add_query_arg( $googlemaps_js_args, '//maps.googleapis.com/maps/api/js' ) );
 	}
 
 	/**
 	 * Enqueue WP Geo Scripts
 	 */
 	function wpgeo_enqueue_scripts() {
+
+		global $wpgeo;
+
 		wp_enqueue_script( 'wpgeo' );
 		wp_enqueue_script( 'googlemaps3' );
+
 		if ( is_admin() ) {
-			$screen = get_current_screen();
-			if ( 'post' == $screen->base ) {
-				wp_enqueue_script( 'wpgeo_admin_post_googlemaps3' );
+			if ( $wpgeo->admin->show_on_admin_screen() ) {
+				$screen = get_current_screen();
+				if ( 'post' == $screen->base ) {
+					wp_enqueue_script( 'wpgeo_admin_post_googlemaps3' );
+				}
 			}
 		}
+
 	}
 
 	/**

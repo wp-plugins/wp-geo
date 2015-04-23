@@ -54,7 +54,7 @@ class WPGeo_Admin {
 				update_option( 'wp_geo_show_version_msg', 'N' );
 				$url = remove_query_arg( 'wpgeo_action', $_SERVER['PHP_SELF'] );
 				$url = remove_query_arg( '_wpnonce', $url );
-				wp_redirect( $url );
+				wp_redirect( esc_url_raw( $url ) );
 				exit();
 			}
 		}
@@ -82,7 +82,7 @@ class WPGeo_Admin {
 			$wp_geo_show_version_msg = get_option( 'wp_geo_show_version_msg' );
 			if ( current_user_can( 'manage_options' ) && $wp_geo_show_version_msg == 'Y' ) {
 				echo '<div id="wpgeo_version_message" class="error below-h2" style="margin:5px 15px 2px 0px;">
-						<p><strong style="color: #C00;">' . __( 'Important Notice: <a href="https://developers.google.com/maps/documentation/javascript/v2/reference">Version 2 of the Google Maps API is no longer available</a>', 'wp-geo' ) . '</strong><br />' . __( 'WP Geo has been updated to support Google Map API v3. The v2 API will be completed removed from future versions of WP Geo. You may need <a href="https://developers.google.com/maps/documentation/javascript/tutorial#api_key" target="_blank">create a new API key</a>, then update your WP Geo settings to use the Google Map API v3. If you have added custom code or plugins to work with WP Geo you may need to update them. Please <a href="https://github.com/benhuson/WP-Geo/issues">report bug issues here...</a>', 'wp-geo' ) . ' <a href="' . wp_nonce_url( add_query_arg( 'wpgeo_action', 'dismiss-update-msg', null ), 'wpgeo_dismiss_update_msg' ) . '">' . __( 'Dismiss', 'wp-geo' ) . '</a></p>
+						<p><strong style="color: #C00;">' . __( 'Important Notice: <a href="https://developers.google.com/maps/documentation/javascript/v2/reference">Version 2 of the Google Maps API is no longer available</a>', 'wp-geo' ) . '</strong><br />' . __( 'WP Geo has been updated to support Google Map API v3. The v2 API will be completed removed from future versions of WP Geo. You may need <a href="https://developers.google.com/maps/documentation/javascript/tutorial#api_key" target="_blank">create a new API key</a>, then update your WP Geo settings to use the Google Map API v3. If you have added custom code or plugins to work with WP Geo you may need to update them. Please <a href="https://github.com/benhuson/WP-Geo/issues">report bug issues here...</a>', 'wp-geo' ) . ' <a href="' . wp_nonce_url( esc_url( add_query_arg( 'wpgeo_action', 'dismiss-update-msg' ) ), 'wpgeo_dismiss_update_msg' ) . '">' . __( 'Dismiss', 'wp-geo' ) . '</a></p>
 					</div>';
 			}
 		}
@@ -92,7 +92,11 @@ class WPGeo_Admin {
 	 * Admin Enqueue Scripts & Styles
 	 */
 	function admin_enqueue_scripts() {
-		wp_enqueue_style( 'wpgeo_admin', WPGEO_URL . 'css/wp-geo.css' );
+
+		if ( $this->show_on_admin_screen() ) {
+			wp_enqueue_style( 'wpgeo_admin', WPGEO_URL . 'css/wp-geo.css' );
+		}
+
 	}
 	
 	/**
@@ -103,14 +107,46 @@ class WPGeo_Admin {
 		global $wpgeo, $post_ID;
 		
 		// Only load if on a post or page
-		if ( $wpgeo->show_maps() ) {
+		if ( $this->show_on_admin_screen() && $wpgeo->show_maps() ) {
 			$coord = get_wpgeo_post_coord( $post_ID );
 			if ( ! $wpgeo->show_maps_external ) {
 				echo $wpgeo->mapScriptsInit( $coord, 13, false, false );
 			}
 		}
 	}
-	
+
+	/**
+	 * Show on Admin Screen
+	 *
+	 * Ensures scripts are only loaded in admin on screens where needed.
+	 */
+	function show_on_admin_screen() {
+
+		global $wpgeo;
+
+		if ( is_admin() ) {
+
+			$screen = get_current_screen();
+
+			if ( $screen ) {
+
+				if ( $wpgeo->post_type_supports( $screen->post_type ) ) {
+					return true;
+				}
+
+			} else {
+
+				// Not sure so load anyway
+				return true;
+
+			}
+
+		}
+
+		return false;
+
+	}
+
 	/**
 	 * Admin Menu
 	 * Adds WP Geo settings page menu item.
