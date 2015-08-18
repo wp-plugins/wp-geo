@@ -8,8 +8,15 @@ class WPGeo_Feeds {
 	/**
 	 * Constructor
 	 */
-	function WPGeo_Feeds() {
+	function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
+	}
+
+	/**
+	 * Deprecated PHP 4 Constructor
+	 */
+	function WPGeo_Feeds() {
+		$this->__construct();
 	}
 
 	/**
@@ -100,9 +107,9 @@ class WPGeo_Feeds {
 		if ( $wpgeo->show_maps() ) {
 			$coord = get_wpgeo_post_coord( $post->ID );
 			if ( $coord->is_valid_coord() ) {
-				echo '<georss:point>' . $coord->get_delimited( ' ' ) . '</georss:point>';
-				echo '<geo:lat>' . $coord->latitude() . '</geo:lat>';
-				echo '<geo:long>' . $coord->longitude() . '</geo:long>';
+				echo '<georss:point>' . esc_html( $coord->get_delimited( ' ' ) ) . '</georss:point>';
+				echo '<geo:lat>' . esc_html( $coord->latitude() ) . '</geo:lat>';
+				echo '<geo:long>' . esc_html( $coord->longitude() ) . '</geo:long>';
 			}
 		}
 	}

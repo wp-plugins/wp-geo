@@ -7,7 +7,7 @@
 class WPGeo {
 	
 	// Version Information
-	var $version    = '3.3.8';
+	var $version    = '3.4';
 	var $db_version = 1;
 	
 	var $api;
@@ -24,7 +24,7 @@ class WPGeo {
 	/**
 	 * Constructor
 	 */
-	function WPGeo() {
+	function __construct() {
 		
 		// API
 		$wp_geo_options = get_option( 'wp_geo_options' );
@@ -65,7 +65,14 @@ class WPGeo {
 			$this->admin = new WPGeo_Admin();
 		}
 	}
-	
+
+	/**
+	 * Deprecated PHP 4 Constructor
+	 */
+	function WPGeo() {
+		$this->__construct();
+	}
+
 	/**
 	 * Filter 'wp_geo_options' value to ensure all defaults are set.
 	 *
@@ -244,10 +251,10 @@ class WPGeo {
 			if ( $coord->is_valid_coord() ) {
 
 				// Would make sense to look these up automatically from Google
-				//echo '<meta name="geo.region" content="DE-BY" />';                                // Geo-Tag: Country code (ISO 3166-1) and regional code (ISO 3166-2)
-				//echo '<meta name="geo.placename" content="MÙnchen" />';                           // Geo-Tag: City or the nearest town
-				echo '<meta name="geo.position" content="' . $coord->get_delimited( ';' ) . '" />'; // Geo-Tag: Latitude and longitude
-				echo '<meta name="ICBM" content="' . $coord->get_delimited() . '" />';              // ICBM Tag (prior existing equivalent to the geo.position)
+				//echo '<meta name="geo.region" content="DE-BY" />';                                            // Geo-Tag: Country code (ISO 3166-1) and regional code (ISO 3166-2)
+				//echo '<meta name="geo.placename" content="MÙnchen" />';                                       // Geo-Tag: City or the nearest town
+				echo '<meta name="geo.position" content="' . esc_attr( $coord->get_delimited( ';' ) ) . '" />'; // Geo-Tag: Latitude and longitude
+				echo '<meta name="ICBM" content="' . esc_attr( $coord->get_delimited() ) . '" />';              // ICBM Tag (prior existing equivalent to the geo.position)
 
 				// Dublin Core Meta Title Tag
 				// Some geo databases extract the web-page's title out of the DC.title tag

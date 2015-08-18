@@ -7,9 +7,9 @@ Plugin URI: https://wordpress.org/plugins/wp-geo/
 Description: Adds location maps to your posts, pages and custom post types.
 Author: Ben Huson
 Author URI: https://github.com/benhuson/wp-geo
-Version: 3.3.9
-Tested up to: 4.2
-Minimum WordPress Version Required: 3.7
+Version: 3.4
+Tested up to: 4.3
+Minimum WordPress Version Required: 3.9
 
 Released under the GPL:
 http://www.opensource.org/licenses/gpl-license.php
@@ -42,6 +42,10 @@ include_once( WPGEO_DIR . 'includes/api.php' );
 include_once( WPGEO_DIR . 'includes/marker.php' );
 include_once( WPGEO_DIR . 'includes/markers.php' );
 include_once( WPGEO_DIR . 'includes/maps.php' );
+include_once( WPGEO_DIR . 'includes/map.php' );
+include_once( WPGEO_DIR . 'includes/polyline.php' );
+include_once( WPGEO_DIR . 'includes/point.php' );
+include_once( WPGEO_DIR . 'includes/coord.php' );
 include_once( WPGEO_DIR . 'includes/functions.php' );
 include_once( WPGEO_DIR . 'includes/templates.php' );
 include_once( WPGEO_DIR . 'includes/shortcodes.php' );

@@ -7,6 +7,29 @@
 */
 
 /**
+ * Refresh Map Container
+ *
+ * This function can be used to refresh a map that has been previously
+ * hidden - for example in a hidden tab.
+ *
+ * @param  obj  container  Map container jQuery object.
+ */
+function wpgeo_refreshMapContainer( container ) {
+
+	container.each( function() {
+
+		var map_id = jQuery( this ).attr( 'id' );
+		var map = window[ map_id ];
+		var centerofmap = map.getCenter();
+
+		google.maps.event.trigger( map, 'resize' );
+		map.setCenter( centerofmap );
+
+	} );
+
+}
+
+/**
  * Create a custom marker icon for the map
  */
 function wpgeo_createIcon(width, height, anchorX, anchorY, image, transparent) {
